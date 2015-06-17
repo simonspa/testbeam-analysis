@@ -1,0 +1,14 @@
+ 8   clk    0
+ 9   sda   22
+10   ctr    0
+11   tin   13
+12   rda   13
+
+17   trc   20
+18   tcc   60
+19   tct  105 # WBC 99
+20   ttk   16
+21  trep   44
+22    cc    1
+
+77   spd    0

@@ -1,0 +1,112 @@
+-- DacDependency
+
+Dac1 26  # 26 = CalDel
+Dac2 25  # 25 = Vcal = timewalk plot
+#Dac2 12  # 12 = VthrComp = tornado plot
+#Dac2 11  # 11 = Vtrim
+DacNTrig   50
+DacRange1 256
+DacRange2 256
+
+-- Trimming --
+
+# TrimVcal is target threshold, put low value
+# TrimNTrig 20 works, 36 does not (NoiseMap all zero, Sep 2011)
+# TrimDoubleWbc looks in earlier BC: don't need
+#
+# gui
+# Trim
+# effvscaldel
+# CalDel nn
+# Trim
+
+TrimVcal 32
+TrimNTrig 9
+TrimDoubleWbc 0
+
+-- PH --
+
+PHNTrig 10
+PHMode 25   # 25 = Vcal
+#PHMode 10   # 10 = VhldDel
+#PHMode 26   # 26 = CalDel
+PHdac1Start  0
+PHdac1Stop 255
+PHdac1Step  5
+PHdac2Start  0
+PHdac2Stop 255
+PHdac2Step  5
+PHNumberOfSteps 15
+PHtestVcal 60
+PHDacType 1
+
+-- PHCalibration --
+
+PHCalibrationNTrig 10
+PHCalibrationMode 2  # 0=10 points, 1=102 points, 2=512 points
+
+-- PixelMap --
+
+PixelMapReadouts 10
+PixelMapEfficiency 100
+
+-- SCurve --
+
+SCurveVcal 77
+SCurveVthr -1
+SCurveMode 1
+# 1: VthrComp fix 2: Vcal fix
+SCurveNTrig 100
+SCurveBeamNTrig 5
+
+-- Threshold --
+
+ThresholdVcal 200
+ThresholdVthr -1
+ThresholdMode 1
+# 0=CalThresholdMap, 1=VcalThresholdMap, 2=VcalsThresholdMap, 3=NoiseMap, 4=CalXTalkMap
+ThresholdNTrig 50
+
+-- BumpBonding --
+
+BumpBondingNTrig 50
+
+-- TrimTest --
+
+TrimBitsVtrim14 250
+TrimBitsVtrim13 200
+TrimBitsVtrim11 180
+TrimBitsVtrim7  140
+TrimBitsNTrig 5
+
+-- IVCurve --
+
+IVStep 5
+IVStart 0
+IVStop 600
+IVDelay 3
+
+-- TempTest ---
+
+TempNTrig 1
+
+
+-- TBMUbCheck --
+
+TBMUbLevel 1000
+PHSafety 100
+
+-- VsfOptimization --
+
+vsfStart 130
+vsfStop 250
+vsfSteps 24
+vhldDelStart 70
+vhldDelStop 80
+vhldDelSteps 10
+goalPar1 1.4
+goalCurrent 0.005
+
+-- TimeWalk ---
+
+TWMeanShift 22

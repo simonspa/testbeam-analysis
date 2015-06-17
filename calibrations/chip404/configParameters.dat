@@ -1,0 +1,53 @@
+
+# chip404 = psi46digV21 (with gap 30 sensor, from PSI Feb 2014)
+
+# board 9 tilting DUT:
+testboardName DPE00JAF
+# board 12 uniHH:
+# testboardName DPCSPROB
+# board 23 PSI:
+# testboardName DPVMCK07
+
+-- parameter files:
+
+tbParameters tbParameters.dat  # for all
+
+# for trimming:
+#dacParameters dacParameters-Ia25-trim
+#trimParameters trimParameters-Ia25-trim
+
+# after trimming:
+dacParameters dacParameters-Ia25-trim3032
+trimParameters trimParameters-Ia25-trim3032
+
+tbmParameters tbmParameters.dat
+testParameters testParameters.dat
+rootFileName expert.root
+
+-- configuration
+
+nModules 1
+nRocs 1
+hubId 0
+# in order to take data tbmEnable and tbmEmulator must be set to 1:
+tbmEnable 1
+tbmEmulator 1
+
+hvOn 1
+tbmChannel 1  # channel 1 = ADC2 = digital
+
+halfModule 0
+
+-- voltages and current limits
+
+ia 1199
+id 1000
+va 1799
+vd 2600
+
+-- ADC parameters:
+
+dataTriggerLevel -650    #  obsolete for dig
+emptyReadoutLength    5  # 5 = atb2, 1 = atb5
+emptyReadoutLengthADC 5  # tb getrocntex
+emptyReadoutLengthADCDual 7
