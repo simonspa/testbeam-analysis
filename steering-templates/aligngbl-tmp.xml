@@ -99,9 +99,9 @@
   <!--Events number to have DEBUG1 printed outs (default=10)-->
   <parameter name="PrintEvents" type="int" value="0"/>
   <!--This is the name of the reference it collection (init at 0,0,0)-->
-  <!--parameter name="ReferenceCollection" type="string" value="reference"/-->
+  <parameter name="ReferenceCollection" type="string" value="referenceHit"/>
   <!--This is the name of the reference it collection (init at 0,0,0)-->
-  <!--parameter name="ReferenceHitFile" type="string" value="reference.slcio"/-->
+  <parameter name="ReferenceHitFile" type="string" value="@DatabasePath@/run@RunNumber@-refhit-db.slcio"/>
   <!--verbosity level of this processor ("DEBUG0-4,MESSAGE0-4,WARNING0-4,ERROR0-4,SILENT")-->
   <!--parameter name="Verbosity" type="string" value=""/-->
   <!--List of alignment collections that were applied to the DUT-->
@@ -135,6 +135,7 @@
   <parameter name="BinaryFilename" type="string" value="@LcioPath@/@RunNumber@-tel-align-mille.bin"/>
   <!--Maximal allowed distance between hits entering the fit per 10 cm space between the planes.-->
   <parameter name="DistanceMax" type="float" value="@DistanceMax@"/>
+  <parameter name="Ebeam" type="double" value="@BeamEnergy@"/>
   <!--Maximal allowed distance between hits entering the fit per 10 cm space between the planes. One value for each neighbor planes. DistanceMax will be used for each pair if this vector is empty.-->
   <!--parameter name="DistanceMaxVec" type="FloatVec"> </parameter-->
   <!--Exclude planes from fit according to their sensor ids.-->
@@ -154,9 +155,9 @@
 3 - Mixture of a track collection from the telescope and hit collections for the DUT (only one DUT layer can be used unfortunately)-->
   <parameter name="InputMode" type="int" value="0"/>
   <!--Maximal number of track candidates.-->
-  <parameter name="MaxTrackCandidates" type="int" value="100000"/>
+  <parameter name="MaxTrackCandidates" type="int" value="1000000"/>
   <!--Maximal number of track candidates (Total).-->
-  <parameter name="MaxTrackCandidatesTotal" type="int" value="100000"/>
+  <parameter name="MaxTrackCandidatesTotal" type="int" value="1000000"/>
   <!--Remove Mimosa26 clusters with a charge (i.e. number of fired pixels in cluster) below or equal to this value-->
   <!--parameter name="MimosaClusterChargeMin" type="int" value="1"/-->
   <!--Use only events with one hit in every plane.-->
