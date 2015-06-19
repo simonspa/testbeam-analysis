@@ -135,6 +135,9 @@
   <parameter name="BinaryFilename" type="string" value="@LcioPath@/@RunNumber@-tel-align-mille.bin"/>
   <!--Maximal allowed distance between hits entering the fit per 10 cm space between the planes.-->
   <parameter name="DistanceMax" type="float" value="@DistanceMax@"/>
+  <parameter name="triCut" type="float" value="@TripletCut@"/>
+  <parameter name="driCut" type="float" value="@DripletCut@"/>
+  <parameter name="sixCut" type="float" value="@SixCut@"/>
   <parameter name="Ebeam" type="double" value="@BeamEnergy@"/>
   <!--Maximal allowed distance between hits entering the fit per 10 cm space between the planes. One value for each neighbor planes. DistanceMax will be used for each pair if this vector is empty.-->
   <!--parameter name="DistanceMaxVec" type="FloatVec"> </parameter-->
