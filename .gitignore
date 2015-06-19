@@ -1,6 +1,9 @@
 *.slcio
 *.root
 *.pdf
+*.raw
+*.zip
+*.bin
 *~
 *.log
 *.txt
