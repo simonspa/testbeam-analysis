@@ -192,15 +192,37 @@ RunNumber,AlignmentRun,GearFile,BeamEnergy,dut_chip,dut_gain,dut_gain_type,ref_c
 # Chip 506 (rot) turn angle scan at VIColOr 255
 # update gaincalibrations when new ones are available!
 #cmsdyfct
-19714,019714,gear_desy2015_06b.xml,5.6,506,c506-ia24-trim30tb-gaincal.dat,desy_weibull_decorr_pos,501,c501-ia24-trim30-gaincal.dat,desy_weibull_decorr_pos,-4.7,4.3,55.3,42.0,0.0,-0.0,-3.9,-0.1,40.0,0.0
-19715,019714,gear_desy2015_06b.xml,5.6,506,c506-ia24-trim30tb-gaincal.dat,desy_weibull_decorr_pos,501,c501-ia24-trim30-gaincal.dat,desy_weibull_decorr_pos,-4.7,4.3,55.3,42.0,0.0,-0.0,-3.9,-0.1,40.0,0.0
+19714,019714,gear_desy2015_06b.xml,5.6,506,c506-ia24-trim30tb-gaincal.dat,desy_weibull_decorr_pos,501,c501-ia24-trim30-gaincal.dat,desy_weibull_decorr_pos,-4.73806681,4.40501019,43.6619992,40.0436356,-0.690013073,-0.0057862,-3.9000001,-0.100000001,40,0
+19715,019714,gear_desy2015_06b.xml,5.6,506,c506-ia24-trim30tb-gaincal.dat,desy_weibull_decorr_pos,501,c501-ia24-trim30-gaincal.dat,desy_weibull_decorr_pos,-4.73733,4.40563,43.678,40.0505,-0.693394,-0.005779,-3.9,-0.1,40,0
 
-19716,019714,gear_desy2015_06b.xml,5.6,506,c506-ia24-trim30tb-gaincal.dat,desy_weibull_decorr_pos,501,c501-ia24-trim30-gaincal.dat,desy_weibull_decorr_pos,-4.7,4.3,55.3,42.0,0.0,-0.0,-3.9,-0.1,40.0,0.0
-19717,019714,gear_desy2015_06b.xml,5.6,506,c506-ia24-trim30tb-gaincal.dat,desy_weibull_decorr_pos,501,c501-ia24-trim30-gaincal.dat,desy_weibull_decorr_pos,-4.7,4.3,55.3,42.0,0.0,-0.0,-3.9,-0.1,40.0,0.0
+19716,019714,gear_desy2015_06b.xml,5.6,506,c506-ia24-trim30tb-gaincal.dat,desy_weibull_decorr_pos,501,c501-ia24-trim30-gaincal.dat,desy_weibull_decorr_pos,-4.73417,4.42248,44.062,38.6837,-0.656037,-0.0056746,-3.9,-0.1,40,0
+19717,019714,gear_desy2015_06b.xml,5.6,506,c506-ia24-trim30tb-gaincal.dat,desy_weibull_decorr_pos,501,c501-ia24-trim30-gaincal.dat,desy_weibull_decorr_pos,-4.73401,4.42251,44.263,38.6769,-0.658386,-0.0056515,-3.9,-0.1,40,0
 
-19718,019714,gear_desy2015_06b.xml,5.6,506,c506-ia24-trim30tb-gaincal.dat,desy_weibull_decorr_pos,501,c501-ia24-trim30-gaincal.dat,desy_weibull_decorr_pos,-4.7,4.3,55.3,42.0,0.0,-0.0,-3.9,-0.1,40.0,0.0
-19719,019714,gear_desy2015_06b.xml,5.6,506,c506-ia24-trim30tb-gaincal.dat,desy_weibull_decorr_pos,501,c501-ia24-trim30-gaincal.dat,desy_weibull_decorr_pos,-4.7,4.3,55.3,42.0,0.0,-0.0,-3.9,-0.1,40.0,0.0
+19718,019714,gear_desy2015_06b.xml,5.6,506,c506-ia24-trim30tb-gaincal.dat,desy_weibull_decorr_pos,501,c501-ia24-trim30-gaincal.dat,desy_weibull_decorr_pos,-4.73048,4.44077,44.928,37.3318,-0.628878,-0.0057276,-3.9,-0.1,40,0
+19719,019714,gear_desy2015_06b.xml,5.6,506,c506-ia24-trim30tb-gaincal.dat,desy_weibull_decorr_pos,501,c501-ia24-trim30-gaincal.dat,desy_weibull_decorr_pos,-4.7301,4.4411,45.007,37.3313,-0.634837,-0.005776,-3.9,-0.1,40,0
 
-19720,019714,gear_desy2015_06b.xml,5.6,506,c506-ia24-trim30tb-gaincal.dat,desy_weibull_decorr_pos,501,c501-ia24-trim30-gaincal.dat,desy_weibull_decorr_pos,-4.7,4.3,55.3,42.0,0.0,-0.0,-3.9,-0.1,40.0,0.0
-19721,019714,gear_desy2015_06b.xml,5.6,506,c506-ia24-trim30tb-gaincal.dat,desy_weibull_decorr_pos,501,c501-ia24-trim30-gaincal.dat,desy_weibull_decorr_pos,-4.7,4.3,55.3,42.0,0.0,-0.0,-3.9,-0.1,40.0,0.0
+
+19720,019714,gear_desy2015_06b.xml,5.6,506,c506-ia24-trim30tb-gaincal.dat,desy_weibull_decorr_pos,501,c501-ia24-trim30-gaincal.dat,desy_weibull_decorr_pos,-4.7,4.3,55.3,36.0,0.0,-0.0,-3.9,-0.1,40.0,0.0
+19721,019714,gear_desy2015_06b.xml,5.6,506,c506-ia24-trim30tb-gaincal.dat,desy_weibull_decorr_pos,501,c501-ia24-trim30-gaincal.dat,desy_weibull_decorr_pos,-4.7,4.3,55.3,36.0,0.0,-0.0,-3.9,-0.1,40.0,0.0
+
+19722,019714,gear_desy2015_06b.xml,5.6,506,c506-ia24-trim30tb-gaincal.dat,desy_weibull_decorr_pos,501,c501-ia24-trim30-gaincal.dat,desy_weibull_decorr_pos,-4.7,4.3,55.3,34.0,0.0,-0.0,-3.9,-0.1,40.0,0.0
+19723,019714,gear_desy2015_06b.xml,5.6,506,c506-ia24-trim30tb-gaincal.dat,desy_weibull_decorr_pos,501,c501-ia24-trim30-gaincal.dat,desy_weibull_decorr_pos,-4.7,4.3,55.3,34.0,0.0,-0.0,-3.9,-0.1,40.0,0.0
+
+19724,019714,gear_desy2015_06b.xml,5.6,506,c506-ia24-trim30tb-gaincal.dat,desy_weibull_decorr_pos,501,c501-ia24-trim30-gaincal.dat,desy_weibull_decorr_pos,-4.7,4.3,55.3,32.0,0.0,-0.0,-3.9,-0.1,40.0,0.0
+19725,019714,gear_desy2015_06b.xml,5.6,506,c506-ia24-trim30tb-gaincal.dat,desy_weibull_decorr_pos,501,c501-ia24-trim30-gaincal.dat,desy_weibull_decorr_pos,-4.7,4.3,55.3,32.0,0.0,-0.0,-3.9,-0.1,40.0,0.0
+
+19726,019714,gear_desy2015_06b.xml,5.6,506,c506-ia24-trim30tb-gaincal.dat,desy_weibull_decorr_pos,501,c501-ia24-trim30-gaincal.dat,desy_weibull_decorr_pos,-4.7,4.3,55.3,30.0,0.0,-0.0,-3.9,-0.1,40.0,0.0
+19727,019714,gear_desy2015_06b.xml,5.6,506,c506-ia24-trim30tb-gaincal.dat,desy_weibull_decorr_pos,501,c501-ia24-trim30-gaincal.dat,desy_weibull_decorr_pos,-4.7,4.3,55.3,30.0,0.0,-0.0,-3.9,-0.1,40.0,0.0
+19728,019714,gear_desy2015_06b.xml,5.6,506,c506-ia24-trim30tb-gaincal.dat,desy_weibull_decorr_pos,501,c501-ia24-trim30-gaincal.dat,desy_weibull_decorr_pos,-4.7,4.3,55.3,30.0,0.0,-0.0,-3.9,-0.1,40.0,0.0
+
+19729,019714,gear_desy2015_06b.xml,5.6,506,c506-ia24-trim30tb-gaincal.dat,desy_weibull_decorr_pos,501,c501-ia24-trim30-gaincal.dat,desy_weibull_decorr_pos,-4.7,4.3,55.3,28.0,0.0,-0.0,-3.9,-0.1,40.0,0.0
+19730,019714,gear_desy2015_06b.xml,5.6,506,c506-ia24-trim30tb-gaincal.dat,desy_weibull_decorr_pos,501,c501-ia24-trim30-gaincal.dat,desy_weibull_decorr_pos,-4.7,4.3,55.3,28.0,0.0,-0.0,-3.9,-0.1,40.0,0.0
+
+19721,019714,gear_desy2015_06b.xml,5.6,506,c506-ia24-trim30tb-gaincal.dat,desy_weibull_decorr_pos,501,c501-ia24-trim30-gaincal.dat,desy_weibull_decorr_pos,-4.7,4.3,55.3,26.0,0.0,-0.0,-3.9,-0.1,40.0,0.0
+19732,019714,gear_desy2015_06b.xml,5.6,506,c506-ia24-trim30tb-gaincal.dat,desy_weibull_decorr_pos,501,c501-ia24-trim30-gaincal.dat,desy_weibull_decorr_pos,-4.7,4.3,55.3,26.0,0.0,-0.0,-3.9,-0.1,40.0,0.0
+
+19733,019714,gear_desy2015_06b.xml,5.6,506,c506-ia24-trim30tb-gaincal.dat,desy_weibull_decorr_pos,501,c501-ia24-trim30-gaincal.dat,desy_weibull_decorr_pos,-4.7,4.3,55.3,24.0,0.0,-0.0,-3.9,-0.1,40.0,0.0
+19734,019714,gear_desy2015_06b.xml,5.6,506,c506-ia24-trim30tb-gaincal.dat,desy_weibull_decorr_pos,501,c501-ia24-trim30-gaincal.dat,desy_weibull_decorr_pos,-4.7,4.3,55.3,24.0,0.0,-0.0,-3.9,-0.1,40.0,0.0
+19735,019714,gear_desy2015_06b.xml,5.6,506,c506-ia24-trim30tb-gaincal.dat,desy_weibull_decorr_pos,501,c501-ia24-trim30-gaincal.dat,desy_weibull_decorr_pos,-4.7,4.3,55.3,24.0,0.0,-0.0,-3.9,-0.1,40.0,0.0
+
 
