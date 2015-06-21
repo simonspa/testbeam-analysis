@@ -23,6 +23,10 @@ void resolution() {
 }
 
 void resolution(const char* inputdir) {
+  resolution(inputdir,0,99999);
+}
+
+void resolution(const char* inputdir, int startrun, int stoprun) {
 
   TCanvas *c1 = new TCanvas("c1","resolution",600,600);
   TProfile *resolution = new TProfile("resolution"," ",130,5,70,10,20,"");
@@ -36,6 +40,7 @@ void resolution(const char* inputdir) {
 
   std::vector<int> runs = getruns(inputdir,chip);
   for(std::vector<int>::iterator run = runs.begin(); run != runs.end(); run++) {
+    if(*run < startrun || *run > stoprun) continue;
 
     TString fileName;
     fileName += inputdir;
