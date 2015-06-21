@@ -103,7 +103,7 @@
     <!--Name of LCIO db file where alignment constantds will be stored-->
     <parameter name="AlignmentConstantLCIOFile" type="string"> @DatabasePath@/run@RunNumber@-prealign-db.slcio </parameter>
     <!--How many events should be used for an approximation to the X,Y shifts (pre-alignment)? (default=50000)-->
-    <parameter name="Events" type="int"> 250000 </parameter>
+    <parameter name="Events" type="int"> @PreAlignEvents@ </parameter>
     <!--SensorID of fixed plane-->
     <!--parameter name="FixedPlane" type="int">0 </parameter-->
     <!--Switch on or off the histogram filling-->
