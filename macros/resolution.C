@@ -29,7 +29,7 @@ void resolution(const char* inputdir) {
 void resolution(const char* inputdir, int startrun, int stoprun) {
 
   TCanvas *c1 = new TCanvas("c1","resolution",600,600);
-  TProfile *resolution = new TProfile("resolution"," ",130,5,70,10,20,"");
+  TProfile *resolution = new TProfile("resolution"," ",130,5,70,10,50,"");
 
   gStyle->SetOptStat(0);
 
@@ -59,11 +59,11 @@ void resolution(const char* inputdir, int startrun, int stoprun) {
     if(!h) continue;
 
     // Y Resolution in fiducial volume & Landau peak:
-    Double_t res = fitep0sigma("cmsdyfctq3d");
+    Double_t res = fitep0sigma("cmsdyfctq3");
     Double_t tilt = gettilt(inputdir,*run,chip);
 
     // Collect statistics:
-    nfiducial += ((TH1D*)gDirectory->Get("cmsdyfctq3d"))->GetEntries();
+    nfiducial += ((TH1D*)gDirectory->Get("cmsdyfctq3"))->GetEntries();
     nevents += ((TH1D*)gDirectory->Get("trixylk"))->GetEntries();
 
     cout << "run" << *run << " (chip" << chip << ") res " << res << " tilt " << tilt << endl;
