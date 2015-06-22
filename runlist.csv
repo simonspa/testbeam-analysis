@@ -229,7 +229,7 @@ RunNumber,AlignmentRun,GearFile,BeamEnergy,dut_chip,dut_gain,dut_gain_type,ref_c
 # JUNE 20
 # no chiller connected!
 #alignment run
-19807,019807,gear_desy2015_06b.xml,5.6,506,c506-ia24-trim32tb-nochill-gaincal.dat,desy_weibull_decorr_pos,501,c501-ia24-trim30tb-gaincal.dat,desy_weibull_decorr_pos,-4.6387,4.452,55.574,27.0196,-0.510746,-0.00430182,-4.64417,-0.0454692,40,0
+19807,019807,gear_desy2015_06b.xml,5.5999999,506,c506-ia24-trim32tb-nochill-gaincal.dat,desy_weibull_decorr_pos,501,c501-ia24-trim30tb-gaincal.dat,desy_weibull_decorr_pos,-4.63814221,0.252678102,51.1273469,27.2548917,-0.533488789,-0.00455132323,-4.5999999,-0,40,0
 
 # tilt scan:
 19809,019807,gear_desy2015_06b.xml,5.6,506,c506-ia24-trim32tb-nochill-gaincal.dat,desy_weibull_decorr_pos,501,c501-ia24-trim30tb-gaincal.dat,desy_weibull_decorr_pos,-4.63723,4.11206,51.1906,53.3825,-0.622566,-0.00539678,-4.64417,-0.0454692,40,0
