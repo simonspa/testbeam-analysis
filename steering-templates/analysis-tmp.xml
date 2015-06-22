@@ -239,6 +239,8 @@
   <parameter name="Verbosity" type="string" value="@Verbosity@"/>
   <!--Again, the gear file of the used telescope configuration-->
   <parameter name="gearfile" type="string" value="@GearFile@"/>
+  <!--Run number of the telescope alignment run-->
+  <parameter name="alignmentrun" type="string" value="@AlignmentRun@"/>
 </processor>
 
  <processor name="EUTelUtilityPrintEventNumber" type="EUTelUtilityPrintEventNumber">
