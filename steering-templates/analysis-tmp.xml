@@ -194,7 +194,7 @@
   <!--Name of the input Track collection of the telescope-->
   <parameter name="InputTrackCollectionTelescope" type="string" lcioOutType="Track"> fittracks </parameter>
   <!--Path to the native CMS data files-->
-  <parameter name="CMS_gain_path" type="string" value="calibrations"/>
+  <parameter name="CMS_gain_path" type="string" value="@BasePath@/calibrations"/>
   <!--DUT alignment in x-->
   <parameter name="DUT_align_x" type="double" value="@dut_align_x@"/>
   <!--DUT alignment in y-->
