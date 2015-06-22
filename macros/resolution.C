@@ -59,7 +59,7 @@ void resolution(const char* inputdir, int startrun, int stoprun) {
     if(!h) continue;
 
     // Y Resolution in fiducial volume & Landau peak:
-    Double_t res = fitep0sigma("cmsdyfctq3");
+    Double_t res = fitep0sigma("cmsdyfctq3",-50,50);
     Double_t tilt = gettilt(inputdir,*run,chip);
 
     // Collect statistics:
