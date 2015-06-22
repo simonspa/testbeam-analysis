@@ -122,7 +122,7 @@
 1 - shifts in the X and Y directions and a rotation around the Z axis,
 2 - only shifts in the X and Y directions
 3 - (EXPERIMENTAL) shifts in the X,Y and Z directions and rotations around all three axis-->
-  <parameter name="AlignMode" type="int" value="4"/>
+  <parameter name="AlignMode" type="int" value="3"/>
   <!--This is the name of the alignment collection to be saved into the slcio file-->
   <!--parameter name="AlignmentConstantCollectionName" type="string" value="alignment"/-->
   <!--This is the name of the LCIO file name with the output alignmentconstants (add .slcio)-->
