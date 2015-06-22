@@ -230,6 +230,11 @@
   <!--REF rotation in xy-->
   <parameter name="REF_rot" type="double" value="@ref_rot@"/>
 
+  <!--Matching cut in X-->
+  <parameter name="matching_cut_x" type="double" value="0.15"/>
+  <!--Matching cut in Y-->
+  <parameter name="matching_cut_y" type="double" value="0.10"/>
+
   <!--verbosity level of this processor ("DEBUG0-4,MESSAGE0-4,WARNING0-4,ERROR0-4,SILENT")-->
   <parameter name="Verbosity" type="string" value="@Verbosity@"/>
   <!--Again, the gear file of the used telescope configuration-->
