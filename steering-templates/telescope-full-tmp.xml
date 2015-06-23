@@ -131,13 +131,13 @@
   <processor name="Save" type="EUTelOutputProcessor">
     <!--Writes the current event to the specified LCIO outputfile. Eventually it adds a EORE at the of the file if it was missing Needs to be the last ActiveProcessor.-->
     <!--drops the named collections from the event-->
-    <parameter name="DropCollectionNames" type="StringVec"> zsdata_m26 cluster_m26 cluster_m26_free </parameter>
+    <parameter name="DropCollectionNames" type="StringVec"> zsdata_m26 cluster_m26 cluster_m26_free original_zsdata eudrbSetup </parameter>
     <!--drops all collections of the given type from the event-->
     <!--parameter name="DropCollectionTypes" type="StringVec">SimTrackerHit SimCalorimeterHit  </parameter-->
     <!-- write complete objects in subset collections to the file (i.e. ignore subset flag)-->
     <!--parameter name="FullSubsetCollections" type="StringVec">MCParticlesSkimmed  </parameter-->
     <!--force keep of the named collections - overrules DropCollectionTypes (and DropCollectionNames)-->
-    <parameter name="KeepCollectionNames" type="StringVec"> CMSPixel CMSPixelREF hit </parameter>
+    <parameter name="KeepCollectionNames" type="StringVec"> CMSPixel CMSPixelDUT CMSPixelREF hit </parameter>
     <!-- name of output file -->
     <parameter name="LCIOOutputFile" type="string" value="@LcioPath@/run@RunNumber@-hitmaker.slcio"/>
     <!--write mode for output file:  WRITE_APPEND or WRITE_NEW-->
