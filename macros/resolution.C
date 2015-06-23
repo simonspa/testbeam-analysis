@@ -29,7 +29,7 @@ void resolution(const char* inputdir) {
 void resolution(const char* inputdir, int startrun, int stoprun) {
 
   TCanvas *c1 = new TCanvas("c1","resolution",600,600);
-  TProfile *resolution = new TProfile("resolution"," ",130,5,70,10,50,"");
+  TProfile *resolution = new TProfile("resolution"," ",130,5,80,10,60,"");
 
   gStyle->SetOptStat(0);
 
