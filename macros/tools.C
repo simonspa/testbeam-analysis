@@ -358,7 +358,7 @@ int fitep0( char* hs ) {
   }
 }
 
-Double_t fitep0sigma( char* hs ) {
+Double_t fitep0sigma( char* hs, int binlow=-999, int binhigh=999) {
 
   TH1 *h = (TH1*)gDirectory->Get(hs);
   if( h == NULL ){ cout << hs << " does not exist\n"; return 0; }
@@ -373,8 +373,15 @@ Double_t fitep0sigma( char* hs ) {
   double n9 = h->GetBinContent(nb);
   double bg = 0.5*(n1+n9);
 
-  double x1 = h->GetBinCenter(1);
-  double x9 = h->GetBinCenter(nb);
+  double x1, x9;
+  if(binlow < -900 && binhigh > 900) {
+    x1 = h->GetBinCenter(1);
+    x9 = h->GetBinCenter(nb);
+  }
+  else {
+    x1 = binlow;
+    x9 = binhigh;
+  }
 
   // create a TF1 with the range from x1 to x9 and 5 parameters
   TF1 *ep0Fcn = new TF1( "ep0Fcn", ep0Fit, x1, x9, 5 );
