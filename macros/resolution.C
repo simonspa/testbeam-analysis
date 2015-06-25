@@ -36,6 +36,9 @@ void resolution(const char* inputdir, int startrun, int stoprun) {
   TCanvas *c2 = new TCanvas("c2","resolution",600,600);
   TProfile *resolution_tel_subtracted = new TProfile("resolution_tel_subtracted"," ",130,5,85,0,60,"");
 
+  TCanvas *c3 = new TCanvas("c3","resolution",600,600);
+  TProfile *resolution_vs_eta = new TProfile("resolution_vs_eta"," ",130,0,5,0,60,"");
+
   gStyle->SetOptStat(0);
 
   int nruns, nfiducial, nevents;
@@ -68,6 +71,9 @@ void resolution(const char* inputdir, int startrun, int stoprun) {
     Double_t res = fitep0sigma("cmsdyfctq3");
     Double_t tilt = gettilt(inputdir,*run,chip);
 
+    
+    Double_t eta = -TMath::LogE(0.5*TMath::Tan(2*TMath::Pi*(90-tilt)/360));
+
     // Collect statistics:
     nfiducial += ((TH1D*)gDirectory->Get("cmsdyfctq3"))->GetEntries();
     nevents += ((TH1D*)gDirectory->Get("trixylk"))->GetEntries();
@@ -78,6 +84,7 @@ void resolution(const char* inputdir, int startrun, int stoprun) {
     cout << "run" << *run << " (chip" << chip << ") res " << res << " ressub " << res_tel_subtracted << " tilt " << tilt << endl;
     resolution->Fill(tilt,res,1);
     resolution_tel_subtracted->Fill(tilt,res_tel_subtracted,1);
+    resolution_vs_eta->Fill(eta,res_tel_subtracted,1);
 
     nruns++;
     delete source;
@@ -96,5 +103,11 @@ void resolution(const char* inputdir, int startrun, int stoprun) {
   resolution_tel_subtracted->SetMarkerStyle(20);
   resolution_tel_subtracted->SetMarkerColor(2);
   resolution_tel_subtracted->Draw();
+
+  c2->cd();
+  resolution_vs_eta->SetTitle("CMS Pixel Resolution (y) - Tel Res. wrt to pseudo rapidity;pseudo rapidity #eta;resolution y [#mum]");
+  resolution_vs_eta->SetMarkerStyle(20);
+  resolution_vs_eta->SetMarkerColor(2);
+  resolution_vs_eta->Draw();
 
 }
