@@ -18,6 +18,8 @@
 
 using namespace std;
 
+Double_t restel = 4.8;
+
 void resolution() {
   std::cout << "Run resolution(histogram dir)" << std::endl;
 }
@@ -29,7 +31,10 @@ void resolution(const char* inputdir) {
 void resolution(const char* inputdir, int startrun, int stoprun) {
 
   TCanvas *c1 = new TCanvas("c1","resolution",600,600);
-  TProfile *resolution = new TProfile("resolution"," ",130,5,80,10,60,"");
+  TProfile *resolution = new TProfile("resolution"," ",130,5,80,0,60,"");
+
+  TCanvas *c2 = new TCanvas("c2","resolution",600,600);
+  TProfile *resolution_tel_subtracted = new TProfile("resolution_tel_subtracted"," ",130,5,80,0,60,"");
 
   gStyle->SetOptStat(0);
 
@@ -66,9 +71,12 @@ void resolution(const char* inputdir, int startrun, int stoprun) {
     nfiducial += ((TH1D*)gDirectory->Get("cmsdyfctq3"))->GetEntries();
     nevents += ((TH1D*)gDirectory->Get("trixylk"))->GetEntries();
 
-    cout << "run" << *run << " (chip" << chip << ") res " << res << " tilt " << tilt << endl;
+    // Subtract telescope track resolution:
+    Double_t res_tel_subtracted = TMath::Sqrt(res*res - restel*restel);
 
+    cout << "run" << *run << " (chip" << chip << ") res " << res << " ressub " << res_tel_subtracted << " tilt " << tilt << endl;
     resolution->Fill(tilt,res,1);
+    resolution_tel_subtracted->Fill(tilt,res_tel_subtracted,1);
 
     nruns++;
     delete source;
@@ -77,8 +85,15 @@ void resolution(const char* inputdir, int startrun, int stoprun) {
   cout << nruns << " runs analyzed with " << nevents << " linked clusters and " << nfiducial << " clusters in the fiducial volume in total." << endl;
 
   c1->cd();
-  resolution->SetTitle("CMS Pixel Resolution (y) wrt to tilt angle (from: cmsdyfctq3d);tilt angle [#deg];resolution y [#mum]");
+  resolution->SetTitle("CMS Pixel Resolution (y) wrt to tilt angle (from: cmsdyfctq3);tilt angle [#deg];resolution y [#mum]");
   resolution->SetMarkerStyle(20);
   resolution->SetMarkerColor(2);
   resolution->Draw();
+
+  c2->cd();
+  resolution_tel_subtracted->SetTitle("CMS Pixel Resolution (y) - Tel Res. wrt to tilt angle;tilt angle [#deg];resolution y [#mum]");
+  resolution_tel_subtracted->SetMarkerStyle(20);
+  resolution_tel_subtracted->SetMarkerColor(2);
+  resolution_tel_subtracted->Draw();
+
 }
