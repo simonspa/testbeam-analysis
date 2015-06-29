@@ -84,6 +84,7 @@ void simulation() {
   cout << m << " lines" << endl;
 
   double btilt[999];
+  double beta[999];
   double bsy[999];
   double bncol[999];
   double blanpk[999];
@@ -92,6 +93,7 @@ void simulation() {
 
   for( int ii = 0; ii < m; ++ii ) {
     btilt[ii] = stilt.at(ii);
+    beta[ii] = -TMath::Log(TMath::Tan(TMath::TwoPi()*(90-stilt.at(ii))/(2*360)));
     bpath[ii] = 1 / cos( stilt.at(ii) / wt );
     btant[ii] = tan( stilt.at(ii) / wt );
     bsy[ii] = sqrt( sry.at(ii)*sry.at(ii) - 4.8*4.8 ); // subtract telescope
@@ -102,8 +104,16 @@ void simulation() {
   c2->cd();
   TGraph *si = new TGraph( m, btilt, bsy ); // sim
   si->SetLineColor(2);
-  si->SetLineSize(2);
-  si->Draw("L"); // without axis option: overlay
+  si->SetLineWidth(3);
+  si->SetMarkerColor(2);
+  si->Draw("PL"); // without axis option: overlay
+
+  c3->cd();
+  TGraph *si_eta = new TGraph( m, beta, bsy ); // sim
+  si_eta->SetLineColor(2);
+  si_eta->SetLineWidth(3);
+  si_eta->SetMarkerColor(2);
+  si_eta->Draw("PL"); // without axis option: overlay
 
 }
 
@@ -124,7 +134,7 @@ void resolution(const char* inputdir, int startrun, int stoprun) {
   TProfile *resolution_tel_subtracted = new TProfile("resolution_tel_subtracted"," ",130,5,85,0,60,"");
 
   TCanvas *c3 = new TCanvas("c3","resolution",600,600);
-  TProfile *resolution_vs_eta = new TProfile("resolution_vs_eta"," ",130,0,5,0,60,"");
+  TProfile *resolution_vs_eta = new TProfile("resolution_vs_eta"," ",110,0.1,3,0,60,"");
 
   gStyle->SetOptStat(0);
 
@@ -133,7 +143,7 @@ void resolution(const char* inputdir, int startrun, int stoprun) {
   // Get all runs for chip 506:
   int chip = 506;
 
-  /*  std::vector<int> runs = getruns(inputdir,chip);
+  std::vector<int> runs = getruns(inputdir,chip);
   for(std::vector<int>::iterator run = runs.begin(); run != runs.end(); run++) {
     if(*run < startrun || *run > stoprun) continue;
 
@@ -158,8 +168,8 @@ void resolution(const char* inputdir, int startrun, int stoprun) {
     Double_t res = fitep0sigma("cmsdyfctq3");
     Double_t tilt = gettilt(inputdir,*run,chip);
 
-    
-    Double_t eta = -TMath::LogE(0.5*TMath::Tan(2*TMath::Pi*(90-tilt)/360));
+    // Eta: flip angle from tilt to theta from beam axis:
+    Double_t eta = -TMath::Log(TMath::Tan(TMath::TwoPi()*(90-tilt)/(2*360)));
 
     // Collect statistics:
     nfiducial += ((TH1D*)gDirectory->Get("cmsdyfctq3"))->GetEntries();
@@ -175,7 +185,7 @@ void resolution(const char* inputdir, int startrun, int stoprun) {
 
     nruns++;
     delete source;
-    }*/
+  }
 
   cout << nruns << " runs analyzed with " << nevents << " linked clusters and " << nfiducial << " clusters in the fiducial volume in total." << endl;
 
@@ -188,13 +198,13 @@ void resolution(const char* inputdir, int startrun, int stoprun) {
   c2->cd();
   resolution_tel_subtracted->SetTitle("CMS Pixel Resolution (y) - Tel Res. wrt to tilt angle;tilt angle [#deg];resolution y [#mum]");
   resolution_tel_subtracted->SetMarkerStyle(20);
-  resolution_tel_subtracted->SetMarkerColor(2);
+  resolution_tel_subtracted->SetMarkerColor(1);
   resolution_tel_subtracted->Draw();
 
-  c2->cd();
+  c3->cd();
   resolution_vs_eta->SetTitle("CMS Pixel Resolution (y) - Tel Res. wrt to pseudo rapidity;pseudo rapidity #eta;resolution y [#mum]");
   resolution_vs_eta->SetMarkerStyle(20);
-  resolution_vs_eta->SetMarkerColor(2);
+  resolution_vs_eta->SetMarkerColor(1);
   resolution_vs_eta->Draw();
 
   simulation();
