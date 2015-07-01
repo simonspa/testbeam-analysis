@@ -27,10 +27,6 @@ RunNumber,AlignmentRun,GearFile,BeamEnergy,dut_chip,dut_gain,dut_gain_type,ref_c
 14360,014360,gear_desy2015_01a.xml,5.6,500,c500-ia24-trim30-A-chiller15-gaincal.dat,desy_weibull_decorr_pos,404,c404-ia27-trim30.dat,desy_weibull_decorr_pos,-1.96051,0.080604,60.9001,25.2579,-1.05131,-0.00549481,-1,-0.1,40,0
 14361,014361,gear_desy2015_01a.xml,5.6,500,c500-ia24-trim30-A-chiller15-gaincal.dat,desy_weibull_decorr_pos,404,c404-ia27-trim30.dat,desy_weibull_decorr_pos,-1.95249,0.08464,60.7656,26.1572,-1.06403,-0.00611001,-1,-0.1,40,0
 
-# above: aligned.
-
-# above: prealigned.
-
 
 
 # JANUAR 29
@@ -319,16 +315,16 @@ RunNumber,AlignmentRun,GearFile,BeamEnergy,dut_chip,dut_gain,dut_gain_type,ref_c
 19831,019807,gear_desy2015_06c.xml,5.6,506,c506-ia24-trim32tb-nochill-gaincal.dat,desy_weibull_decorr_pos,501,c501-ia24-trim30tb-gaincal.dat,desy_weibull_decorr_pos,-4.6301,-0.702698,52.3797,71.1093,-0.896999,-0.00976451,-4.64741,-0.0468571,40,0
 19832,019807,gear_desy2015_06c.xml,5.6,506,c506-ia24-trim32tb-nochill-gaincal.dat,desy_weibull_decorr_pos,501,c501-ia24-trim30tb-gaincal.dat,desy_weibull_decorr_pos,-4.62941,-0.823353,52.6093,72.9099,-0.955251,-0.0106582,-4.64769,-0.0476091,40,0
 19833,019807,gear_desy2015_06c.xml,5.6,506,c506-ia24-trim32tb-nochill-gaincal.dat,desy_weibull_decorr_pos,501,c501-ia24-trim30tb-gaincal.dat,desy_weibull_decorr_pos,-4.62876,-0.822519,52.4852,72.9095,-0.96159,-0.0106854,-4.64738,-0.0473627,40,0
-19834,019807,gear_desy2015_06c.xml,5.6,506,c506-ia24-trim32tb-nochill-gaincal.dat,desy_weibull_decorr_pos,501,c501-ia24-trim30tb-gaincal.dat,desy_weibull_decorr_pos,-4.62825,-0.97164,52.8422,74.7798,-1.00956,-0.0117142,-4.64765,-0.0477676,40,0
-19835,019807,gear_desy2015_06c.xml,5.6,506,c506-ia24-trim32tb-nochill-gaincal.dat,desy_weibull_decorr_pos,501,c501-ia24-trim30tb-gaincal.dat,desy_weibull_decorr_pos,-4.62766,-0.97027,52.8134,74.7589,-1.00329,-0.011448,-4.64785,-0.0477646,40,0
-19836,019807,gear_desy2015_06c.xml,5.6,506,c506-ia24-trim32tb-nochill-gaincal.dat,desy_weibull_decorr_pos,501,c501-ia24-trim30tb-gaincal.dat,desy_weibull_decorr_pos,-4.62678,-1.16629,53.1405,76.7575,-1.07437,-0.0129081,-4.64783,-0.0480796,40,0
-19837,019807,gear_desy2015_06c.xml,5.6,506,c506-ia24-trim32tb-nochill-gaincal.dat,desy_weibull_decorr_pos,501,c501-ia24-trim30tb-gaincal.dat,desy_weibull_decorr_pos,-4.62649,-1.16642,53.2523,76.753,-1.06735,-0.0127531,-4.64783,-0.0480796,40,0
+19834,019807,gear_desy2015_06c.xml,5.6,506,c506-ia24-trim32tb-nochill-gaincal.dat,desy_weibull_decorr_pos,501,c501-ia24-trim30tb-gaincal.dat,desy_weibull_decorr_pos,-4.62818,-0.969603,52.8389,74.709,-1.01157,-0.0117119,-4.64765,-0.0477676,40,0
+19835,019807,gear_desy2015_06c.xml,5.6,506,c506-ia24-trim32tb-nochill-gaincal.dat,desy_weibull_decorr_pos,501,c501-ia24-trim30tb-gaincal.dat,desy_weibull_decorr_pos,-4.62765,-0.969056,52.8042,74.702,-1.00335,-0.0114546,-4.64785,-0.0477646,40,0
+19836,019807,gear_desy2015_06c.xml,5.6,506,c506-ia24-trim32tb-nochill-gaincal.dat,desy_weibull_decorr_pos,501,c501-ia24-trim30tb-gaincal.dat,desy_weibull_decorr_pos,-4.62702,-1.14924,52.929,76.4881,-1.09742,-0.0131229,-4.64783,-0.0480796,40,0
+19837,019807,gear_desy2015_06c.xml,5.6,506,c506-ia24-trim32tb-nochill-gaincal.dat,desy_weibull_decorr_pos,501,c501-ia24-trim30tb-gaincal.dat,desy_weibull_decorr_pos,-4.6267,-1.1507,53.1037,76.4906,-1.08501,-0.012869,-4.64783,-0.0480796,40,0
+19838,019807,gear_desy2015_06c.xml,5.6,506,c506-ia24-trim32tb-nochill-gaincal.dat,desy_weibull_decorr_pos,501,c501-ia24-trim30tb-gaincal.dat,desy_weibull_decorr_pos,-4.62644,-1.38744,53.0112,78.3027,-1.19609,-0.0149168,-4.64821,-0.0479146,40,0
+19839,019807,gear_desy2015_06c.xml,5.6,506,c506-ia24-trim32tb-nochill-gaincal.dat,desy_weibull_decorr_pos,501,c501-ia24-trim30tb-gaincal.dat,desy_weibull_decorr_pos,-4.62569,-1.38848,52.8574,78.3198,-1.19823,-0.0145531,-4.648,-0.0479438,40,0
 
-#19838,019807,gear_desy2015_06c.xml,5.6,506,c506-ia24-trim32tb-nochill-gaincal.dat,desy_weibull_decorr_pos,501,c501-ia24-trim30tb-gaincal.dat,desy_weibull_decorr_pos,-4.62791,-1.3812,46.4815,81.9779,-0.970882,-0.0140917,-4.64821,-0.0479146,40,0
-#19839,019807,gear_desy2015_06c.xml,5.6,506,c506-ia24-trim32tb-nochill-gaincal.dat,desy_weibull_decorr_pos,501,c501-ia24-trim30tb-gaincal.dat,desy_weibull_decorr_pos,-4.62947,-1.28684,47.9139,82.8187,-1.16815,-0.0120324,-4.648,-0.0479438,40,0
-#19841,019807,gear_desy2015_06c.xml,5.6,506,c506-ia24-trim32tb-nochill-gaincal.dat,desy_weibull_decorr_pos,501,c501-ia24-trim30tb-gaincal.dat,desy_weibull_decorr_pos,-4.67848,-4.71886,47.3441,85.1604,-0.5361,-0.0153678,-4.64813,-0.0472043,40,0
-#19842,019807,gear_desy2015_06c.xml,5.6,506,c506-ia24-trim32tb-nochill-gaincal.dat,desy_weibull_decorr_pos,501,c501-ia24-trim30tb-gaincal.dat,desy_weibull_decorr_pos,-4.62519,-1.89432,47.1412,85.7264,-1.64476,-0.018615,-4.64831,-0.0472349,40,0
-#19844,019807,gear_desy2015_06c.xml,5.6,506,c506-ia24-trim32tb-nochill-gaincal.dat,desy_weibull_decorr_pos,501,c501-ia24-trim30tb-gaincal.dat,desy_weibull_decorr_pos,-4.65849,-4.5972,43.2007,88.0726,0.844549,0.00649848,-4.6482,-0.0453436,40,0
+19841,019807,gear_desy2015_06c.xml,5.6,506,c506-ia24-trim32tb-nochill-gaincal.dat,desy_weibull_decorr_pos,501,c501-ia24-trim30tb-gaincal.dat,desy_weibull_decorr_pos,-4.62359,-1.70791,53.6706,80.089,-1.33893,-0.0170848,-4.64813,-0.0472043,40,0
+19842,019807,gear_desy2015_06c.xml,5.6,506,c506-ia24-trim32tb-nochill-gaincal.dat,desy_weibull_decorr_pos,501,c501-ia24-trim30tb-gaincal.dat,desy_weibull_decorr_pos,-4.62419,-1.70634,53.226,80.086,-1.30698,-0.0168072,-4.64831,-0.0472349,40,0
+19844,019807,gear_desy2015_06c.xml,5.6,506,c506-ia24-trim32tb-nochill-gaincal.dat,desy_weibull_decorr_pos,501,c501-ia24-trim30tb-gaincal.dat,desy_weibull_decorr_pos,-4.62055,-2.15584,50.1741,82.6685,-1.71061,-0.0215037,-4.6482,-0.0453436,40,0
 
 19845,019807,gear_desy2015_06c.xml,5.6,506,c506-ia24-trim32tb-nochill-gaincal.dat,desy_weibull_decorr_pos,501,c501-ia24-trim30tb-gaincal.dat,desy_weibull_decorr_pos,-4.62376,-0.122603,51.4824,54.0645,-0.672458,-0.00613684,-4.64542,-0.0427623,40,0
 19846,019807,gear_desy2015_06c.xml,5.6,506,c506-ia24-trim32tb-nochill-gaincal.dat,desy_weibull_decorr_pos,501,c501-ia24-trim30tb-gaincal.dat,desy_weibull_decorr_pos,-4.62388,-0.122209,51.5204,54.0604,-0.677681,-0.00617756,-4.6454,-0.0429528,40,0
@@ -398,18 +394,18 @@ RunNumber,AlignmentRun,GearFile,BeamEnergy,dut_chip,dut_gain,dut_gain_type,ref_c
 # Alignment:
 20143,020143,gear_desy2015_06d.xml,5.6,506,c506-ia24-trim28tb-nochiller-gaincal.dat,desy_weibull_decorr_pos,501,c501-ia24-trim30tb-gaincal.dat,desy_weibull_decorr_pos,0.173733,0.31889,56.6364,26.0383,-0.202643,-0.0047465,0.543845,0.0599197,40,0
 
-20150,020143,gear_desy2015_06d.xml,5.6,506,c506-ia24-trim28tb-nochiller-gaincal.dat,desy_weibull_decorr_pos,501,c501-ia24-trim30tb-gaincal.dat,desy_weibull_decorr_pos,0.177483,-1.05749,57.6517,77.9297,-0.88422,-0.0152316,0.548286,0.0521938,40,0
-20151,020143,gear_desy2015_06d.xml,5.6,506,c506-ia24-trim28tb-nochiller-gaincal.dat,desy_weibull_decorr_pos,501,c501-ia24-trim30tb-gaincal.dat,desy_weibull_decorr_pos,0.177002,-1.34122,58.4276,79.9208,-1.03648,-0.0176457,0.54694,0.0530945,40,0
-20152,020143,gear_desy2015_06d.xml,5.6,506,c506-ia24-trim28tb-nochiller-gaincal.dat,desy_weibull_decorr_pos,501,c501-ia24-trim30tb-gaincal.dat,desy_weibull_decorr_pos,0.177,-1.75074,58.7274,81.8992,-1.21728,-0.0209601,0.454324,0.0543671,40,0
-20153,020143,gear_desy2015_06d.xml,5.6,506,c506-ia24-trim28tb-nochiller-gaincal.dat,desy_weibull_decorr_pos,501,c501-ia24-trim30tb-gaincal.dat,desy_weibull_decorr_pos,0.178084,-1.75419,58.8203,81.9078,-1.23685,-0.0211174,0.454536,0.0544757,40,0
-20154,020143,gear_desy2015_06d.xml,5.6,506,c506-ia24-trim28tb-nochiller-gaincal.dat,desy_weibull_decorr_pos,501,c501-ia24-trim30tb-gaincal.dat,desy_weibull_decorr_pos,0.178,-2.44146,58.8892,83.8987,-1.60781,-0.027509,0.455332,0.0565556,40,0
-20155,020143,gear_desy2015_06d.xml,5.6,506,c506-ia24-trim28tb-nochiller-gaincal.dat,desy_weibull_decorr_pos,501,c501-ia24-trim30tb-gaincal.dat,desy_weibull_decorr_pos,0.179782,-2.05936,58.9824,82.9312,-1.38348,-0.0239064,0.454806,0.0557613,40,0
-20156,020143,gear_desy2015_06d.xml,5.6,506,c506-ia24-trim28tb-nochiller-gaincal.dat,desy_weibull_decorr_pos,501,c501-ia24-trim30tb-gaincal.dat,desy_weibull_decorr_pos,0.181029,-2.05616,58.917,82.9304,-1.36205,-0.0234352,0.45481,0.0558442,40,0
-20157,020143,gear_desy2015_06d.xml,5.6,506,c506-ia24-trim28tb-nochiller-gaincal.dat,desy_weibull_decorr_pos,501,c501-ia24-trim30tb-gaincal.dat,desy_weibull_decorr_pos,0.182475,-1.52915,58.6577,80.9377,-1.12334,-0.019307,0.546633,0.0537091,40,0
-20158,020143,gear_desy2015_06d.xml,5.6,506,c506-ia24-trim28tb-nochiller-gaincal.dat,desy_weibull_decorr_pos,501,c501-ia24-trim30tb-gaincal.dat,desy_weibull_decorr_pos,0.183738,-1.18543,57.9808,78.95,-0.958207,-0.0164792,0.547615,0.0526069,40,0
-20159,020143,gear_desy2015_06d.xml,5.6,506,c506-ia24-trim28tb-nochiller-gaincal.dat,desy_weibull_decorr_pos,501,c501-ia24-trim30tb-gaincal.dat,desy_weibull_decorr_pos,0.184685,-1.18648,58.3703,78.9524,-0.964736,-0.0165123,0.547715,0.0526705,40,0
-20160,020143,gear_desy2015_06d.xml,5.6,506,c506-ia24-trim28tb-nochiller-gaincal.dat,desy_weibull_decorr_pos,501,c501-ia24-trim30tb-gaincal.dat,desy_weibull_decorr_pos,0.185938,-0.94565,58.0874,76.9694,-0.836346,-0.0142051,0.548444,0.0523043,40,0
-20161,020143,gear_desy2015_06d.xml,5.6,506,c506-ia24-trim28tb-nochiller-gaincal.dat,desy_weibull_decorr_pos,501,c501-ia24-trim30tb-gaincal.dat,desy_weibull_decorr_pos,0.185572,-0.943613,57.961,76.9651,-0.827435,-0.0143138,0.548325,0.0523551,40,0
+20150,020143,gear_desy2015_06d.xml,5.6,506,c506-ia24-trim28tb-nochiller-gaincal.dat,desy_weibull_decorr_pos,501,c501-ia24-trim30tb-gaincal.dat,desy_weibull_decorr_pos,0.17748,-1.0574,57.6488,77.9288,-0.885431,-0.0152476,0.548286,0.0521938,40,0
+20151,020143,gear_desy2015_06d.xml,5.6,506,c506-ia24-trim28tb-nochiller-gaincal.dat,desy_weibull_decorr_pos,501,c501-ia24-trim30tb-gaincal.dat,desy_weibull_decorr_pos,0.177064,-1.34086,58.4591,79.9168,-1.03949,-0.0176614,0.54694,0.0530945,40,0
+20152,020143,gear_desy2015_06d.xml,5.6,506,c506-ia24-trim28tb-nochiller-gaincal.dat,desy_weibull_decorr_pos,501,c501-ia24-trim30tb-gaincal.dat,desy_weibull_decorr_pos,0.176974,-1.74913,58.814,81.8802,-1.23426,-0.021228,0.454324,0.0543671,40,0
+20153,020143,gear_desy2015_06d.xml,5.6,506,c506-ia24-trim28tb-nochiller-gaincal.dat,desy_weibull_decorr_pos,501,c501-ia24-trim30tb-gaincal.dat,desy_weibull_decorr_pos,0.178053,-1.75258,58.9812,81.8927,-1.25288,-0.0213788,0.454536,0.0544757,40,0
+20154,020143,gear_desy2015_06d.xml,5.6,506,c506-ia24-trim28tb-nochiller-gaincal.dat,desy_weibull_decorr_pos,501,c501-ia24-trim30tb-gaincal.dat,desy_weibull_decorr_pos,0.177936,-2.43281,59.2105,83.863,-1.64754,-0.0282534,0.455332,0.0565556,40,0
+20155,020143,gear_desy2015_06d.xml,5.6,506,c506-ia24-trim28tb-nochiller-gaincal.dat,desy_weibull_decorr_pos,501,c501-ia24-trim30tb-gaincal.dat,desy_weibull_decorr_pos,0.179818,-2.05608,59.1553,82.91,-1.41233,-0.024427,0.454806,0.0557613,40,0
+20156,020143,gear_desy2015_06d.xml,5.6,506,c506-ia24-trim28tb-nochiller-gaincal.dat,desy_weibull_decorr_pos,501,c501-ia24-trim30tb-gaincal.dat,desy_weibull_decorr_pos,0.180894,-2.05207,58.9721,82.9075,-1.38962,-0.0239419,0.45481,0.0558442,40,0
+20157,020143,gear_desy2015_06d.xml,5.6,506,c506-ia24-trim28tb-nochiller-gaincal.dat,desy_weibull_decorr_pos,501,c501-ia24-trim30tb-gaincal.dat,desy_weibull_decorr_pos,0.182421,-1.52846,58.7231,80.9309,-1.12567,-0.0193744,0.546633,0.0537091,40,0
+20158,020143,gear_desy2015_06d.xml,5.6,506,c506-ia24-trim28tb-nochiller-gaincal.dat,desy_weibull_decorr_pos,501,c501-ia24-trim30tb-gaincal.dat,desy_weibull_decorr_pos,0.183714,-1.18524,58.0399,78.9462,-0.959433,-0.0165161,0.547615,0.0526069,40,0
+20159,020143,gear_desy2015_06d.xml,5.6,506,c506-ia24-trim28tb-nochiller-gaincal.dat,desy_weibull_decorr_pos,501,c501-ia24-trim30tb-gaincal.dat,desy_weibull_decorr_pos,0.18467,-1.18621,58.3823,78.9492,-0.967234,-0.0165721,0.547715,0.0526705,40,0
+20160,020143,gear_desy2015_06d.xml,5.6,506,c506-ia24-trim28tb-nochiller-gaincal.dat,desy_weibull_decorr_pos,501,c501-ia24-trim30tb-gaincal.dat,desy_weibull_decorr_pos,0.185944,-0.945443,58.089,76.9673,-0.838543,-0.0142366,0.548444,0.0523043,40,0
+20161,020143,gear_desy2015_06d.xml,5.6,506,c506-ia24-trim28tb-nochiller-gaincal.dat,desy_weibull_decorr_pos,501,c501-ia24-trim30tb-gaincal.dat,desy_weibull_decorr_pos,0.185547,-0.943627,57.9403,76.963,-0.828832,-0.014349,0.548325,0.0523551,40,0
 
 
 # JUNE 25
