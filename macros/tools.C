@@ -64,7 +64,7 @@ Double_t gettilt(const char * inputdir, int run, int chip) {
       if(!getline( s, str, ',' )) break;
       if(i == 0 && run == atoi(str.c_str())) found_run = true; // Read run number
       if(i == 4 && chip == atoi(str.c_str())) found_chip = true; // Read DUT chip id
-      if(i == 13 && found_run && found_chip) { tilt = atof(str.c_str()); break; } // Store tilt value
+      if(i == 14 && found_run && found_chip) { tilt = atof(str.c_str()); break; } // Store tilt value
       i++;
     }
     if(found_run && found_chip) break;
