@@ -205,6 +205,8 @@
   <parameter name="DUT_chip" type="int" value="@dut_chip@"/>
   <!--CMS DUT gain file to be used-->
   <parameter name="DUT_gain" type="string" value="@dut_gain@"/>
+  <!--CMS DUT VCAL->electrons conversion factor. Set to 0 if default is to be used.-->
+  <parameter name="DUT_conversion" type="string" value="@dut_conversion@"/>
   <!--DUT position z in mm after the telescope plane-->
   <parameter name="DUT_pos_z" type="double" value="@dut_pos_z@"/>
   <!--DUT rotation in xy-->
