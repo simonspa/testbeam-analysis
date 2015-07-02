@@ -20,13 +20,17 @@ using namespace std;
 
 Double_t restel = 4.8;
 
-void simulation() {
+void simulation(int chip) {
 
     //----------------------------------------------------------------------------
   // read sim:
 
   cout << "try to open sim file";
-  ifstream SIMstream( "simulation/tiltsim294.dat" );
+  std::string file;
+
+  if(chip == 506) { file = "simulation/tiltsim294.dat"; }
+  
+  ifstream SIMstream( file.c_str() );
   if( !SIMstream ) {
     cout << ": failed" << endl;
     return;
@@ -96,7 +100,7 @@ void simulation() {
     beta[ii] = -TMath::Log(TMath::Tan(TMath::TwoPi()*(90-stilt.at(ii))/(2*360)));
     bpath[ii] = 1 / cos( stilt.at(ii) / wt );
     btant[ii] = tan( stilt.at(ii) / wt );
-    bsy[ii] = sqrt( sry.at(ii)*sry.at(ii) - 4.8*4.8 ); // subtract telescope
+    bsy[ii] = sqrt( sry.at(ii)*sry.at(ii) - restel*restel ); // subtract telescope
     bncol[ii] = sncol.at(ii);
     blanpk[ii] = slanpk.at(ii);
   }
@@ -122,10 +126,10 @@ void resolution() {
 }
 
 void resolution(const char* inputdir) {
-  resolution(inputdir,0,99999);
+  resolution(inputdir,506,0,99999);
 }
 
-void resolution(const char* inputdir, int startrun, int stoprun) {
+void resolution(const char* inputdir, int chip, int startrun, int stoprun) {
 
   TCanvas *c1 = new TCanvas("c1","resolution",600,600);
   TProfile *resolution = new TProfile("resolution"," ",130,5,85,0,60,"");
@@ -140,9 +144,7 @@ void resolution(const char* inputdir, int startrun, int stoprun) {
 
   int nruns, nfiducial, nevents;
 
-  // Get all runs for chip 506:
-  int chip = 506;
-
+  // Get all runs for given chip:
   std::vector<int> runs = getruns(inputdir,chip);
   for(std::vector<int>::iterator run = runs.begin(); run != runs.end(); run++) {
     if(*run < startrun || *run > stoprun) continue;
@@ -207,5 +209,5 @@ void resolution(const char* inputdir, int startrun, int stoprun) {
   resolution_vs_eta->SetMarkerColor(1);
   resolution_vs_eta->Draw();
 
-  simulation();
+  simulation(chip);
 }
