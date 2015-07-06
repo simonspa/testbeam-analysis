@@ -3,7 +3,6 @@
 #include <fstream>
 #include <sstream>
 
-
 std::vector<int> getruns(const char * inputdir, int chip) {
 
   std::vector<int> runs;
@@ -73,7 +72,89 @@ Double_t gettilt(const char * inputdir, int run, int chip) {
   in.close();
   return tilt;
 }
+
+std::vector<double> getsimulation(std::string name, int chip) {
+
+  //----------------------------------------------------------------------------
+  // read sim:
+
+  cout << "try to open sim file";
+  std::string file;
+
+  if(chip == 506) { file = "simulation/tiltsim294.dat"; }
   
+  ifstream SIMstream( file.c_str() );
+  if( !SIMstream ) {
+    cout << ": failed" << endl;
+    return;
+  }
+  cout << ": succeed" << endl;
+
+  // Read file by lines:
+  double pi = 4*atan(1.0);
+  double wt = 180/pi;
+
+  string rl;
+  double tilt;
+  int run;
+  int nev;
+  int dutyield;
+  int refyield;
+  double eff;
+  double ry;
+  double ncol;
+  double lanpk;
+
+  double turn;
+  double edge;
+
+  vector <double> stilt;
+  vector <double> sry;
+  vector <double> sncol;
+  vector <double> slanpk;
+
+  while( SIMstream.good() && ! SIMstream.eof() ) {
+
+    getline( SIMstream, rl ); // read one line  = event into string
+    istringstream simrun( rl ); // tokenize string
+
+    simrun >> run;
+    simrun >> tilt; // [deg]
+    simrun >> turn;
+    simrun >> nev;
+    simrun >> ry;
+    simrun >> ncol;
+    simrun >> lanpk;
+    simrun >> edge;
+    stilt.push_back(tilt);
+    sry.push_back(ry);
+    sncol.push_back(ncol);
+    slanpk.push_back(lanpk);
+
+    Double_t res_tel_subtracted = TMath::Sqrt(ry*ry - restel*restel);
+    //cout << "run" << run << " (chip506) res " << ry << " ressub " << res_tel_subtracted << " tilt " << tilt << endl;
+  } // while lines
+
+  vector<double> beta;
+  vector<double> bsy;
+  vector<double> bpath;
+  vector<double> btant;
+
+  for(size_t i = 0; i < stilt.size(); i++) {
+    beta.push_back(-TMath::Log(TMath::Tan(TMath::TwoPi()*(90-stilt.at(i))/(2*360))));
+    bpath.push_back(1 / cos( stilt.at(i) / wt ));
+    btant.push_back(tan( stilt.at(i) / wt ));
+    bsy.push_back(sqrt( sry.at(i)*sry.at(i) - restel*restel )); // subtract telescope
+  }
+
+  if(name == "tilt") return stilt;
+  else if(name == "eta") return beta;
+  else if(name == "path") return bpath;
+  else if(name == "res") return bsy;
+  else if(name == "ncol") return sncol;
+  else if(name == "peak") return slanpk;
+  else return std::vector<double>();
+}
 
 // Gauss function:
 Double_t gp0Fit( Double_t *x, Double_t *par ) {
@@ -229,6 +310,52 @@ Double_t fitlang( char* hs ) {
   // fit range:
   int ib0 = h->FindBin(18);
   int ib9 = h->FindBin(40);
+
+  double x0 = h->GetBinLowEdge(ib0);
+  double x9 = h->GetBinLowEdge(ib9) + h->GetBinWidth(ib9);
+
+  // create a TF1 with the range from x0 to x9 and 4 parameters
+  TF1 *fitFcn = new TF1( "fitFcn", fitLandauGauss, x0, x9, 4 );
+
+  fitFcn->SetParName( 0, "peak" );
+  fitFcn->SetParName( 1, "sigma" );
+  fitFcn->SetParName( 2, "area" );
+  fitFcn->SetParName( 3, "smear" );
+
+  fitFcn->SetNpx(500);
+  fitFcn->SetLineWidth(4);
+  fitFcn->SetLineColor(kMagenta);
+
+  // set start values:
+  fitFcn->SetParameter( 0, xpk ); // peak position, defined above
+  fitFcn->SetParameter( 1, sm ); // width
+  fitFcn->SetParameter( 2, aa ); // area
+  fitFcn->SetParameter( 3, ns ); // noise
+
+  h->Fit("fitFcn", "NQR", "ep" );// R = range from fitFcn
+  return fitFcn->GetParameter(0);
+}
+
+Double_t fitfulllang( char* hs ) {
+
+  TH1 *h = (TH1*)gDirectory->Get(hs);
+
+  if( h == NULL ){
+    cout << hs << " does not exist\n";
+    return 0;
+  }
+
+  double aa = h->GetEntries();//normalization
+
+  // find peak:
+  int ipk = h->GetMaximumBin();
+  double xpk = h->GetBinCenter(ipk);
+  double sm = xpk / 9; // sigma
+  double ns = sm; // noise
+
+  // fit range:
+  int ib0 = ipk/2;
+  int ib9 = h->GetNbinsX() - 1;
 
   double x0 = h->GetBinLowEdge(ib0);
   double x9 = h->GetBinLowEdge(ib9) + h->GetBinWidth(ib9);

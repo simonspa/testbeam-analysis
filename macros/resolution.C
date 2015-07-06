@@ -5,6 +5,7 @@
 #include "TCanvas.h"
 #include "TFile.h"
 #include "TProfile.h"
+#include "TGraph.h"
 #include "TSystem.h"
 #include "TStyle.h"
 #include "TROOT.h"
@@ -19,107 +20,6 @@
 using namespace std;
 
 Double_t restel = 4.8;
-
-void simulation(int chip) {
-
-    //----------------------------------------------------------------------------
-  // read sim:
-
-  cout << "try to open sim file";
-  std::string file;
-
-  if(chip == 506) { file = "simulation/tiltsim294.dat"; }
-  
-  ifstream SIMstream( file.c_str() );
-  if( !SIMstream ) {
-    cout << ": failed" << endl;
-    return;
-  }
-  cout << ": succeed" << endl;
-
-  // Read file by lines:
-  double pi = 4*atan(1.0);
-  double wt = 180/pi;
-
-  string rl;
-  double tilt;
-  int run;
-  int nev;
-  int dutyield;
-  int refyield;
-  double eff;
-  double ry;
-  double ncol;
-  double lanpk;
-
-  double turn;
-  double edge;
-
-  vector <double> stilt;
-  vector <double> sry;
-  vector <double> sncol;
-  vector <double> slanpk;
-
-  int m = 0;
-
-  while( SIMstream.good() && ! SIMstream.eof() ) {
-
-    getline( SIMstream, rl ); // read one line  = event into string
-    istringstream simrun( rl ); // tokenize string
-
-    simrun >> run;
-    simrun >> tilt; // [deg]
-    simrun >> turn;
-    simrun >> nev;
-    simrun >> ry;
-    simrun >> ncol;
-    simrun >> lanpk;
-    simrun >> edge;
-    ++m;
-    stilt.push_back(tilt);
-    sry.push_back(ry);
-    sncol.push_back(ncol);
-    slanpk.push_back(lanpk);
-
-    Double_t res_tel_subtracted = TMath::Sqrt(ry*ry - restel*restel);
-    cout << "run" << run << " (chip506) res " << ry << " ressub " << res_tel_subtracted << " tilt " << tilt << endl;
-  } // while lines
-
-  cout << m << " lines" << endl;
-
-  double btilt[999];
-  double beta[999];
-  double bsy[999];
-  double bncol[999];
-  double blanpk[999];
-  double bpath[999];
-  double btant[999];
-
-  for( int ii = 0; ii < m; ++ii ) {
-    btilt[ii] = stilt.at(ii);
-    beta[ii] = -TMath::Log(TMath::Tan(TMath::TwoPi()*(90-stilt.at(ii))/(2*360)));
-    bpath[ii] = 1 / cos( stilt.at(ii) / wt );
-    btant[ii] = tan( stilt.at(ii) / wt );
-    bsy[ii] = sqrt( sry.at(ii)*sry.at(ii) - restel*restel ); // subtract telescope
-    bncol[ii] = sncol.at(ii);
-    blanpk[ii] = slanpk.at(ii);
-  }
-
-  c2->cd();
-  TGraph *si = new TGraph( m, btilt, bsy ); // sim
-  si->SetLineColor(2);
-  si->SetLineWidth(3);
-  si->SetMarkerColor(2);
-  si->Draw("PL"); // without axis option: overlay
-
-  c3->cd();
-  TGraph *si_eta = new TGraph( m, beta, bsy ); // sim
-  si_eta->SetLineColor(2);
-  si_eta->SetLineWidth(3);
-  si_eta->SetMarkerColor(2);
-  si_eta->Draw("PL"); // without axis option: overlay
-
-}
 
 void resolution() {
   std::cout << "Run resolution(histogram dir)" << std::endl;
@@ -191,6 +91,8 @@ void resolution(const char* inputdir, int chip, int startrun, int stoprun) {
 
   cout << nruns << " runs analyzed with " << nevents << " linked clusters and " << nfiducial << " clusters in the fiducial volume in total." << endl;
 
+  TLegend * leg = new TLegend();
+
   c1->cd();
   resolution->SetTitle("CMS Pixel Resolution (y) wrt to tilt angle (from: cmsdyfctq3);tilt angle [#deg];resolution y [#mum]");
   resolution->SetMarkerStyle(20);
@@ -204,10 +106,32 @@ void resolution(const char* inputdir, int chip, int startrun, int stoprun) {
   resolution_tel_subtracted->Draw();
 
   c3->cd();
-  resolution_vs_eta->SetTitle("CMS Pixel Resolution (y) - Tel Res. wrt to pseudo rapidity;pseudo rapidity #eta;resolution y [#mum]");
+  leg->AddEntry(resolution_vs_eta, "Data",  "p");
+
+  //resolution_vs_eta->SetTitle("CMS Pixel Resolution (y) - Tel Res. wrt to pseudo rapidity;pseudo rapidity #eta;resolution y [#mum]");
   resolution_vs_eta->SetMarkerStyle(20);
   resolution_vs_eta->SetMarkerColor(1);
   resolution_vs_eta->Draw();
 
-  simulation(chip);
+
+  std::vector<double> vtilt = getsimulation("tilt", chip);
+  std::vector<double> veta = getsimulation("eta", chip);
+  std::vector<double> vres = getsimulation("res", chip);
+
+  c2->cd();
+  TGraph *si = new TGraph( vtilt.size(), &(vtilt[0]), &(vres[0]) ); // sim
+  si->SetLineColor(2);
+  si->SetLineWidth(3);
+  si->SetMarkerColor(2);
+  si->Draw("PL"); // without axis option: overlay
+
+  c3->cd();
+  TGraph *si_eta = new TGraph( veta.size(), &(veta[0]), &(vres[0]) ); // sim
+  leg->AddEntry(si_eta, "pixelav simulation",  "l");
+  si_eta->SetLineColor(2);
+  si_eta->SetLineWidth(3);
+  si_eta->SetMarkerColor(2);
+  si_eta->Draw("PL"); // without axis option: overlay
+
+  leg->Draw();
 }
