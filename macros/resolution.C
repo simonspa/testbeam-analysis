@@ -80,7 +80,7 @@ void resolution(const char* inputdir, int chip, int startrun, int stoprun) {
     // Subtract telescope track resolution:
     Double_t res_tel_subtracted = TMath::Sqrt(res*res - restel*restel);
 
-    cout << "run" << *run << " (chip" << chip << ") res " << res << " ressub " << res_tel_subtracted << " tilt " << tilt << endl;
+    cout << "run" << *run << " (chip" << chip << ") res " << res << " ressub " << res_tel_subtracted << " tilt " << tilt << " eta " << eta << endl;
     resolution->Fill(tilt,res,1);
     resolution_tel_subtracted->Fill(tilt,res_tel_subtracted,1);
     resolution_vs_eta->Fill(eta,res_tel_subtracted,1);
@@ -108,7 +108,7 @@ void resolution(const char* inputdir, int chip, int startrun, int stoprun) {
   c3->cd();
   leg->AddEntry(resolution_vs_eta, "Data",  "p");
 
-  //resolution_vs_eta->SetTitle("CMS Pixel Resolution (y) - Tel Res. wrt to pseudo rapidity;pseudo rapidity #eta;resolution y [#mum]");
+  resolution_vs_eta->SetTitle("CMS Pixel Resolution (y) - Tel Res. wrt to pseudo rapidity;pseudo rapidity #eta;resolution y [#mum]");
   resolution_vs_eta->SetMarkerStyle(20);
   resolution_vs_eta->SetMarkerColor(1);
   resolution_vs_eta->Draw();
@@ -118,20 +118,21 @@ void resolution(const char* inputdir, int chip, int startrun, int stoprun) {
   std::vector<double> veta = getsimulation("eta", chip);
   std::vector<double> vres = getsimulation("res", chip);
 
-  c2->cd();
-  TGraph *si = new TGraph( vtilt.size(), &(vtilt[0]), &(vres[0]) ); // sim
-  si->SetLineColor(2);
-  si->SetLineWidth(3);
-  si->SetMarkerColor(2);
-  si->Draw("PL"); // without axis option: overlay
+  if(!vtilt.empty()) {
+    c2->cd();
+    TGraph *si = new TGraph( vtilt.size(), &(vtilt[0]), &(vres[0]) ); // sim
+    si->SetLineColor(2);
+    si->SetLineWidth(3);
+    si->SetMarkerColor(2);
+    si->Draw("PL"); // without axis option: overlay
 
-  c3->cd();
-  TGraph *si_eta = new TGraph( veta.size(), &(veta[0]), &(vres[0]) ); // sim
-  leg->AddEntry(si_eta, "pixelav simulation",  "l");
-  si_eta->SetLineColor(2);
-  si_eta->SetLineWidth(3);
-  si_eta->SetMarkerColor(2);
-  si_eta->Draw("PL"); // without axis option: overlay
-
+    c3->cd();
+    TGraph *si_eta = new TGraph( veta.size(), &(veta[0]), &(vres[0]) ); // sim
+    leg->AddEntry(si_eta, "pixelav simulation",  "l");
+    si_eta->SetLineColor(2);
+    si_eta->SetLineWidth(3);
+    si_eta->SetMarkerColor(2);
+    si_eta->Draw("PL"); // without axis option: overlay
+  }
   leg->Draw();
 }
