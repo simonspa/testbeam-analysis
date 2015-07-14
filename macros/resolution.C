@@ -16,6 +16,7 @@
 #include <sstream>
 
 #include "tools.C"
+#include "plotter.C"
 
 using namespace std;
 
@@ -30,6 +31,9 @@ void resolution(const char* inputdir) {
 }
 
 void resolution(const char* inputdir, int chip, int startrun, int stoprun) {
+
+  // Set the histogram styles:
+  setHHStyle(*gStyle);
 
   TCanvas *c1 = new TCanvas("c1","resolution",600,600);
   TProfile *resolution = new TProfile("resolution"," ",130,5,85,0,60,"");
@@ -91,28 +95,36 @@ void resolution(const char* inputdir, int chip, int startrun, int stoprun) {
 
   cout << nruns << " runs analyzed with " << nevents << " linked clusters and " << nfiducial << " clusters in the fiducial volume in total." << endl;
 
-  TLegend * leg = new TLegend();
+  TLegend *leg = new TLegend();
+  TLegend *leg2 = new TLegend();
+  TLegend *leg3 = new TLegend();
+  setLegendStyle(leg);
+  setLegendStyle(leg2);
+  setLegendStyle(leg3);
 
   c1->cd();
-  resolution->SetTitle("CMS Pixel Resolution (y) wrt to tilt angle (from: cmsdyfctq3);tilt angle [#deg];resolution y [#mum]");
+  resolution->SetTitle(";tilt angle [#degree];resolution y #left[#mum#right]");
   resolution->SetMarkerStyle(20);
-  resolution->SetMarkerColor(2);
+  //resolution->SetMarkerColor(2);
   resolution->Draw();
+  setStyleAndFillLegend(resolution,"data",leg);
+  DrawCMSLabels(nfiducial,5.6,0.045);
 
   c2->cd();
-  resolution_tel_subtracted->SetTitle("CMS Pixel Resolution (y) - Tel Res. wrt to tilt angle;tilt angle [#deg];resolution y [#mum]");
+  resolution_tel_subtracted->SetTitle(";tilt angle [#degree];resolution y #left[#mum#right]");
   resolution_tel_subtracted->SetMarkerStyle(20);
   resolution_tel_subtracted->SetMarkerColor(1);
   resolution_tel_subtracted->Draw();
+  setStyleAndFillLegend(resolution_tel_subtracted,"data",leg2);
+  DrawCMSLabels(nfiducial,5.6,0.045);
 
   c3->cd();
-  leg->AddEntry(resolution_vs_eta, "Data",  "p");
-
-  resolution_vs_eta->SetTitle("CMS Pixel Resolution (y) - Tel Res. wrt to pseudo rapidity;pseudo rapidity #eta;resolution y [#mum]");
+  resolution_vs_eta->SetTitle(";pseudo rapidity #eta;resolution y #left[#mum#right]");
   resolution_vs_eta->SetMarkerStyle(20);
   resolution_vs_eta->SetMarkerColor(1);
   resolution_vs_eta->Draw();
-
+  setStyleAndFillLegend(resolution_vs_eta,"data",leg3);
+  DrawCMSLabels(nfiducial,5.6,0.045);
 
   std::vector<double> vtilt = getsimulation("tilt", chip);
   std::vector<double> veta = getsimulation("eta", chip);
@@ -125,14 +137,19 @@ void resolution(const char* inputdir, int chip, int startrun, int stoprun) {
     si->SetLineWidth(3);
     si->SetMarkerColor(2);
     si->Draw("PL"); // without axis option: overlay
+    setStyleAndFillLegend(si,"sim",leg2);
 
     c3->cd();
     TGraph *si_eta = new TGraph( veta.size(), &(veta[0]), &(vres[0]) ); // sim
-    leg->AddEntry(si_eta, "pixelav simulation",  "l");
     si_eta->SetLineColor(2);
     si_eta->SetLineWidth(3);
     si_eta->SetMarkerColor(2);
     si_eta->Draw("PL"); // without axis option: overlay
+    setStyleAndFillLegend(si_eta,"sim",leg3);
   }
-  leg->Draw();
+
+  c2->cd();
+  leg2->Draw();
+  c3->cd();
+  leg3->Draw();
 }
