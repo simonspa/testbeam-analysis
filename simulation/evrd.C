@@ -30,6 +30,7 @@
 #include <fstream> // files
 #include <vector>
 #include <cmath>
+#include <math.h>
 
 #include <TFile.h>
 #include <TH1D.h>
@@ -170,7 +171,7 @@ int main( int argc, char* argv[] )
 
   // extract run number from pixelav-r1001.out
 
-  string::size_type idx = evFileName.find( "." );
+  string::size_type idx = evFileName.find( ".out" );
 
   if( idx == string::npos ) {
     cout << evFileName << " does not end wih .out. end" << endl;
@@ -293,7 +294,9 @@ int main( int argc, char* argv[] )
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   // (re-)create root file:
 
-  TFile* histoFile = new TFile( "evrd.root", "RECREATE" );
+  TString histfilename;
+  histfilename.Form("%s.root",evFileName.c_str());
+  TFile* histoFile = new TFile( histfilename, "RECREATE" );
 
   // book histos:
 
@@ -353,8 +356,17 @@ int main( int argc, char* argv[] )
   TH1D hq2( "hq2", "2-pix cluster Q2;2-pixel cluster Q2 [ke];clusters", 200, 0, 100 );
   TH1D heta( "heta", "eta 2-row cluster;2-row eta;cluster", 100, -1, 1 );
 
+  TH1D hdx0( "hdx0", "dx;dx [um];clusters", 250, -250, 250 );
+  TH1D hdy0( "hdy0", "dy;dy [um];clusters", 300, -100, 200 );
+
   TH1D hdx( "hdx", "dx;dx [um];clusters", 250, -250, 250 );
   TH1D hdy( "hdy", "dy;dy [um];clusters", 300, -100, 200 );
+
+  TH1D skwcol( "skwcol", "skwcol;cluster col skw;clusters", 80, -0.2, 0.2 );
+  TProfile skwcolvsxm( "skwcolvsxm", "skwcolvsxm;x track [um];cluster col skw", 150, 0, 80, -0.2, 0.2);
+  TProfile dxvsskwcol( "dxvsskwcol", "dxvsskwcol;cluster col skw;DUT cluster - track x", 80, -0.2, 0.2, -60, 60);
+  TProfile dx0vsskwcol( "dx0vsskwcol", "dx0vsskwcol;cluster col skw;DUT cluster - track x", 80, -0.2, 0.2, -60, 60);
+
   TH1D hdxc( "hdxc", "dx;dx [um];clusters", 250, -250, 250 );
   TH1D hdyc( "hdyc", "dy;dy [um];clusters", 300, -100, 200 );
   TH1D hdxcq0( "hdxcq0", "dx;#Deltax [um];clusters", 250, -250, 250 );
@@ -364,6 +376,7 @@ int main( int argc, char* argv[] )
   TH1D hdxcq2( "hdxcq2", "dx;#Deltax [um];clusters", 250, -250, 250 );
   TH1D hdycq2( "hdycq2", "dy;#Deltay [um];clusters", 300, -100, 200 );
   TH1D hdxcq3( "hdxcq3", "dx;#Deltax [um];clusters", 250, -250, 250 );
+  TH1D hdx0cq3( "hdx0cq3", "dx0;#Deltax0 [um];clusters", 250, -250, 250 );
   TH1D hdycq3( "hdycq3", "dy;#Deltay [um];clusters", 300, -100, 200 );
   TH1D hdycq3d( "hdycq3d", "dytr with bg no dot;#Deltaytr [um];clusters", 300, -100, 200 );
   TH1D hdycq5( "hdycq5", "dy;#Deltay [um];clusters", 300, -100, 200 );
@@ -383,6 +396,10 @@ int main( int argc, char* argv[] )
 
   TProfile dyvsxm( "dyvsxm", "y shift vs x;x track [um];shift(#Deltay) [#mum]", 150, 0, 300, -100, 100 );
   TProfile dyvsym( "dyvsym", "y shift vs y;y track [um];shift(#Deltay) [#mum]", 100, 0, 200, -100, 200 );
+
+  TProfile dx0vsxm( "dx0vsxm", "x0 shift vs x;x track [um];shift(#Deltax) [#mum]", 150, 0, 300, -100, 100 );
+  TProfile dxvsxm( "dxvsxm", "x shift vs x;x track [um];shift(#Deltax) [#mum]", 150, 0, 300, -100, 100 );
+  TProfile dxvsym( "dxvsym", "x shift vs y;y track [um];shift(#Deltax) [#mum]", 100, 0, 200, -100, 200 );
 
   TProfile etavsym( "etavsym", "eta vs track y;y track [um];2-row <eta>", 100, 0, 200, -1, 1 );
   TProfile q0vsym( "q0vsym", "Qleft vs track y;y track [um];2-row <Qleft> [ke]", 100, 0, 200, 0, 99 );
@@ -707,6 +724,14 @@ int main( int argc, char* argv[] )
       hcol.Fill( ncol );
       hrow.Fill( nrow );
 
+      // skew calculation (3rd moment):
+      double skw = 0;
+      // Sum third powers of x-x_cog:
+      for(int col = colmin; col <= colmax; col++) { skw += pow((col - c->col),3)*qcol[col]; }
+      // Normalize to total charge and cluster length ^3:
+      skw /= (c->charge*pow(ncol,3));
+      skw *= 8;
+
       // eta-algo in rows:
 
       double q1 = 0;
@@ -760,15 +785,25 @@ int main( int argc, char* argv[] )
       if( chip < 0 ) eta = -eta;
 
       // residuals:
+      double dx0 = ( c->col + 0.5 - 0.5*Ncol ) * pitchx - xmid; // [um]
+      double dy0 = ( c->row + 0.5 - 0.5*Nrow ) * pitchy - ymid;
 
-      double dx = ( c->col + 0.5 - 0.5*Ncol ) * pitchx - xmid; // [um]
+      // skew correction
+      double skwcorr =  0.0665505 + 77.6218*skw;
+      double dx = ( c->col + 0.5 - 0.5*Ncol ) * pitchx - xmid - skwcorr; // [um]
       double dy = ( c->row + 0.5 - 0.5*Nrow ) * pitchy - ymid;
 
       double dxtr = dx - smr*rx/cos(alfa); // smeared by telescope
       double dytr = dy - smr*ry/cos(beta); // negative sign is important: cancellation with ymod
 
+      double dx0tr = dx0 - smr*rx/cos(alfa); // smeared by telescope
+      double dy0tr = dy0 - smr*ry/cos(beta); // negative sign is important: cancellation with ymod
+
       double dxbg = 180 * ( myRandom->Rndm() - myRandom->Rndm() ); // triangular
       double dybg = 120 * ( myRandom->Rndm() - myRandom->Rndm() ); // [-100,100]
+
+      hdx0.Fill( dx0 );
+      hdy0.Fill( dy0 );
 
       hdx.Fill( dx );
       hdy.Fill( dy );
@@ -789,7 +824,10 @@ int main( int argc, char* argv[] )
 	  if( abs( dx ) < 76 ) hdycq2.Fill( dytr );
 	}
 	if( qnrm*0.01 < 25 ) {
-	  if( abs( dy ) < 51 ) hdxcq3.Fill( dxtr );
+	  if( abs( dy ) < 51 ) { 
+	    hdxcq3.Fill( dxtr );
+	    hdx0cq3.Fill( dx0tr );
+	  }
 	  if( abs( dx ) < 76 ) {
 	    hdycq3.Fill( dytr );
 	    hdycq3.Fill( dybg, wbg );
@@ -899,6 +937,14 @@ int main( int argc, char* argv[] )
 
 	  hncol.Fill( ncol );
 	  hnrow.Fill( nrow );
+	  
+	  // skew
+	  skwcol.Fill(skw);
+	  skwcolvsxm.Fill( -umod+ 75, skw ); // smeared
+	  skwcolvsxm.Fill( xmod+225, skw ); // smeared
+
+	  dxvsskwcol.Fill( skw, dxtr);
+	  dx0vsskwcol.Fill( skw, dx0tr);
 
 	  if( xmid > -75+20 && xmid < 75-20 ) { // cut out x-cracks
 	    nrowvsy.Fill( ymid+ 50, nrow );
@@ -947,6 +993,15 @@ int main( int argc, char* argv[] )
 
 	  dyvsym.Fill( ymod+ 50, dytr );
 	  dyvsym.Fill( ymod+150, dytr );
+
+	  dx0vsxm.Fill( -umod+ 75, dx0tr );
+	  dx0vsxm.Fill( xmod+225, dx0tr );
+
+	  dxvsxm.Fill( -umod+ 75, dxtr );
+	  dxvsxm.Fill( xmod+225, dxtr );
+
+	  dxvsym.Fill( ymod+ 50, dxtr );
+	  dxvsym.Fill( ymod+150, dxtr );
 
 	  //rmsxvsxm.Fill(  75-xmod, abs(dxtr) );
 	  rmsxvsxm.Fill( umod+ 75, abs(dxtr) );
