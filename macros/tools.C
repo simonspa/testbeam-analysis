@@ -3,11 +3,15 @@
 #include <fstream>
 #include <sstream>
 
+#include "constants.h"
+
+using namespace std;
+
 std::vector<int> getruns(const char * inputdir, int chip) {
 
   std::vector<int> runs;
 
-  void* dirp = gSystem->OpenDirectory(inputdir);
+  gSystem->OpenDirectory(inputdir);
   ifstream in;
   string line;
   in.open("runlist.csv");
@@ -42,7 +46,7 @@ Double_t gettilt(const char * inputdir, int run, int chip) {
   bool found_run = false;
   bool found_chip = false;
 
-  void* dirp = gSystem->OpenDirectory(inputdir);
+  gSystem->OpenDirectory(inputdir);
   ifstream in;
   string line;
   in.open("runlist.csv");
@@ -57,7 +61,6 @@ Double_t gettilt(const char * inputdir, int run, int chip) {
 
     istringstream s( line );
     int i = 0;
-    int run;
     while (s) {
       string str;
       if(!getline( s, str, ',' )) break;
@@ -86,7 +89,7 @@ std::vector<double> getsimulation(std::string name, int chip) {
   ifstream SIMstream( file.c_str() );
   if( !SIMstream ) {
     cout << ": failed" << endl;
-    return;
+    return std::vector<double>();
   }
   cout << ": succeed" << endl;
 
@@ -98,9 +101,6 @@ std::vector<double> getsimulation(std::string name, int chip) {
   double tilt;
   int run;
   int nev;
-  int dutyield;
-  int refyield;
-  double eff;
   double ry;
   double ncol;
   double lanpk;
@@ -131,8 +131,6 @@ std::vector<double> getsimulation(std::string name, int chip) {
     sncol.push_back(ncol);
     slanpk.push_back(lanpk);
 
-    Double_t res_tel_subtracted = TMath::Sqrt(ry*ry - restel*restel);
-    //cout << "run" << run << " (chip506) res " << ry << " ressub " << res_tel_subtracted << " tilt " << tilt << endl;
   } // while lines
 
   vector<double> beta;

@@ -15,20 +15,16 @@
 #include <fstream>
 #include <sstream>
 
+#include "constants.h"
 #include "tools.C"
 #include "plotter.C"
 
 using namespace std;
 
-Double_t restel = 4.8;
-
 void resolution() {
   std::cout << "Run resolution(histogram dir)" << std::endl;
 }
 
-void resolution(const char* inputdir) {
-  resolution(inputdir,506,0,99999);
-}
 
 void resolution(const char* inputdir, int chip, int startrun, int stoprun) {
 

@@ -19,14 +19,8 @@
 
 using namespace std;
 
-Double_t restel = 4.8;
-
 void ncols() {
   std::cout << "Run ncols(histogram dir)" << std::endl;
-}
-
-void ncols(const char* inputdir) {
-  ncols(inputdir,506,0,99999);
 }
 
 void ncols(const char* inputdir, int chip, int startrun, int stoprun) {

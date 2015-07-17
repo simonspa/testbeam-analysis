@@ -19,14 +19,8 @@
 
 using namespace std;
 
-Double_t restel = 4.8;
-
 void clustercharge() {
   std::cout << "Run clustercharge(histogram dir)" << std::endl;
-}
-
-void clustercharge(const char* inputdir) {
-  clustercharge(inputdir,506,0,99999);
 }
 
 void clustercharge(const char* inputdir, int chip, int startrun, int stoprun) {
