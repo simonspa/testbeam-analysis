@@ -33,12 +33,15 @@ void resolution(const char* inputdir, int chip, int startrun, int stoprun) {
 
   TCanvas *c1 = new TCanvas("c1","resolution",600,600);
   TProfile *resolution = new TProfile("resolution"," ",130,5,85,0,60,"");
+  TProfile *resolution_corr = new TProfile("resolution_corr"," ",130,5,85,0,60,"");
 
   TCanvas *c2 = new TCanvas("c2","resolution",600,600);
   TProfile *resolution_tel_subtracted = new TProfile("resolution_tel_subtracted"," ",130,5,85,0,60,"");
+  TProfile *resolution_corr_tel_subtracted = new TProfile("resolution_corr_tel_subtracted"," ",130,5,85,0,60,"");
 
   TCanvas *c3 = new TCanvas("c3","resolution",600,600);
   TProfile *resolution_vs_eta = new TProfile("resolution_vs_eta"," ",110,0.1,3,0,60,"");
+  TProfile *resolution_corr_vs_eta = new TProfile("resolution_corr_vs_eta"," ",110,0.1,3,0,60,"");
 
   gStyle->SetOptStat(0);
 
@@ -67,7 +70,9 @@ void resolution(const char* inputdir, int chip, int startrun, int stoprun) {
 
     // Y Resolution in fiducial volume & Landau peak:
     //Double_t res = fitep0sigma("cmsdyfctq3",-50,50);
-    Double_t res = fitep0sigma("cmsdyfctq3");
+    Double_t res = fitep0sigma("cmsdy0fctq3");
+    // Skew corrected:
+    Double_t res_corr = fitep0sigma("cmsdyfctq3");
     Double_t tilt = gettilt(inputdir,*run,chip);
 
     // Eta: flip angle from tilt to theta from beam axis:
@@ -79,11 +84,18 @@ void resolution(const char* inputdir, int chip, int startrun, int stoprun) {
 
     // Subtract telescope track resolution:
     Double_t res_tel_subtracted = TMath::Sqrt(res*res - restel*restel);
+    Double_t res_corr_tel_subtracted = TMath::Sqrt(res_corr*res_corr - restel*restel);
 
     cout << "run" << *run << " (chip" << chip << ") res " << res << " ressub " << res_tel_subtracted << " tilt " << tilt << " eta " << eta << endl;
+
     resolution->Fill(tilt,res,1);
+    resolution_corr->Fill(tilt,res_corr,1);
+
     resolution_tel_subtracted->Fill(tilt,res_tel_subtracted,1);
+    resolution_corr_tel_subtracted->Fill(tilt,res_corr_tel_subtracted,1);
+
     resolution_vs_eta->Fill(eta,res_tel_subtracted,1);
+    resolution_corr_vs_eta->Fill(eta,res_corr_tel_subtracted,1);
 
     nruns++;
     delete source;
@@ -101,8 +113,11 @@ void resolution(const char* inputdir, int chip, int startrun, int stoprun) {
   c1->cd();
   resolution->SetTitle(";tilt angle [#degree];resolution y #left[#mum#right]");
   resolution->SetMarkerStyle(20);
-  //resolution->SetMarkerColor(2);
+  resolution->SetMarkerColor(1);
   resolution->Draw();
+  resolution_corr->SetMarkerStyle(20);
+  resolution_corr->SetMarkerColor(15);
+  resolution_corr->Draw("same");
   setStyleAndFillLegend(resolution,"data",leg);
   DrawCMSLabels(nfiducial,5.6,0.045);
 
@@ -111,6 +126,9 @@ void resolution(const char* inputdir, int chip, int startrun, int stoprun) {
   resolution_tel_subtracted->SetMarkerStyle(20);
   resolution_tel_subtracted->SetMarkerColor(1);
   resolution_tel_subtracted->Draw();
+  resolution_corr_tel_subtracted->SetMarkerStyle(20);
+  resolution_corr_tel_subtracted->SetMarkerColor(15);
+  resolution_corr_tel_subtracted->Draw("same");
   setStyleAndFillLegend(resolution_tel_subtracted,"data",leg2);
   DrawCMSLabels(nfiducial,5.6,0.045);
 
@@ -119,6 +137,9 @@ void resolution(const char* inputdir, int chip, int startrun, int stoprun) {
   resolution_vs_eta->SetMarkerStyle(20);
   resolution_vs_eta->SetMarkerColor(1);
   resolution_vs_eta->Draw();
+  resolution_corr_vs_eta->SetMarkerStyle(20);
+  resolution_corr_vs_eta->SetMarkerColor(15);
+  resolution_corr_vs_eta->Draw("same");
   setStyleAndFillLegend(resolution_vs_eta,"data",leg3);
   DrawCMSLabels(nfiducial,5.6,0.045);
 
