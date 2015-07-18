@@ -237,6 +237,9 @@
   <!--Matching cut in Y-->
   <parameter name="matching_cut_y" type="double" value="0.10"/>
 
+  <!--database file for skew corrections-->
+  <parameter name="skew_database" type="string" value="@skewCorrectionDatabase@"/>
+
   <!--verbosity level of this processor ("DEBUG0-4,MESSAGE0-4,WARNING0-4,ERROR0-4,SILENT")-->
   <parameter name="Verbosity" type="string" value="@Verbosity@"/>
   <!--Again, the gear file of the used telescope configuration-->
