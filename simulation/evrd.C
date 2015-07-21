@@ -28,6 +28,7 @@
 #include <iomanip> // setw
 #include <string> // strings
 #include <fstream> // files
+#include <sstream> // stringstream
 #include <vector>
 #include <cmath>
 #include <math.h>
@@ -789,7 +790,62 @@ int main( int argc, char* argv[] )
       double dy0 = ( c->row + 0.5 - 0.5*Nrow ) * pitchy - ymid;
 
       // skew correction
-      double skwcorr =  0.0665505 + 77.6218*skw;
+      double skwcorr = 0;
+
+      if(ncol > 1) {
+	std::ifstream in;
+	in.open("skwcorr.dat", std::ifstream::in);
+
+	bool have_lower_tilt = false;
+	bool have_higher_tilt = false;
+	double lower_skew_par0, lower_skew_par1, lower_tilt;
+	double higher_skew_par0, higher_skew_par1, higher_tilt;
+      
+	if (in.is_open()) {
+	  double tilt = alfa*wt;
+	  
+	  string line;
+	  // Skip first line:
+	  getline(in,line);
+	
+	  while(std::getline(in,line)){
+	    // Skip reading comments:
+	    if (line.empty() || line[0] == '#') continue;
+	    istringstream s(line);
+	    int i = 0;
+	    while (s) {
+	      string str;
+	      if(!getline( s, str, ',' )) break;
+	      if(i == 0) {  // Read tilt angle
+		if(atof(str.c_str()) < tilt) { have_lower_tilt = true; lower_tilt = atof(str.c_str()); }
+		if(atof(str.c_str()) > tilt) { have_higher_tilt = true; higher_tilt = atof(str.c_str()); }
+	      }
+	      if(have_higher_tilt) {
+		if(i == 1) { higher_skew_par0 = atof(str.c_str()); }
+		if(i == 2) { higher_skew_par1 = atof(str.c_str()); break; }
+	      }
+	      else if(have_lower_tilt) {
+		if(i == 1) { lower_skew_par0 = atof(str.c_str()); }
+		if(i == 2) { lower_skew_par1 = atof(str.c_str()); break; }
+	      }
+	      i++;
+	    }
+	    if(have_higher_tilt) { break; }
+	  }
+	  in.close();
+
+	  if(have_higher_tilt && have_lower_tilt) {
+	    double slope1 = (higher_skew_par1-lower_skew_par1)/(higher_tilt-lower_tilt);
+	    double skew_par1 = lower_skew_par1 + (tilt-lower_tilt)*slope1;
+	    
+	    double slope0 = (higher_skew_par0-lower_skew_par0)/(higher_tilt-lower_tilt);
+	    double skew_par0 = lower_skew_par0 + (tilt-lower_tilt)*slope0;
+	    
+	    skwcorr = skew_par0 + skew_par1*skw;
+	  }
+	}
+      }
+
       double dx = ( c->col + 0.5 - 0.5*Ncol ) * pitchx - xmid - skwcorr; // [um]
       double dy = ( c->row + 0.5 - 0.5*Nrow ) * pitchy - ymid;
 
@@ -933,7 +989,7 @@ int main( int argc, char* argv[] )
 	// Landau peak:
 
 	//if( qnrm*0.01 > 18 &&  qnrm*0.01 < 35 ) {
-	if( qnrm*0.01 > 16 &&  qnrm*0.01 < 30 ) { // lq cut
+	if( qnrm*0.01 > 17 &&  qnrm*0.01 < 30 ) { // lq cut
 
 	  hncol.Fill( ncol );
 	  hnrow.Fill( nrow );
