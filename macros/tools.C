@@ -1,3 +1,15 @@
+#include "TH1.h"
+#include "TMath.h"
+#include "TF1.h"
+#include "TLegend.h"
+#include "TCanvas.h"
+#include "TFile.h"
+#include "TProfile.h"
+#include "TGraph.h"
+#include "TSystem.h"
+#include "TStyle.h"
+#include "TROOT.h"
+
 #include <iomanip>
 #include <iostream>
 #include <fstream>
@@ -84,7 +96,7 @@ std::vector<double> getsimulation(std::string name, int chip) {
   cout << "try to open sim file";
   std::string file;
 
-  if(chip == 506) { file = "simulation/tiltsim294.dat"; }
+  if(chip == 506) { file = "simulation/tiltsim294skw.dat"; }
   
   ifstream SIMstream( file.c_str() );
   if( !SIMstream ) {
@@ -102,6 +114,7 @@ std::vector<double> getsimulation(std::string name, int chip) {
   int run;
   int nev;
   double ry;
+  double ry_skwcorr;
   double ncol;
   double lanpk;
 
@@ -110,6 +123,7 @@ std::vector<double> getsimulation(std::string name, int chip) {
 
   vector <double> stilt;
   vector <double> sry;
+  vector <double> sryskw;
   vector <double> sncol;
   vector <double> slanpk;
 
@@ -123,11 +137,13 @@ std::vector<double> getsimulation(std::string name, int chip) {
     simrun >> turn;
     simrun >> nev;
     simrun >> ry;
+    simrun >> ry_skwcorr;
     simrun >> ncol;
     simrun >> lanpk;
     simrun >> edge;
     stilt.push_back(tilt);
     sry.push_back(ry);
+    sryskw.push_back(ry_skwcorr);
     sncol.push_back(ncol);
     slanpk.push_back(lanpk);
 
@@ -135,6 +151,7 @@ std::vector<double> getsimulation(std::string name, int chip) {
 
   vector<double> beta;
   vector<double> bsy;
+  vector<double> bsyskw;
   vector<double> bpath;
   vector<double> btant;
 
@@ -143,12 +160,14 @@ std::vector<double> getsimulation(std::string name, int chip) {
     bpath.push_back(1 / cos( stilt.at(i) / wt ));
     btant.push_back(tan( stilt.at(i) / wt ));
     bsy.push_back(sqrt( sry.at(i)*sry.at(i) - restel*restel )); // subtract telescope
+    bsyskw.push_back(sqrt( sryskw.at(i)*sryskw.at(i) - restel*restel )); // subtract telescope
   }
 
   if(name == "tilt") return stilt;
   else if(name == "eta") return beta;
   else if(name == "path") return bpath;
   else if(name == "res") return bsy;
+  else if(name == "resskw") return bsyskw;
   else if(name == "ncol") return sncol;
   else if(name == "peak") return slanpk;
   else return std::vector<double>();
