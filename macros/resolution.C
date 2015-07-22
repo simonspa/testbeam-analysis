@@ -86,7 +86,7 @@ void resolution(const char* inputdir, int chip, int startrun, int stoprun) {
     Double_t res_tel_subtracted = TMath::Sqrt(res*res - restel*restel);
     Double_t res_corr_tel_subtracted = TMath::Sqrt(res_corr*res_corr - restel*restel);
 
-    cout << "run" << *run << " (chip" << chip << ") res " << res << " ressub " << res_tel_subtracted << " tilt " << tilt << " eta " << eta << endl;
+    cout << "run" << *run << " (chip" << chip << ") res " << res << " ressub " << res_tel_subtracted << " res_corr " << res_corr_tel_subtracted << " tilt " << tilt << " eta " << eta << endl;
 
     resolution->Fill(tilt,res,1);
     resolution_corr->Fill(tilt,res_corr,1);
@@ -146,6 +146,7 @@ void resolution(const char* inputdir, int chip, int startrun, int stoprun) {
   std::vector<double> vtilt = getsimulation("tilt", chip);
   std::vector<double> veta = getsimulation("eta", chip);
   std::vector<double> vres = getsimulation("res", chip);
+  std::vector<double> vresskw = getsimulation("resskw", chip);
 
   if(!vtilt.empty()) {
     c2->cd();
@@ -156,6 +157,12 @@ void resolution(const char* inputdir, int chip, int startrun, int stoprun) {
     si->Draw("PL"); // without axis option: overlay
     setStyleAndFillLegend(si,"sim",leg2);
 
+    TGraph *siskw = new TGraph( vtilt.size(), &(vtilt[0]), &(vresskw[0]) ); // sim
+    siskw->SetLineColor(kRed-7);
+    siskw->SetLineWidth(3);
+    siskw->SetMarkerSize(0);
+    siskw->Draw("PL"); // without axis option: overlay
+
     c3->cd();
     TGraph *si_eta = new TGraph( veta.size(), &(veta[0]), &(vres[0]) ); // sim
     si_eta->SetLineColor(2);
@@ -163,6 +170,13 @@ void resolution(const char* inputdir, int chip, int startrun, int stoprun) {
     si_eta->SetMarkerColor(2);
     si_eta->Draw("PL"); // without axis option: overlay
     setStyleAndFillLegend(si_eta,"sim",leg3);
+
+    TGraph *si_etaskw = new TGraph( veta.size(), &(veta[0]), &(vresskw[0]) ); // sim
+    si_etaskw->SetLineColor(kRed-7);
+    si_etaskw->SetLineWidth(3);
+    si_etaskw->SetMarkerSize(0);
+    si_etaskw->Draw("PL"); // without axis option: overlay
+
   }
 
   c2->cd();
