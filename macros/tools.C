@@ -8,6 +8,7 @@
 #include "TGraph.h"
 #include "TSystem.h"
 #include "TStyle.h"
+#include "TString.h"
 #include "TROOT.h"
 
 #include <iomanip>
@@ -26,7 +27,9 @@ std::vector<int> getruns(const char * inputdir, int chip) {
   gSystem->OpenDirectory(inputdir);
   ifstream in;
   string line;
-  in.open("runlist.csv");
+  TString name;
+  name.Form("runlist-%i.csv",chip);
+  in.open(name);
 
   // Skip first line:
   getline(in,line);
@@ -61,7 +64,9 @@ Double_t gettilt(const char * inputdir, int run, int chip) {
   gSystem->OpenDirectory(inputdir);
   ifstream in;
   string line;
-  in.open("runlist.csv");
+  TString name;
+  name.Form("runlist-%i.csv",chip);
+  in.open(name);
 
   // Skip first line:
   getline(in,line);
