@@ -101,7 +101,8 @@ std::vector<double> getsimulation(std::string name, int chip) {
   cout << "try to open sim file";
   std::string file;
 
-  if(chip == 506) { file = "simulation/tiltsim294skw.dat"; }
+  if(chip == 506) { file = "simulation/sim303_506skw_thr250.dat"; }
+  else if(chip == 504) {file = "simulation/sim303_504skw.dat"; }
   
   ifstream SIMstream( file.c_str() );
   if( !SIMstream ) {
