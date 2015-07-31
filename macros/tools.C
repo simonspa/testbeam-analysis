@@ -15,6 +15,7 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include <utility>
 
 #include "constants.h"
 
@@ -506,6 +507,7 @@ int fitep0( char* hs ) {
 
     h->Draw("histepsame");  // data again on top
   }
+  return 0;
 }
 
 Double_t fitep0sigma( char* hs, int binlow=-999, int binhigh=999) {
@@ -552,4 +554,41 @@ Double_t fitep0sigma( char* hs, int binlow=-999, int binhigh=999) {
   h->Fit("ep0Fcn", "Q R", "ep" );
   TF1 *fit = h->GetFunction("ep0Fcn");
   return fit->GetParameter(1);
+}
+
+
+//------------------------------------------------------------------------------
+Double_t fitSkw( Double_t *x, Double_t *par )
+{
+  return par[0] + par[1] * x[0];
+}
+
+//------------------------------------------------------------------------------
+std::pair<double,double> fitskwlin( char* hs, double xl=-0.1, double xr=0.1 ) {
+  TH1 *h = (TH1*)gDirectory->Get(hs);
+
+  if( h == NULL ) {
+    cout << hs << " does not exist\n";
+    return std::make_pair(0.,0.);
+  }
+
+  int nb = h->GetNbinsX();
+  double x1 = h->GetBinCenter(1); // first
+  double x9 = h->GetBinCenter(nb); // last
+
+  if( xl > x1 && xl < x9 ) x1 = xl; // left
+  if( xr > x1 && xr < x9 ) x9 = xr; // right
+
+  // create a TF1 with the range from x1 to x9 and 3 parameters
+  TF1 *tanhFcn = new TF1( "tanhFcn", fitSkw, x1, x9, 2 );
+  tanhFcn->SetParName( 0, "dyoff" );
+  tanhFcn->SetParName( 1, "dyslp" );
+
+  // set start values:
+  tanhFcn->SetParameter( 0, 0 ); // dy off [um]
+  tanhFcn->SetParameter( 1, 99 ); // dy slope [um/skw]
+
+  h->Fit( "tanhFcn", "R Q", "p" );// R = range from tanhFcn
+
+  return std::make_pair(tanhFcn->GetParameter(0),tanhFcn->GetParameter(1));
 }
