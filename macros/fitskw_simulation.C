@@ -27,7 +27,7 @@ void fitskw_simulation() {
 
 void fitskw_simulation(TString inputdir) {
 
-  for(int tilt = 0; tilt < 81; tilt++)  {
+  for(int tilt = 0; tilt < 91; tilt++)  {
     TString fileName;
     fileName += inputdir;
     if( !fileName.EndsWith("/") ) fileName += "/";
@@ -39,7 +39,7 @@ void fitskw_simulation(TString inputdir) {
 
     std::pair<double,double> skwpar = fitskwlin("dx0vsskwcol");
 
-    std::cout << tilt << " " << skwpar.first << " " << skwpar.second << "\n";
+    std::cout << tilt << "," << skwpar.first << "," << skwpar.second << "\n";
     delete source;
   }
   
