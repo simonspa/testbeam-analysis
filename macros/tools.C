@@ -102,7 +102,7 @@ std::vector<double> getsimulation(std::string name, int chip) {
   cout << "try to open sim file";
   std::string file;
 
-  if(chip == 506) { file = "simulation/sim303_506skw_thr250.dat"; }
+  if(chip == 506) { file = "simulation/sim303_506skw_thr200.dat"; }
   else if(chip == 504) {file = "simulation/sim303_504skw.dat"; }
   
   ifstream SIMstream( file.c_str() );
@@ -314,7 +314,7 @@ Double_t fitLandauGauss( Double_t *x, Double_t *par ) {
   return( par[2] * invsq2pi * xbin * step * sum / par[3] );
 }
 
-Double_t fitlang( char* hs ) {
+Double_t fitlang( char* hs, double klow = 18, double khigh = 40 ) {
 
   TH1 *h = (TH1*)gDirectory->Get(hs);
 
@@ -332,8 +332,8 @@ Double_t fitlang( char* hs ) {
   double ns = sm; // noise
 
   // fit range:
-  int ib0 = h->FindBin(18);
-  int ib9 = h->FindBin(40);
+  int ib0 = h->FindBin(klow);
+  int ib9 = h->FindBin(khigh);
 
   double x0 = h->GetBinLowEdge(ib0);
   double x9 = h->GetBinLowEdge(ib9) + h->GetBinWidth(ib9);
