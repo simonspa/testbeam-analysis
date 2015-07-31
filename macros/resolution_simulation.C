@@ -1,14 +1,15 @@
-#include "../macros/tools.C"
+#include "tools.C"
 
-void resolution() {
+void resolution_simulation() {
   cout << "inputdir!" << endl;
 }
 
-void resolution(TString inputdir) {
+void resolution_simulation(TString inputdir, int chip) {
 
-  bool is_rotated = true;//false;
+  bool is_rotated = true;
+  if(chip == 506) is_rotated = true;
 
-  for(int tilt = 0; tilt < 81; tilt++)  {
+  for(int tilt = 0; tilt < 91; tilt++)  {
     TString fileName;
     fileName += inputdir;
     if( !fileName.EndsWith("/") ) fileName += "/";
@@ -40,7 +41,7 @@ void resolution(TString inputdir) {
       cout << "(RMS for tilt " << tilt << ")" << endl;
     }
 
-    Double_t lanpk = fitlang("h031");
+    Double_t lanpk = fitlang("h031",18,499);
 
     TH1 *nc;
     if(is_rotated) gDirectory->GetObject("hcol",nc);
