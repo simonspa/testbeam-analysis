@@ -45,7 +45,7 @@ void resolution(const char* inputdir, int chip, int startrun, int stoprun) {
 
   gStyle->SetOptStat(0);
 
-  int nruns, nfiducial, nevents;
+  int nruns = 0, nfiducial = 0, nevents = 0;
 
   // Get all runs for given chip:
   std::vector<int> runs = getruns(inputdir,chip);
