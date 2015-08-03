@@ -156,6 +156,7 @@ std::vector<double> getsimulation(std::string name, int chip) {
 
   } // while lines
 
+  vector<double> btilttan;
   vector<double> beta;
   vector<double> bsy;
   vector<double> bsyskw;
@@ -163,6 +164,7 @@ std::vector<double> getsimulation(std::string name, int chip) {
   vector<double> btant;
 
   for(size_t i = 0; i < stilt.size(); i++) {
+    btilttan.push_back(TMath::Tan(stilt.at(i)/180*TMath::Pi()));
     beta.push_back(-TMath::Log(TMath::Tan(TMath::TwoPi()*(90-stilt.at(i))/(2*360))));
     bpath.push_back(1 / cos( stilt.at(i) / wt ));
     btant.push_back(tan( stilt.at(i) / wt ));
@@ -171,6 +173,7 @@ std::vector<double> getsimulation(std::string name, int chip) {
   }
 
   if(name == "tilt") return stilt;
+  else if(name == "tilttan") return btilttan;
   else if(name == "eta") return beta;
   else if(name == "path") return bpath;
   else if(name == "res") return bsy;

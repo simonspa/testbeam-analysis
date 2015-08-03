@@ -26,7 +26,10 @@ void ncols() {
 void ncols(const char* inputdir, int chip, int startrun, int stoprun) {
 
   TCanvas *c1 = new TCanvas("c1","ncols",600,600);
-  TProfile *ncols = new TProfile("ncols"," ",130,5,85,0,60,"");
+  TProfile *ncols = new TProfile("ncols"," ",130,0,85,0,60,"");
+
+  TCanvas *c2 = new TCanvas("c2","ncolstan",600,600);
+  TProfile *ncolstan = new TProfile("ncolstan"," ",130,0,12,0,60,"");
 
   gStyle->SetOptStat(0);
 
@@ -61,6 +64,7 @@ void ncols(const char* inputdir, int chip, int startrun, int stoprun) {
 
     cout << "run" << *run << " (chip" << chip << ") ncol " << ncol << " tilt " << tilt << endl;
     ncols->Fill(tilt,ncol,1);
+    ncolstan->Fill(TMath::Tan(tilt/180*TMath::Pi()),ncol,1);
 
     nruns++;
     delete source;
@@ -77,6 +81,7 @@ void ncols(const char* inputdir, int chip, int startrun, int stoprun) {
   ncols->Draw();
 
   std::vector<double> vtilt = getsimulation("tilt", chip);
+  std::vector<double> vtilttan = getsimulation("tilttan", chip);
   std::vector<double> vncol = getsimulation("ncol", chip);
 
   TGraph *si = new TGraph( vtilt.size(), &(vtilt[0]), &(vncol[0]) ); // sim
@@ -86,4 +91,17 @@ void ncols(const char* inputdir, int chip, int startrun, int stoprun) {
   si->Draw("PL"); // without axis option: overlay
 
   leg->Draw();
+
+  c2->cd();
+  ncolstan->SetTitle(";tan(#alpha);columns per cluster");
+  ncolstan->SetMarkerStyle(20);
+  ncolstan->SetMarkerColor(1);
+  ncolstan->Draw();
+
+  TGraph *si_tan = new TGraph( vtilttan.size(), &(vtilttan[0]), &(vncol[0]) ); // sim
+  si_tan->SetLineColor(2);
+  si_tan->SetLineWidth(3);
+  si_tan->SetMarkerColor(2);
+  si_tan->Draw("PL"); // without axis option: overlay
+
 }
