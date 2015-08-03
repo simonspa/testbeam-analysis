@@ -94,18 +94,17 @@ Double_t gettilt(const char * inputdir, int run, int chip) {
   return tilt;
 }
 
-std::vector<double> getsimulation(std::string name, int chip) {
+std::vector<double> getsimulation(std::string name, int chip, int thickness=294) {
 
   //----------------------------------------------------------------------------
   // read sim:
 
-  cout << "try to open sim file";
-  std::string file;
+  TString file;
+  file.Form("simulation/sim%i_%iskw_thr200.dat",thickness,chip);
 
-  if(chip == 506) { file = "simulation/sim303_506skw_thr200.dat"; }
-  else if(chip == 504) {file = "simulation/sim303_504skw.dat"; }
+  cout << "try to open sim file" << file;
   
-  ifstream SIMstream( file.c_str() );
+  ifstream SIMstream( file );
   if( !SIMstream ) {
     cout << ": failed" << endl;
     return std::vector<double>();

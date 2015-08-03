@@ -6,7 +6,7 @@ void resolution_simulation() {
 
 void resolution_simulation(TString inputdir, int chip) {
 
-  bool is_rotated = true;
+  bool is_rotated = false;
   if(chip == 506) is_rotated = true;
 
   for(int tilt = 0; tilt < 91; tilt++)  {
