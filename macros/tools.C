@@ -100,9 +100,9 @@ std::vector<double> getsimulation(std::string name, int chip, int thickness=294)
   // read sim:
 
   TString file;
-  file.Form("simulation/sim%i_%iskw_thr200.dat",thickness,chip);
+  file.Form("simulation/sim%i_%iskw_thr150.dat",thickness,chip);
 
-  cout << "try to open sim file" << file;
+  cout << "try to open sim file " << file;
   
   ifstream SIMstream( file );
   if( !SIMstream ) {
@@ -560,7 +560,7 @@ Double_t fitep0sigma( char* hs, int binlow=-999, int binhigh=999) {
 
 
 // Returns the RMS including 96% of the histogram entries, cutting the tails:
-Double_t getRMS96(char* hs) {
+Double_t getRMS96(char* hs, double truncation=96.) {
 
   bool debug = false;
 
@@ -574,7 +574,7 @@ Double_t getRMS96(char* hs) {
 
   double subrange_integral = h->GetBinContent(maxbin);
   int bin = 0;
-  while(subrange_integral < 0.96*integral) {
+  while(subrange_integral < truncation/100*integral) {
     bin++;
     // Add one bin to the left:
     subrange_integral += h->GetBinContent(maxbin-bin);
