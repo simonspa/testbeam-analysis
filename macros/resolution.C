@@ -32,16 +32,16 @@ void resolution(const char* inputdir, int chip, int startrun, int stoprun) {
   setHHStyle(*gStyle);
 
   TCanvas *c1 = new TCanvas("c1","resolution",600,600);
-  TProfile *resolution = new TProfile("resolution"," ",130,5,85,0,60,"");
-  TProfile *resolution_corr = new TProfile("resolution_corr"," ",130,5,85,0,60,"");
+  TProfile *resolution = new TProfile("resolution"," ",170,0,85,0,60,"");
+  TProfile *resolution_corr = new TProfile("resolution_corr"," ",170,0,85,0,60,"");
 
   TCanvas *c2 = new TCanvas("c2","resolution",600,600);
-  TProfile *resolution_tel_subtracted = new TProfile("resolution_tel_subtracted"," ",130,5,85,0,60,"");
-  TProfile *resolution_corr_tel_subtracted = new TProfile("resolution_corr_tel_subtracted"," ",130,5,85,0,60,"");
+  TProfile *resolution_tel_subtracted = new TProfile("resolution_tel_subtracted"," ",170,0,85,0,60,"");
+  TProfile *resolution_corr_tel_subtracted = new TProfile("resolution_corr_tel_subtracted"," ",170,0,85,0,60,"");
 
   TCanvas *c3 = new TCanvas("c3","resolution",600,600);
-  TProfile *resolution_vs_eta = new TProfile("resolution_vs_eta"," ",110,0.1,3,0,60,"");
-  TProfile *resolution_corr_vs_eta = new TProfile("resolution_corr_vs_eta"," ",110,0.1,3,0,60,"");
+  TProfile *resolution_vs_eta = new TProfile("resolution_vs_eta"," ",120,0.01,3,0,60,"");
+  TProfile *resolution_corr_vs_eta = new TProfile("resolution_corr_vs_eta"," ",120,0.01,3,0,60,"");
 
   gStyle->SetOptStat(0);
 
@@ -154,6 +154,7 @@ void resolution(const char* inputdir, int chip, int startrun, int stoprun) {
     si->SetLineColor(2);
     si->SetLineWidth(3);
     si->SetMarkerColor(2);
+    resolution_tel_subtracted->GetXaxis()->SetRangeUser(vtilt.front(), vtilt.back());
     si->Draw("PL"); // without axis option: overlay
     setStyleAndFillLegend(si,"sim",leg2);
 
@@ -161,13 +162,14 @@ void resolution(const char* inputdir, int chip, int startrun, int stoprun) {
     siskw->SetLineColor(kRed-7);
     siskw->SetLineWidth(3);
     siskw->SetMarkerSize(0);
-    siskw->Draw("PL"); // without axis option: overlay
+    if(draw_skwcorr) siskw->Draw("PL"); // without axis option: overlay
 
     c3->cd();
     TGraph *si_eta = new TGraph( veta.size(), &(veta[0]), &(vres[0]) ); // sim
     si_eta->SetLineColor(2);
     si_eta->SetLineWidth(3);
     si_eta->SetMarkerColor(2);
+    resolution_vs_eta->GetXaxis()->SetRangeUser(veta.front(), veta.back());
     si_eta->Draw("PL"); // without axis option: overlay
     setStyleAndFillLegend(si_eta,"sim",leg3);
 

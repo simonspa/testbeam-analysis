@@ -197,7 +197,7 @@ void setHHStyle(TStyle& HHStyle)
 // Draw statistics info above plot
 void DrawCMSLabels(double lumi, double energy, double textSize) {
 
-  //const char *text = "%2.1fM clusters (fiducial) (%1.1f GeV)";
+  //const char *text = "%2.1f #times 10^{6} clusters (fiducial) (%1.1f GeV)";
   const char *text = "%2.1f #times 10^{6} clusters (fiducial)";
     
   TPaveText *label = new TPaveText();
@@ -216,7 +216,7 @@ void DrawCMSLabels(double lumi, double energy, double textSize) {
 
 void setLegendStyle(TLegend *leg) {
 
-  Double_t x1 = 0.2416107;
+  Double_t x1 = 0.5216107;
   Double_t y1 = 0.7839721;
   double height = 0.075, width = 0.275;
 
@@ -255,6 +255,13 @@ void setStyle(TProfile *hist, TString name)
     hist->SetFillStyle(3005);
     hist->SetFillColor(kBlack);
   }
+  else if(name == "dot1") {
+    hist->SetLineWidth(2);
+    hist->SetMarkerSize(0);
+    hist->SetLineColor(kCyan+1);
+    hist->SetFillStyle(3004);
+    hist->SetFillColor(kRed+1);
+  }
   else {
     hist->SetLineWidth(2);
     hist->SetMarkerSize(0);
@@ -287,6 +294,13 @@ void setStyle(TGraph *hist, TString name)
     hist->SetFillStyle(3005);
     hist->SetFillColor(kBlack);
   }
+  else if(name == "dot1") {
+    hist->SetLineWidth(2);
+    hist->SetMarkerSize(0);
+    hist->SetLineColor(kCyan+1);
+    hist->SetFillStyle(3004);
+    hist->SetFillColor(kRed+1);
+  }
   else {
     hist->SetLineWidth(2);
     hist->SetMarkerSize(0);
@@ -301,6 +315,8 @@ void setStyleAndFillLegend(TProfile* hist, TString name, TLegend *leg) {
   setStyle(hist,name);
 
   if(name == "data") { if(leg) leg->AddEntry(hist, "Data",  "p"); }
+  else if(name == "dot1") { if(leg) leg->AddEntry(hist, "Simulation (pixelav) - dot1 design",  "l"); }
+  else if(name == "gap30") { if(leg) leg->AddEntry(hist, "Simulation (pixelav) - gap30 design",  "l"); }
   else { if(leg) leg->AddEntry(hist, "Simulation (pixelav)",  "l"); }
 }
 
@@ -309,5 +325,7 @@ void setStyleAndFillLegend(TGraph* hist, TString name, TLegend *leg) {
   setStyle(hist,name);
 
   if(name == "data") { if(leg) leg->AddEntry(hist, "Data",  "p"); }
+  else if(name == "dot1") { if(leg) leg->AddEntry(hist, "Simulation (pixelav) - dot1 design",  "l"); }
+  else if(name == "gap30") { if(leg) leg->AddEntry(hist, "Simulation (pixelav) - gap30 design",  "l"); }
   else { if(leg) leg->AddEntry(hist, "Simulation (pixelav)",  "l"); }
 }
