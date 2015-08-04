@@ -167,8 +167,8 @@ std::vector<double> getsimulation(std::string name, int chip, int thickness=294)
     beta.push_back(-TMath::Log(TMath::Tan(TMath::TwoPi()*(90-stilt.at(i))/(2*360))));
     bpath.push_back(1 / cos( stilt.at(i) / wt ));
     btant.push_back(tan( stilt.at(i) / wt ));
-    bsy.push_back(sqrt( sry.at(i)*sry.at(i) - restel*restel )); // subtract telescope
-    bsyskw.push_back(sqrt( sryskw.at(i)*sryskw.at(i) - restel*restel )); // subtract telescope
+    bsy.push_back(sqrt( sry.at(i)*sry.at(i) - restel_sim*restel_sim )); // subtract telescope
+    bsyskw.push_back(sqrt( sryskw.at(i)*sryskw.at(i) - restel_sim*restel_sim )); // subtract telescope
   }
 
   if(name == "tilt") return stilt;
