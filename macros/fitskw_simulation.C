@@ -25,7 +25,7 @@ void fitskw_simulation() {
   cout << "inputdir!" << endl;
 }
 
-void fitskw_simulation(TString inputdir) {
+void fitskw_simulation(TString inputdir,int chip) {
 
   for(int tilt = 0; tilt < 91; tilt++)  {
     TString fileName;
@@ -37,7 +37,9 @@ void fitskw_simulation(TString inputdir) {
     if (!gSystem->AccessPathName( fileName )) source = TFile::Open(fileName);
     else continue;
 
-    std::pair<double,double> skwpar = fitskwlin("dx0vsskwcol");
+    std::pair<double,double> skwpar;
+    if(chip == 506) skwpar = fitskwlin("dx0vsskwcol");
+    else skwpar = fitskwlin("dy0vsskwrow");
 
     std::cout << tilt << "," << skwpar.first << "," << skwpar.second << "\n";
     delete source;
