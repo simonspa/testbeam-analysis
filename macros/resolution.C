@@ -21,6 +21,8 @@
 
 using namespace std;
 
+bool draw_skwcorr = true;
+
 void resolution() {
   std::cout << "Run resolution(histogram dir)" << std::endl;
 }
@@ -117,7 +119,7 @@ void resolution(const char* inputdir, int chip, int startrun, int stoprun) {
   resolution->Draw();
   resolution_corr->SetMarkerStyle(20);
   resolution_corr->SetMarkerColor(15);
-  resolution_corr->Draw("same");
+  if(draw_skwcorr) resolution_corr->Draw("same");
   setStyleAndFillLegend(resolution,"data",leg);
   DrawCMSLabels(nfiducial,5.6,0.045);
 
@@ -128,7 +130,7 @@ void resolution(const char* inputdir, int chip, int startrun, int stoprun) {
   resolution_tel_subtracted->Draw();
   resolution_corr_tel_subtracted->SetMarkerStyle(20);
   resolution_corr_tel_subtracted->SetMarkerColor(15);
-  resolution_corr_tel_subtracted->Draw("same");
+  if(draw_skwcorr) resolution_corr_tel_subtracted->Draw("same");
   setStyleAndFillLegend(resolution_tel_subtracted,"data",leg2);
   DrawCMSLabels(nfiducial,5.6,0.045);
 
@@ -139,14 +141,14 @@ void resolution(const char* inputdir, int chip, int startrun, int stoprun) {
   resolution_vs_eta->Draw();
   resolution_corr_vs_eta->SetMarkerStyle(20);
   resolution_corr_vs_eta->SetMarkerColor(15);
-  resolution_corr_vs_eta->Draw("same");
+  if(draw_skwcorr) resolution_corr_vs_eta->Draw("same");
   setStyleAndFillLegend(resolution_vs_eta,"data",leg3);
   DrawCMSLabels(nfiducial,5.6,0.045);
 
-  std::vector<double> vtilt = getsimulation("tilt", chip);
-  std::vector<double> veta = getsimulation("eta", chip);
-  std::vector<double> vres = getsimulation("res", chip);
-  std::vector<double> vresskw = getsimulation("resskw", chip);
+  std::vector<double> vtilt = getsimulation("tilt", chip,294,170);
+  std::vector<double> veta = getsimulation("eta", chip,294,170);
+  std::vector<double> vres = getsimulation("res", chip,294,170);
+  std::vector<double> vresskw = getsimulation("resskw", chip,294,170);
 
   if(!vtilt.empty()) {
     c2->cd();
@@ -177,7 +179,7 @@ void resolution(const char* inputdir, int chip, int startrun, int stoprun) {
     si_etaskw->SetLineColor(kRed-7);
     si_etaskw->SetLineWidth(3);
     si_etaskw->SetMarkerSize(0);
-    si_etaskw->Draw("PL"); // without axis option: overlay
+    if(draw_skwcorr) si_etaskw->Draw("PL"); // without axis option: overlay
 
   }
 
