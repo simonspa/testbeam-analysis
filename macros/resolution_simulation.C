@@ -24,22 +24,32 @@ void resolution_simulation(TString inputdir, int chip) {
     if(is_rotated) res = fitep0sigma("hdx0cq3");
     else res = fitep0sigma("hdy0cq3");
 
+    // RMS96%:
+    Double_t rms96;
+    if(is_rotated) rms96 = getRMS96("hdx0cq3",92);
+    else rms96 = getRMS96("hdy0cq3",92);
+
     // Skew corrected:
     Double_t res_corr;
     if(is_rotated) res_corr = fitep0sigma("hdxcq3");
     else res_corr = fitep0sigma("hdycq3");
 
+    // RMS96%:
+    Double_t rms96_corr;
+    if(is_rotated) rms96_corr = getRMS96("hdxcq3",92);
+    else rms96_corr = getRMS96("hdycq3",92);
+
     // If the corrected is larger then the uncorrected resokution, take the RMS instead:
     // reason: after correction the desitribution looks very different from a Gauss for small angles
 
     //if(res_corr > res) {
-    if(tilt < 15) {
+    /*if(tilt < 15) {
       TH1 *h;
       if(is_rotated) gDirectory->GetObject("hdxcq3",h);
       else gDirectory->GetObject("hdycq3",h);
       res_corr = h->GetRMS();
       cout << "(RMS for tilt " << tilt << ")" << endl;
-    }
+      }*/
 
     Double_t lanpk = fitlang("h031",18,499);
 
@@ -50,7 +60,6 @@ void resolution_simulation(TString inputdir, int chip) {
     Double_t ncol = nc->GetMean();
     int nevents = nc->GetEntries();
 
-    // FIXME what's that?
     Double_t edge = 0;
     
     std::cout << ZeroPadNumber(tilt,4) 
@@ -58,7 +67,9 @@ void resolution_simulation(TString inputdir, int chip) {
 	      << "  " << "0.1"
 	      << "  " << nevents
 	      << "  " << res
+      //<< " " << rms96
 	      << "  " << res_corr
+      //<< " " << rms96_corr
 	      << "  " << ncol
 	      << "  " << lanpk
 	      << "  " << edge

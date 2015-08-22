@@ -21,7 +21,7 @@
 
 using namespace std;
 
-bool draw_skwcorr = true;
+bool draw_skwcorr = false;
 
 void resolution() {
   std::cout << "Run resolution(histogram dir)" << std::endl;
@@ -71,10 +71,14 @@ void resolution(const char* inputdir, int chip, int startrun, int stoprun) {
     if(!h) continue;
 
     // Y Resolution in fiducial volume & Landau peak:
-    //Double_t res = fitep0sigma("cmsdyfctq3",-50,50);
-    Double_t res = fitep0sigma("cmsdy0fctq3");
+    //Double_t res = fitep0sigma("cmsdyfctq4",-50,50);
+    Double_t res = fitep0sigma("cmsdy0fctq4d");
+    //Double_t res = fittp0sigma("cmsdyfctq4d");
+
+    //Double_t res = getRMS96("cmsdy0fctq3");
     // Skew corrected:
-    Double_t res_corr = fitep0sigma("cmsdyfctq3");
+    Double_t res_corr = fitep0sigma("cmsdyfctq4d");
+    //Double_t res_corr = getRMS96("cmsdy0fctq4",92);
     Double_t tilt = gettilt(inputdir,*run,chip);
 
     // Eta: flip angle from tilt to theta from beam axis:
@@ -89,6 +93,7 @@ void resolution(const char* inputdir, int chip, int startrun, int stoprun) {
     Double_t res_corr_tel_subtracted = TMath::Sqrt(res_corr*res_corr - restel*restel);
 
     cout << "run" << *run << " (chip" << chip << ") res " << res << " ressub " << res_tel_subtracted << " res_corr " << res_corr_tel_subtracted << " tilt " << tilt << " eta " << eta << endl;
+    //cout << *run << " " << tilt << " " << res_tel_subtracted << endl;
 
     resolution->Fill(tilt,res,1);
     resolution_corr->Fill(tilt,res_corr,1);
@@ -144,11 +149,14 @@ void resolution(const char* inputdir, int chip, int startrun, int stoprun) {
   if(draw_skwcorr) resolution_corr_vs_eta->Draw("same");
   setStyleAndFillLegend(resolution_vs_eta,"data",leg3);
   DrawCMSLabels(nfiducial,5.6,0.045);
-
-  std::vector<double> vtilt = getsimulation("tilt", chip,294,170);
-  std::vector<double> veta = getsimulation("eta", chip,294,170);
-  std::vector<double> vres = getsimulation("res", chip,294,170);
-  std::vector<double> vresskw = getsimulation("resskw", chip,294,170);
+  
+  int thickness = 294;
+  int threshold = 170; // maybe 160 or so?
+  //if(chip == 506) thickness = 308;
+  std::vector<double> vtilt = getsimulation("tilt", chip,thickness,threshold);
+  std::vector<double> veta = getsimulation("eta", chip,thickness,threshold);
+  std::vector<double> vres = getsimulation("res", chip,thickness,threshold);
+  std::vector<double> vresskw = getsimulation("resskw", chip,thickness,threshold);
 
   if(!vtilt.empty()) {
     c2->cd();

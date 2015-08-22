@@ -30,11 +30,11 @@ void compare_simulations(int chip) {
 
   gStyle->SetOptStat(0);
 
-  std::vector<double> vtilt_gap30 = getsimulation("tilt", chip, 294, 200);
-  std::vector<double> vres_gap30 = getsimulation("res", chip, 294, 200);
+  std::vector<double> vtilt_gap30 = getsimulation("tilt", chip, 294, 170);
+  std::vector<double> vres_gap30 = getsimulation("res", chip, 294, 170);
 
-  std::vector<double> vtilt_dot1 = getsimulation("tilt", chip, 294, 200, true);
-  std::vector<double> vres_dot1 = getsimulation("res", chip, 294, 200, true);
+  std::vector<double> vtilt_dot1 = getsimulation("tilt", chip, 308, 170);
+  std::vector<double> vres_dot1 = getsimulation("res", chip, 308, 170);
 
   TLegend *leg = new TLegend();
   setLegendStyle(leg);
