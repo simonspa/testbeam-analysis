@@ -33,8 +33,8 @@ void compare_simulations(int chip) {
   std::vector<double> vtilt_gap30 = getsimulation("tilt", chip, 294, 170);
   std::vector<double> vres_gap30 = getsimulation("res", chip, 294, 170);
 
-  std::vector<double> vtilt_dot1 = getsimulation("tilt", chip, 308, 170);
-  std::vector<double> vres_dot1 = getsimulation("res", chip, 308, 170);
+  std::vector<double> vtilt_dot1 = getsimulation("tilt", chip, 294, 150);
+  std::vector<double> vres_dot1 = getsimulation("res", chip, 294, 150);
 
   TLegend *leg = new TLegend();
   setLegendStyle(leg);

@@ -94,6 +94,69 @@ Double_t gettilt(const char * inputdir, int run, int chip) {
   return tilt;
 }
 
+Double_t getdz(const char * inputdir, int run, int chip) {
+
+  Double_t dz = -999;
+  bool found_run = false;
+  bool found_chip = false;
+
+  gSystem->OpenDirectory(inputdir);
+  ifstream in;
+  string line;
+  TString name;
+  name.Form("runlist-%i.csv",chip);
+  in.open(name);
+
+  // Skip first line:
+  getline(in,line);
+
+  while(std::getline(in,line)){
+    // Skip reading comments:
+    if (line[0] == '#') continue;
+    if(line.empty()) continue;
+
+    istringstream s( line );
+    int i = 0;
+    while (s) {
+      string str;
+      if(!getline( s, str, ',' )) break;
+      if(i == 0 && run == atoi(str.c_str())) found_run = true; // Read run number
+      if(i == 4 && chip == atoi(str.c_str())) found_chip = true; // Read DUT chip id
+      if(i == 13 && found_run && found_chip) { dz = atof(str.c_str()); break; } // Store tilt value
+      i++;
+    }
+    if(found_run && found_chip) break;
+  }
+
+  in.close();
+  return dz;
+}
+
+Double_t getTelRes(double dz) {
+
+  Double_t dzDUT, sigma_x;
+
+  ifstream in;
+  string line;
+  in.open("resolutions.db");
+
+  // Skip first line:
+  getline(in,line);
+
+  while(std::getline(in,line)){
+    // Skip reading comments:
+    if (line[0] == '#') continue;
+    if(line.empty()) continue;
+
+    istringstream s( line );
+    s >> dzDUT >> sigma_x;
+    if(dzDUT >= dz) break;
+  }
+
+  in.close();
+  return sigma_x;
+}
+
 std::vector<double> getsimulation(std::string name, int chip, int thickness=294, int threshold=200, bool dot1=false) {
 
   //----------------------------------------------------------------------------

@@ -89,11 +89,15 @@ void resolution(const char* inputdir, int chip, int startrun, int stoprun) {
     nevents += ((TH1D*)gDirectory->Get("trixylk"))->GetEntries();
 
     // Subtract telescope track resolution:
-    Double_t res_tel_subtracted = TMath::Sqrt(res*res - restel*restel);
-    Double_t res_corr_tel_subtracted = TMath::Sqrt(res_corr*res_corr - restel*restel);
+    Double_t dz = getdz(inputdir,*run,chip);
+    Double_t tel_resolution = getTelRes(dz);
+
+    Double_t res_tel_subtracted = TMath::Sqrt(res*res - tel_resolution*tel_resolution);
+    Double_t res_corr_tel_subtracted = TMath::Sqrt(res_corr*res_corr - tel_resolution*tel_resolution);
 
     cout << "run" << *run << " (chip" << chip << ") res " << res << " ressub " << res_tel_subtracted << " res_corr " << res_corr_tel_subtracted << " tilt " << tilt << " eta " << eta << endl;
     //cout << *run << " " << tilt << " " << res_tel_subtracted << endl;
+    //cout << " -> dz = " << dz << ", sigma_tel = " << tel_resolution << endl;
 
     resolution->Fill(tilt,res,1);
     resolution_corr->Fill(tilt,res_corr,1);
