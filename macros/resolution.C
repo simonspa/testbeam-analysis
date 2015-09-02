@@ -122,7 +122,8 @@ void resolution(const char* inputdir, int chip, int startrun, int stoprun) {
   setLegendStyle(leg3);
 
   c1->cd();
-  resolution->SetTitle(";tilt angle [#degree];resolution y #left[#mum#right]");
+  if(chip == 506) resolution->SetTitle(";tilt angle [#degree];resolution y #left[#mum#right]");
+  else resolution->SetTitle(";tilt angle [#degree];resolution x #left[#mum#right]");
   resolution->SetMarkerStyle(20);
   resolution->SetMarkerColor(1);
   resolution->Draw();
@@ -133,7 +134,8 @@ void resolution(const char* inputdir, int chip, int startrun, int stoprun) {
   DrawCMSLabels(nfiducial,5.6,0.045);
 
   c2->cd();
-  resolution_tel_subtracted->SetTitle(";tilt angle [#degree];resolution y #left[#mum#right]");
+  if(chip == 506) resolution_tel_subtracted->SetTitle(";tilt angle [#degree];resolution y #left[#mum#right]");
+  else resolution_tel_subtracted->SetTitle(";tilt angle [#degree];resolution x #left[#mum#right]");
   resolution_tel_subtracted->SetMarkerStyle(20);
   resolution_tel_subtracted->SetMarkerColor(1);
   resolution_tel_subtracted->Draw();
@@ -143,16 +145,18 @@ void resolution(const char* inputdir, int chip, int startrun, int stoprun) {
   setStyleAndFillLegend(resolution_tel_subtracted,"data",leg2);
   DrawCMSLabels(nfiducial,5.6,0.045);
 
-  c3->cd();
-  resolution_vs_eta->SetTitle(";pseudo rapidity #eta;resolution y #left[#mum#right]");
-  resolution_vs_eta->SetMarkerStyle(20);
-  resolution_vs_eta->SetMarkerColor(1);
-  resolution_vs_eta->Draw();
-  resolution_corr_vs_eta->SetMarkerStyle(20);
-  resolution_corr_vs_eta->SetMarkerColor(15);
-  if(draw_skwcorr) resolution_corr_vs_eta->Draw("same");
-  setStyleAndFillLegend(resolution_vs_eta,"data",leg3);
-  DrawCMSLabels(nfiducial,5.6,0.045);
+  if(chip == 506) {
+    c3->cd();
+    resolution_vs_eta->SetTitle(";pseudo rapidity #eta;resolution y #left[#mum#right]");
+    resolution_vs_eta->SetMarkerStyle(20);
+    resolution_vs_eta->SetMarkerColor(1);
+    resolution_vs_eta->Draw();
+    resolution_corr_vs_eta->SetMarkerStyle(20);
+    resolution_corr_vs_eta->SetMarkerColor(15);
+    if(draw_skwcorr) resolution_corr_vs_eta->Draw("same");
+    setStyleAndFillLegend(resolution_vs_eta,"data",leg3);
+    DrawCMSLabels(nfiducial,5.6,0.045);
+  }
   
   int thickness = 294;
   int threshold = 170; // maybe 160 or so?
@@ -178,25 +182,29 @@ void resolution(const char* inputdir, int chip, int startrun, int stoprun) {
     siskw->SetMarkerSize(0);
     if(draw_skwcorr) siskw->Draw("PL"); // without axis option: overlay
 
-    c3->cd();
-    TGraph *si_eta = new TGraph( veta.size(), &(veta[0]), &(vres[0]) ); // sim
-    si_eta->SetLineColor(2);
-    si_eta->SetLineWidth(3);
-    si_eta->SetMarkerColor(2);
-    resolution_vs_eta->GetXaxis()->SetRangeUser(veta.front(), veta.back());
-    si_eta->Draw("PL"); // without axis option: overlay
-    setStyleAndFillLegend(si_eta,"sim",leg3);
+    if(chip == 506) {
+      c3->cd();
+      TGraph *si_eta = new TGraph( veta.size(), &(veta[0]), &(vres[0]) ); // sim
+      si_eta->SetLineColor(2);
+      si_eta->SetLineWidth(3);
+      si_eta->SetMarkerColor(2);
+      resolution_vs_eta->GetXaxis()->SetRangeUser(veta.front(), veta.back());
+      si_eta->Draw("PL"); // without axis option: overlay
+      setStyleAndFillLegend(si_eta,"sim",leg3);
 
-    TGraph *si_etaskw = new TGraph( veta.size(), &(veta[0]), &(vresskw[0]) ); // sim
-    si_etaskw->SetLineColor(kRed-7);
-    si_etaskw->SetLineWidth(3);
-    si_etaskw->SetMarkerSize(0);
-    if(draw_skwcorr) si_etaskw->Draw("PL"); // without axis option: overlay
-
+      TGraph *si_etaskw = new TGraph( veta.size(), &(veta[0]), &(vresskw[0]) ); // sim
+      si_etaskw->SetLineColor(kRed-7);
+      si_etaskw->SetLineWidth(3);
+      si_etaskw->SetMarkerSize(0);
+      if(draw_skwcorr) si_etaskw->Draw("PL"); // without axis option: overlay
+    }
   }
 
   c2->cd();
   leg2->Draw();
-  c3->cd();
-  leg3->Draw();
+
+  if(chip == 506) {
+    c3->cd();
+    leg3->Draw();
+  }
 }
