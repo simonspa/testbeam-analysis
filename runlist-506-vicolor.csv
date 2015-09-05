@@ -1,0 +1,16 @@
+RunNumber,AlignmentRun,GearFile,BeamEnergy,dut_chip,dut_gain,dut_gain_type,dut_conversion,ref_chip,ref_gain,ref_gain_type,dut_align_x,dut_align_y,dut_pos_z,dut_tilt,dut_turn,dut_rot,ref_align_x,ref_align_y,ref_pos_z,ref_rot
+
+# FEBRUARY 24
+14756,014756,gear_desy2015_02e.xml,5.6,506,c506-ia24-trim30tb-gaincal.dat,desy_weibull_decorr_pos,0,404,c404-ia27-trim30.dat,desy_weibull_decorr_pos,-1.93393,0.124138,43.2525,0.1,0.00001,-0.00411861,-1,-0.1,40,0
+14848,014686,gear_desy2015_02e.xml,5.6,506,c506-ia24-trim30tb-gaincal.dat,desy_weibull_decorr_pos,0,404,c404-ia27-trim30.dat,desy_weibull_decorr_pos,-1.93393,0.124138,75.2525,0.1,0.00001,-0.00411861,-1,-0.1,40,0
+
+
+# MAY, VIColOr Tests
+19415,019415,gear_desy2015_05a.xml,5.6,506,c506-ia24-trim32tb-chiller15-gaincal.dat,desy_weibull_decorr_pos,0.271769,501,c501-ia24-trim30tb-gaincal.dat,desy_weibull_decorr_pos,-4.73795,0.210469,43.3461,27.0538,-0.753667,-0.00605027,-3.9424,-0.0511376,40,0
+19422,019422,gear_desy2015_05a.xml,5.6,506,c506-ia24-trim32tb-chiller15-gaincal.dat,desy_weibull_decorr_pos,0.271769,501,c501-ia24-trim30tb-gaincal.dat,desy_weibull_decorr_pos,-4.73795,0.210469,43.3461,27.0538,-0.753667,-0.00605027,-3.9424,-0.0511376,40,0
+19441,019441,gear_desy2015_05b.xml,5.6,506,c506-ia24-trim32tb-chiller15-gaincal.dat,desy_weibull_decorr_pos,0.3,501,c501-ia24-trim30tb-gaincal.dat,desy_weibull_decorr_pos,-3.8835881,-0.731372988,68.3929992,27.5202878,-0.777042166,-0.013144,-4,-0.5,40,0
+19460,019441,gear_desy2015_05b.xml,5.6,506,c506-ia24-trim32tb-chiller15-gaincal.dat,desy_weibull_decorr_pos,0.271769,501,c501-ia24-trim30tb-gaincal.dat,desy_weibull_decorr_pos,-4.73795,0.210469,43.3461,76.0538,-0.753667,-0.00605027,-3.9424,-0.0511376,40,0
+19464,019441,gear_desy2015_05b.xml,5.6,506,c506-ia24-trim32tb-chiller15-gaincal.dat,desy_weibull_decorr_pos,0.271769,501,c501-ia24-trim30tb-gaincal.dat,desy_weibull_decorr_pos,-4.73795,0.210469,43.3461,84.0538,-0.753667,-0.00605027,-3.9424,-0.0511376,40,0
+19465,019441,gear_desy2015_05b.xml,5.6,506,c506-ia24-trim32tb-chiller15-gaincal.dat,desy_weibull_decorr_pos,0.271769,501,c501-ia24-trim30tb-gaincal.dat,desy_weibull_decorr_pos,-4.73795,0.210469,43.3461,84.0538,-0.753667,-0.00605027,-3.9424,-0.0511376,40,0
+19466,019441,gear_desy2015_05b.xml,5.6,506,c506-ia24-trim32tb-chiller15-gaincal.dat,desy_weibull_decorr_pos,0.271769,501,c501-ia24-trim30tb-gaincal.dat,desy_weibull_decorr_pos,-4.73795,0.210469,43.3461,84.0538,-0.753667,-0.00605027,-3.9424,-0.0511376,40,0
+19467,019441,gear_desy2015_05b.xml,5.6,506,c506-ia24-trim32tb-chiller15-gaincal.dat,desy_weibull_decorr_pos,0.271769,501,c501-ia24-trim30tb-gaincal.dat,desy_weibull_decorr_pos,-4.73795,0.210469,43.3461,84.0538,-0.753667,-0.00605027,-3.9424,-0.0511376,40,0
