@@ -194,11 +194,48 @@ void setHHStyle(TStyle& HHStyle)
     // HHStyle.SetHistMinimumZero(kTRUE);
 }
 
+// Draw label for Decay Channel in upper left corner of plot
+void DrawPrelimLabel(int cmsprelim, double textSize) {
+
+    TPaveText *cms = new TPaveText();
+    cms->AddText("CMS");
+
+    cms->SetX1NDC(      gStyle->GetPadLeftMargin() + gStyle->GetTickLength()        );
+    cms->SetY1NDC(1.0 - gStyle->GetPadTopMargin()  - gStyle->GetTickLength() - 0.05 );
+    cms->SetX2NDC(      gStyle->GetPadLeftMargin() + gStyle->GetTickLength() + 0.15 );
+    cms->SetY2NDC(1.0 - gStyle->GetPadTopMargin()  - gStyle->GetTickLength()        );
+
+    cms->SetFillStyle(0);
+    cms->SetBorderSize(0);
+    if (textSize!=0) cms->SetTextSize(textSize*1.1);
+    cms->SetTextAlign(12);
+    cms->SetTextFont(61);
+    cms->Draw("same");
+
+    if(cmsprelim > 0) {
+      TPaveText *extra = new TPaveText();
+      if(cmsprelim == 2) { extra->AddText("Private Work"); }
+      else { extra->AddText("Preliminary"); }
+
+      extra->SetX1NDC(      gStyle->GetPadLeftMargin() + gStyle->GetTickLength()        );
+      extra->SetY1NDC(1.0 - gStyle->GetPadTopMargin()  - gStyle->GetTickLength() - 0.10 );
+      extra->SetX2NDC(      gStyle->GetPadLeftMargin() + gStyle->GetTickLength() + 0.15 );
+      extra->SetY2NDC(1.0 - gStyle->GetPadTopMargin()  - gStyle->GetTickLength() - 0.05 );
+
+      extra->SetFillStyle(0);
+      extra->SetBorderSize(0);
+      if (textSize!=0) extra->SetTextSize(textSize);
+      extra->SetTextAlign(12);
+      extra->SetTextFont(52);
+      extra->Draw("same");
+    }
+}
+
 // Draw statistics info above plot
 void DrawCMSLabels(double lumi, double energy, double textSize) {
 
   //const char *text = "%2.1f #times 10^{6} clusters (fiducial) (%1.1f GeV)";
-  const char *text = "%2.1f #times 10^{6} clusters (fiducial)";
+  const char *text = "%2.1f #times 10^{6} tracks (%1.1f GeV)";
     
   TPaveText *label = new TPaveText();
   label->SetX1NDC(gStyle->GetPadLeftMargin());
@@ -206,7 +243,7 @@ void DrawCMSLabels(double lumi, double energy, double textSize) {
   label->SetX2NDC(1.0-gStyle->GetPadRightMargin());
   label->SetY2NDC(1.0);
   label->SetTextFont(42);
-  label->AddText(Form(text, lumi/1000000));
+  label->AddText(Form(text, lumi/1000000, energy));
   label->SetFillStyle(0);
   label->SetBorderSize(0);
   if (textSize!=0) label->SetTextSize(textSize);

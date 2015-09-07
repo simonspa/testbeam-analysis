@@ -32,6 +32,7 @@ void resolution(const char* inputdir, int chip, int startrun, int stoprun) {
 
   // Set the histogram styles:
   setHHStyle(*gStyle);
+  gStyle->SetTitleYOffset(0.8);
 
   TCanvas *c1 = new TCanvas("c1","resolution",600,600);
   TProfile *resolution = new TProfile("resolution"," ",170,0,85,0,60,"");
@@ -122,8 +123,8 @@ void resolution(const char* inputdir, int chip, int startrun, int stoprun) {
   setLegendStyle(leg3);
 
   c1->cd();
-  if(chip == 506) resolution->SetTitle(";tilt angle [#degree];resolution y #left[#mum#right]");
-  else resolution->SetTitle(";tilt angle [#degree];resolution x #left[#mum#right]");
+  if(chip == 506) resolution->SetTitle(";tilt angle [#circ];resolution y #left[#mum#right]");
+  else resolution->SetTitle(";tilt angle [#circ];resolution x #left[#mum#right]");
   resolution->SetMarkerStyle(20);
   resolution->SetMarkerColor(1);
   resolution->Draw();
@@ -132,10 +133,11 @@ void resolution(const char* inputdir, int chip, int startrun, int stoprun) {
   if(draw_skwcorr) resolution_corr->Draw("same");
   setStyleAndFillLegend(resolution,"data",leg);
   DrawCMSLabels(nfiducial,5.6,0.045);
+  DrawPrelimLabel(1,0.045);
 
   c2->cd();
-  if(chip == 506) resolution_tel_subtracted->SetTitle(";tilt angle [#degree];resolution y #left[#mum#right]");
-  else resolution_tel_subtracted->SetTitle(";tilt angle [#degree];resolution x #left[#mum#right]");
+  if(chip == 506) resolution_tel_subtracted->SetTitle(";tilt angle [#circ];resolution y #left[#mum#right]");
+  else resolution_tel_subtracted->SetTitle(";tilt angle [#circ];resolution x #left[#mum#right]");
   resolution_tel_subtracted->SetMarkerStyle(20);
   resolution_tel_subtracted->SetMarkerColor(1);
   resolution_tel_subtracted->Draw();
@@ -144,6 +146,7 @@ void resolution(const char* inputdir, int chip, int startrun, int stoprun) {
   if(draw_skwcorr) resolution_corr_tel_subtracted->Draw("same");
   setStyleAndFillLegend(resolution_tel_subtracted,"data",leg2);
   DrawCMSLabels(nfiducial,5.6,0.045);
+  DrawPrelimLabel(1,0.045);
 
   if(chip == 506) {
     c3->cd();
@@ -156,6 +159,7 @@ void resolution(const char* inputdir, int chip, int startrun, int stoprun) {
     if(draw_skwcorr) resolution_corr_vs_eta->Draw("same");
     setStyleAndFillLegend(resolution_vs_eta,"data",leg3);
     DrawCMSLabels(nfiducial,5.6,0.045);
+    DrawPrelimLabel(1,0.045);
   }
   
   int thickness = 294;
