@@ -21,7 +21,7 @@
 
 using namespace std;
 
-std::vector<int> getruns(const char * inputdir, int chip) {
+std::vector<int> getruns(const char * inputdir, int chip, string list = "") {
 
   std::vector<int> runs;
 
@@ -29,7 +29,8 @@ std::vector<int> getruns(const char * inputdir, int chip) {
   ifstream in;
   string line;
   TString name;
-  name.Form("runlist-%i.csv",chip);
+  name.Form("runlist-%i%s.csv",chip,list.c_str());
+  std::cout << "Opening " << name << endl;
   in.open(name);
 
   // Skip first line:
@@ -56,7 +57,7 @@ std::vector<int> getruns(const char * inputdir, int chip) {
   return runs;
 }
 
-Double_t gettilt(const char * inputdir, int run, int chip) {
+Double_t gettilt(const char * inputdir, int run, int chip, string list = "") {
 
   Double_t tilt = -999;
   bool found_run = false;
@@ -66,7 +67,7 @@ Double_t gettilt(const char * inputdir, int run, int chip) {
   ifstream in;
   string line;
   TString name;
-  name.Form("runlist-%i.csv",chip);
+  name.Form("runlist-%i%s.csv",chip,list.c_str());
   in.open(name);
 
   // Skip first line:
@@ -94,7 +95,7 @@ Double_t gettilt(const char * inputdir, int run, int chip) {
   return tilt;
 }
 
-Double_t getdz(const char * inputdir, int run, int chip) {
+Double_t getdz(const char * inputdir, int run, int chip, string list = "") {
 
   Double_t dz = -999;
   bool found_run = false;
@@ -104,7 +105,7 @@ Double_t getdz(const char * inputdir, int run, int chip) {
   ifstream in;
   string line;
   TString name;
-  name.Form("runlist-%i.csv",chip);
+  name.Form("runlist-%i%s.csv",chip,list.c_str());
   in.open(name);
 
   // Skip first line:
@@ -130,6 +131,48 @@ Double_t getdz(const char * inputdir, int run, int chip) {
 
   in.close();
   return dz;
+}
+
+Double_t gettrim(const char * inputdir, int run, int chip, string list = "") {
+
+  string trimstring;
+  bool found_run = false;
+  bool found_chip = false;
+
+  gSystem->OpenDirectory(inputdir);
+  ifstream in;
+  string line;
+  TString name;
+  name.Form("runlist-%i%s.csv",chip,list.c_str());
+  in.open(name);
+
+  // Skip first line:
+  getline(in,line);
+
+  while(std::getline(in,line)){
+    // Skip reading comments:
+    if (line[0] == '#') continue;
+    if(line.empty()) continue;
+
+    istringstream s( line );
+    int i = 0;
+    while (s) {
+      string str;
+      if(!getline( s, str, ',' )) break;
+      if(i == 0 && run == atoi(str.c_str())) found_run = true; // Read run number
+      if(i == 4 && chip == atoi(str.c_str())) found_chip = true; // Read DUT chip id
+      if(i == 5 && found_run && found_chip) { trimstring = str; break; } // Store value
+      i++;
+    }
+    if(found_run && found_chip) break;
+  }
+
+  int trim = 0;
+  string delimiter = "trim";
+  trimstring = trimstring.substr(trimstring.find(delimiter) + delimiter.length(), 2);
+  trim = atof(trimstring.c_str());
+  in.close();
+  return trim;
 }
 
 Double_t getTelRes(double dz) {
@@ -163,7 +206,7 @@ std::vector<double> getsimulation(std::string name, int chip, int thickness=294,
   // read sim:
 
   TString file;
-  if(dot1) file.Form("simulation/sim%i_%iskw_thr%i_dot1.dat",thickness,chip,threshold);
+  if(dot1) file.Form("simulation/sim%i_%iskw_thr%i_hg.dat",thickness,chip,threshold);
   else file.Form("simulation/sim%i_%iskw_thr%i.dat",thickness,chip,threshold);
 
   cout << "try to open sim file " << file;
