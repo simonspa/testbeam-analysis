@@ -21,7 +21,7 @@
 
 using namespace std;
 
-bool draw_skwcorr = false;
+bool draw_skwcorr = true;
 
 void resolution() {
   std::cout << "Run resolution(histogram dir)" << std::endl;
@@ -32,7 +32,7 @@ void resolution(const char* inputdir, int chip, int startrun, int stoprun) {
 
   // Set the histogram styles:
   setHHStyle(*gStyle);
-  gStyle->SetTitleYOffset(0.8);
+  gStyle->SetTitleYOffset(1.1);
 
   TCanvas *c1 = new TCanvas("c1","resolution",600,600);
   TProfile *resolution = new TProfile("resolution"," ",170,0,85,0,60,"");
@@ -72,14 +72,13 @@ void resolution(const char* inputdir, int chip, int startrun, int stoprun) {
     if(!h) continue;
 
     // Y Resolution in fiducial volume & Landau peak:
-    //Double_t res = fitep0sigma("cmsdyfctq4",-50,50);
     Double_t res = fitep0sigma("cmsdy0fctq4d");
-    //Double_t res = fittp0sigma("cmsdyfctq4d");
-
     //Double_t res = getRMS96("cmsdy0fctq3");
+
     // Skew corrected:
     Double_t res_corr = fitep0sigma("cmsdyfctq4d");
     //Double_t res_corr = getRMS96("cmsdy0fctq4",92);
+
     Double_t tilt = gettilt(inputdir,*run,chip);
 
     // Eta: flip angle from tilt to theta from beam axis:
@@ -96,9 +95,11 @@ void resolution(const char* inputdir, int chip, int startrun, int stoprun) {
     Double_t res_tel_subtracted = TMath::Sqrt(res*res - tel_resolution*tel_resolution);
     Double_t res_corr_tel_subtracted = TMath::Sqrt(res_corr*res_corr - tel_resolution*tel_resolution);
 
-    cout << "run" << *run << " (chip" << chip << ") res " << res << " ressub " << res_tel_subtracted << " res_corr " << res_corr_tel_subtracted << " tilt " << tilt << " eta " << eta << endl;
-    //cout << *run << " " << tilt << " " << res_tel_subtracted << endl;
-    //cout << " -> dz = " << dz << ", sigma_tel = " << tel_resolution << endl;
+    cout << "run" << *run << " (chip" << chip << ") res " << res 
+	 << " ressub " << res_tel_subtracted 
+	 << " res_corr " << res_corr_tel_subtracted 
+	 << " tilt " << tilt 
+	 << " eta " << eta << endl;
 
     resolution->Fill(tilt,res,1);
     resolution_corr->Fill(tilt,res_corr,1);
@@ -126,12 +127,21 @@ void resolution(const char* inputdir, int chip, int startrun, int stoprun) {
   if(chip == 506) resolution->SetTitle(";tilt angle [#circ];resolution y #left[#mum#right]");
   else resolution->SetTitle(";tilt angle [#circ];resolution x #left[#mum#right]");
   resolution->SetMarkerStyle(20);
-  resolution->SetMarkerColor(1);
-  resolution->Draw();
   resolution_corr->SetMarkerStyle(20);
-  resolution_corr->SetMarkerColor(15);
-  if(draw_skwcorr) resolution_corr->Draw("same");
-  setStyleAndFillLegend(resolution,"data",leg);
+  if(draw_skwcorr) {
+    resolution->SetMarkerColor(kGray);
+    resolution_corr->SetMarkerColor(kBlack);
+  }
+  else { resolution->SetMarkerColor(kBlack); }
+
+  resolution->Draw();
+  if(draw_skwcorr) {
+    resolution_corr->Draw("same");
+    setStyleAndFillLegend(resolution_corr,"data",leg);
+  }
+  else {
+    setStyleAndFillLegend(resolution,"data",leg);
+  }
   DrawCMSLabels(nfiducial,5.6,0.045);
   DrawPrelimLabel(1,0.045);
 
@@ -139,12 +149,21 @@ void resolution(const char* inputdir, int chip, int startrun, int stoprun) {
   if(chip == 506) resolution_tel_subtracted->SetTitle(";tilt angle [#circ];resolution y #left[#mum#right]");
   else resolution_tel_subtracted->SetTitle(";tilt angle [#circ];resolution x #left[#mum#right]");
   resolution_tel_subtracted->SetMarkerStyle(20);
-  resolution_tel_subtracted->SetMarkerColor(1);
-  resolution_tel_subtracted->Draw();
   resolution_corr_tel_subtracted->SetMarkerStyle(20);
-  resolution_corr_tel_subtracted->SetMarkerColor(15);
-  if(draw_skwcorr) resolution_corr_tel_subtracted->Draw("same");
-  setStyleAndFillLegend(resolution_tel_subtracted,"data",leg2);
+  if(draw_skwcorr) {
+    resolution_tel_subtracted->SetMarkerColor(kGray);
+    resolution_corr_tel_subtracted->SetMarkerColor(kBlack);
+  }
+  else { resolution_tel_subtracted->SetMarkerColor(kBlack); }
+
+  resolution_tel_subtracted->Draw();
+  if(draw_skwcorr) {
+    resolution_corr_tel_subtracted->Draw("same");
+    setStyleAndFillLegend(resolution_corr_tel_subtracted,"data",leg2);
+  }
+  else {
+    setStyleAndFillLegend(resolution_tel_subtracted,"data",leg2);
+  }
   DrawCMSLabels(nfiducial,5.6,0.045);
   DrawPrelimLabel(1,0.045);
 
@@ -152,12 +171,21 @@ void resolution(const char* inputdir, int chip, int startrun, int stoprun) {
     c3->cd();
     resolution_vs_eta->SetTitle(";pseudo rapidity #eta;resolution y #left[#mum#right]");
     resolution_vs_eta->SetMarkerStyle(20);
-    resolution_vs_eta->SetMarkerColor(1);
-    resolution_vs_eta->Draw();
     resolution_corr_vs_eta->SetMarkerStyle(20);
-    resolution_corr_vs_eta->SetMarkerColor(15);
-    if(draw_skwcorr) resolution_corr_vs_eta->Draw("same");
-    setStyleAndFillLegend(resolution_vs_eta,"data",leg3);
+    if(draw_skwcorr) {
+      resolution_vs_eta->SetMarkerColor(kGray);
+      resolution_corr_vs_eta->SetMarkerColor(kBlack);
+    }
+    else { resolution_vs_eta->SetMarkerColor(kBlack); }
+
+    resolution_vs_eta->Draw();
+    if(draw_skwcorr) {
+      resolution_corr_vs_eta->Draw("same");
+      setStyleAndFillLegend(resolution_corr_vs_eta,"data",leg3);
+    }
+    else {
+      setStyleAndFillLegend(resolution_vs_eta,"data",leg3);
+    }
     DrawCMSLabels(nfiducial,5.6,0.045);
     DrawPrelimLabel(1,0.045);
   }
@@ -173,34 +201,50 @@ void resolution(const char* inputdir, int chip, int startrun, int stoprun) {
   if(!vtilt.empty()) {
     c2->cd();
     TGraph *si = new TGraph( vtilt.size(), &(vtilt[0]), &(vres[0]) ); // sim
-    si->SetLineColor(2);
+    TGraph *siskw = new TGraph( vtilt.size(), &(vtilt[0]), &(vresskw[0]) ); // sim
     si->SetLineWidth(3);
-    si->SetMarkerColor(2);
+    siskw->SetLineWidth(3);
+    si->SetMarkerSize(0);
+    siskw->SetMarkerSize(0);
+
+    if(draw_skwcorr) {
+      si->SetLineColor(kGray+1);
+      siskw->SetLineColor(2);
+    }
+    else { si->SetLineColor(2); }
+
     resolution_tel_subtracted->GetXaxis()->SetRangeUser(vtilt.front(), vtilt.back());
     si->Draw("PL"); // without axis option: overlay
-    setStyleAndFillLegend(si,"sim",leg2);
-
-    TGraph *siskw = new TGraph( vtilt.size(), &(vtilt[0]), &(vresskw[0]) ); // sim
-    siskw->SetLineColor(kRed-7);
-    siskw->SetLineWidth(3);
-    siskw->SetMarkerSize(0);
-    if(draw_skwcorr) siskw->Draw("PL"); // without axis option: overlay
+    
+    if(draw_skwcorr) {
+      siskw->Draw("PL"); // without axis option: overlay
+      setStyleAndFillLegend(siskw,"sim",leg2);
+    }
+    else { setStyleAndFillLegend(si,"sim",leg2); }
 
     if(chip == 506) {
       c3->cd();
       TGraph *si_eta = new TGraph( veta.size(), &(veta[0]), &(vres[0]) ); // sim
-      si_eta->SetLineColor(2);
-      si_eta->SetLineWidth(3);
-      si_eta->SetMarkerColor(2);
-      resolution_vs_eta->GetXaxis()->SetRangeUser(veta.front(), veta.back());
-      si_eta->Draw("PL"); // without axis option: overlay
-      setStyleAndFillLegend(si_eta,"sim",leg3);
-
       TGraph *si_etaskw = new TGraph( veta.size(), &(veta[0]), &(vresskw[0]) ); // sim
-      si_etaskw->SetLineColor(kRed-7);
+      si_eta->SetLineWidth(3);
+      si_eta->SetMarkerSize(0);
       si_etaskw->SetLineWidth(3);
       si_etaskw->SetMarkerSize(0);
-      if(draw_skwcorr) si_etaskw->Draw("PL"); // without axis option: overlay
+
+      if(draw_skwcorr) {
+	si_eta->SetLineColor(kGray+1);
+	si_etaskw->SetLineColor(2);
+      }
+      else { si_eta->SetLineColor(2); }
+
+      resolution_vs_eta->GetXaxis()->SetRangeUser(veta.front(), veta.back());
+      si_eta->Draw("PL"); // without axis option: overlay
+      
+      if(draw_skwcorr) {
+	si_etaskw->Draw("PL"); // without axis option: overlay
+	setStyleAndFillLegend(si_etaskw,"sim",leg3);
+      }
+      else { setStyleAndFillLegend(si_eta,"sim",leg3); }
     }
   }
 

@@ -285,7 +285,7 @@ void setStyle(TProfile *hist, TString name)
 
   hist->SetMarkerStyle(20);
   hist->SetMarkerSize(1.2);
-  hist->SetLineWidth(2);
+  hist->SetLineWidth(3);
   
   if(name == "data") {
     hist->SetMarkerColor(kBlack);
@@ -293,14 +293,14 @@ void setStyle(TProfile *hist, TString name)
     hist->SetFillColor(kBlack);
   }
   else if(name == "dot1") {
-    hist->SetLineWidth(2);
+    hist->SetLineWidth(3);
     hist->SetMarkerSize(0);
     hist->SetLineColor(kCyan+1);
     hist->SetFillStyle(3004);
     hist->SetFillColor(kRed+1);
   }
   else {
-    hist->SetLineWidth(2);
+    hist->SetLineWidth(3);
     hist->SetMarkerSize(0);
     hist->SetLineColor(kRed+1);
     hist->SetFillStyle(3004);
@@ -324,7 +324,7 @@ void setStyle(TGraph *hist, TString name)
 
   hist->SetMarkerStyle(20);
   hist->SetMarkerSize(1.2);
-  hist->SetLineWidth(2);
+  hist->SetLineWidth(3);
 
   if(name == "data") {
     hist->SetMarkerColor(kBlack);
@@ -332,14 +332,14 @@ void setStyle(TGraph *hist, TString name)
     hist->SetFillColor(kBlack);
   }
   else if(name == "dot1") {
-    hist->SetLineWidth(2);
+    hist->SetLineWidth(3);
     hist->SetMarkerSize(0);
     hist->SetLineColor(kCyan+1);
     hist->SetFillStyle(3004);
     hist->SetFillColor(kRed+1);
   }
   else {
-    hist->SetLineWidth(2);
+    hist->SetLineWidth(3);
     hist->SetMarkerSize(0);
     hist->SetLineColor(kRed+1);
     hist->SetFillStyle(3004);
