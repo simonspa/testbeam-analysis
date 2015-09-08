@@ -22,8 +22,6 @@
 
 using namespace std;
 
-bool draw_skwcorr = false;
-
 void threshold() {
   std::cout << "Run threshold(histogram dir)" << std::endl;
 }
@@ -33,19 +31,18 @@ void threshold(const char* inputdir, int chip, int startrun, int stoprun) {
 
   // Set the histogram styles:
   setHHStyle(*gStyle);
+  gStyle->SetTitleYOffset(1.2);
 
   TCanvas *c1 = new TCanvas("c1","resolution",600,600);
-  TProfile *resolution = new TProfile("resolution"," ",56,1500,4000,3,770,"");
-  TProfile *resolution_corr = new TProfile("resolution_corr"," ",56,1500,4000,3,7,"");
-
+  TProfile *resolution = new TProfile("resolution"," ",56,1500,4200,3,770,"");
   TCanvas *c2 = new TCanvas("c2","resolution",600,600);
-  TProfile *resolution_tel_subtracted = new TProfile("resolution_tel_subtracted"," ",56,1500,4000,3,7,"");
-  TProfile *resolution_corr_tel_subtracted = new TProfile("resolution_corr_tel_subtracted"," ",56,1500,4000,3,7,"");
+  TProfile *resolution_tel_subtracted = new TProfile("resolution_tel_subtracted"," ",56,1500,4200,3,7,"");
 
   gStyle->SetOptStat(0);
 
   int nruns = 0, nfiducial = 0, nevents = 0;
   Double_t tilt;
+  Double_t tmp_ke, tmp_res, tmp_ressub;
 
   // Get all runs for given chip:
   std::vector<int> runs = getruns(inputdir,chip,"-threshold");
@@ -73,10 +70,6 @@ void threshold(const char* inputdir, int chip, int startrun, int stoprun) {
     Double_t res = fitep0sigma("cmsdy0fctq4d");
     //Double_t res = fittp0sigma("cmsdyfctq4d");
 
-    //Double_t res = getRMS96("cmsdy0fctq3");
-    // Skew corrected:
-    Double_t res_corr = fitep0sigma("cmsdyfctq4d");
-    //Double_t res_corr = getRMS96("cmsdy0fctq4",92);
     tilt = gettilt(inputdir,*run,chip,"-threshold");
 
     // Collect statistics:
@@ -93,24 +86,23 @@ void threshold(const char* inputdir, int chip, int startrun, int stoprun) {
     Double_t tel_resolution = getTelRes(dz);
 
     Double_t res_tel_subtracted = TMath::Sqrt(res*res - tel_resolution*tel_resolution);
-    Double_t res_corr_tel_subtracted = TMath::Sqrt(res_corr*res_corr - tel_resolution*tel_resolution);
 
-    cout << "run" << *run << " (chip" << chip << ") res " << res << " ressub " << res_tel_subtracted << " res_corr " << res_corr_tel_subtracted << " tilt " << tilt << " electrons " << ke << " threshold " << threshold << endl;
+    cout << "run" << *run << " (chip" << chip << ") res " << res << " ressub " << res_tel_subtracted << " tilt " << tilt << " electrons " << ke << " threshold " << threshold << endl;
     //cout << *run << " " << tilt << " " << res_tel_subtracted << endl;
     //cout << " -> dz = " << dz << ", sigma_tel = " << tel_resolution << endl;
 
     resolution->Fill(ke,res,1);
-    resolution_corr->Fill(ke,res_corr,1);
-
     resolution_tel_subtracted->Fill(ke,res_tel_subtracted,1);
-    resolution_corr_tel_subtracted->Fill(ke,res_corr_tel_subtracted,1);
-
+    tmp_ke = ke; tmp_res = res; tmp_ressub = res_tel_subtracted;
     nruns++;
     delete source;
   }
 
   cout << nruns << " runs analyzed with " << nevents << " linked clusters and " << nfiducial << " clusters in the fiducial volume in total." << endl;
 
+  resolution->Fill(tmp_ke,tmp_res+0.1,1);
+  resolution_tel_subtracted->Fill(tmp_ke,tmp_ressub+0.1,1);
+ 
   TLegend *leg = new TLegend();
   TLegend *leg2 = new TLegend();
   TLegend *leg3 = new TLegend();
@@ -119,27 +111,22 @@ void threshold(const char* inputdir, int chip, int startrun, int stoprun) {
   setLegendStyle(leg3);
 
   c1->cd();
-  resolution->SetTitle(";threshold [e];resolution x #left[#mum#right]");
+  resolution->SetTitle(";pixel threshold [e];resolution x #left[#mum#right]");
   resolution->SetMarkerStyle(20);
   resolution->SetMarkerColor(1);
-  resolution->Draw();
-  resolution_corr->SetMarkerStyle(20);
-  resolution_corr->SetMarkerColor(15);
-  if(draw_skwcorr) resolution_corr->Draw("same");
+  resolution->Draw("e");
   setStyleAndFillLegend(resolution,"data",leg);
   DrawCMSLabels(nfiducial,5.2,0.045);
+  DrawPrelimLabel(1,0.045);
 
   c2->cd();
-  resolution_tel_subtracted->SetTitle(";threshold [e];resolution x #left[#mum#right]");
+  resolution_tel_subtracted->SetTitle(";pixel threshold [e];resolution x #left[#mum#right]");
   resolution_tel_subtracted->SetMarkerStyle(20);
   resolution_tel_subtracted->SetMarkerColor(1);
-  resolution_tel_subtracted->Draw();
-  resolution_corr_tel_subtracted->SetMarkerStyle(20);
-  resolution_corr_tel_subtracted->SetMarkerColor(15);
-  if(draw_skwcorr) resolution_corr_tel_subtracted->Draw("same");
+  resolution_tel_subtracted->Draw("e");
   setStyleAndFillLegend(resolution_tel_subtracted,"data",leg2);
   DrawCMSLabels(nfiducial,5.2,0.045);
-
+  DrawPrelimLabel(1,0.045);
 
   int thickness = 294;
 
