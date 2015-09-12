@@ -22,6 +22,7 @@
 using namespace std;
 
 bool draw_skwcorr = true;
+bool cmslogo = false;
 
 void resolution() {
   std::cout << "Run resolution(histogram dir)" << std::endl;
@@ -34,15 +35,15 @@ void resolution(const char* inputdir, int chip, int startrun, int stoprun) {
   setHHStyle(*gStyle);
   gStyle->SetTitleYOffset(1.1);
 
-  TCanvas *c1 = new TCanvas("c1","resolution",600,600);
+  TCanvas *c1 = new TCanvas("c1","resolution",700,700);
   TProfile *resolution = new TProfile("resolution"," ",170,0,85,0,60,"");
   TProfile *resolution_corr = new TProfile("resolution_corr"," ",170,0,85,0,60,"");
 
-  TCanvas *c2 = new TCanvas("c2","resolution",600,600);
+  TCanvas *c2 = new TCanvas("c2","resolution",700,700);
   TProfile *resolution_tel_subtracted = new TProfile("resolution_tel_subtracted"," ",170,0,85,0,60,"");
   TProfile *resolution_corr_tel_subtracted = new TProfile("resolution_corr_tel_subtracted"," ",170,0,85,0,60,"");
 
-  TCanvas *c3 = new TCanvas("c3","resolution",600,600);
+  TCanvas *c3 = new TCanvas("c3","resolution",700,700);
   TProfile *resolution_vs_eta = new TProfile("resolution_vs_eta"," ",120,0.01,3,0,60,"");
   TProfile *resolution_corr_vs_eta = new TProfile("resolution_corr_vs_eta"," ",120,0.01,3,0,60,"");
 
@@ -143,7 +144,7 @@ void resolution(const char* inputdir, int chip, int startrun, int stoprun) {
     setStyleAndFillLegend(resolution,"data",leg);
   }
   DrawCMSLabels(nfiducial,5.6,0.045);
-  DrawPrelimLabel(1,0.045);
+  if(cmslogo) DrawPrelimLabel(1,0.045);
 
   c2->cd();
   if(chip == 506) resolution_tel_subtracted->SetTitle(";tilt angle [#circ];resolution y #left[#mum#right]");
@@ -165,7 +166,7 @@ void resolution(const char* inputdir, int chip, int startrun, int stoprun) {
     setStyleAndFillLegend(resolution_tel_subtracted,"data",leg2);
   }
   DrawCMSLabels(nfiducial,5.6,0.045);
-  DrawPrelimLabel(1,0.045);
+  if(cmslogo) DrawPrelimLabel(1,0.045);
 
   if(chip == 506) {
     c3->cd();
@@ -187,7 +188,7 @@ void resolution(const char* inputdir, int chip, int startrun, int stoprun) {
       setStyleAndFillLegend(resolution_vs_eta,"data",leg3);
     }
     DrawCMSLabels(nfiducial,5.6,0.045);
-    DrawPrelimLabel(1,0.045);
+    if(cmslogo) DrawPrelimLabel(1,0.045);
   }
   
   int thickness = 294;
