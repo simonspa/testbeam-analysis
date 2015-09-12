@@ -21,7 +21,6 @@
 
 using namespace std;
 
-bool draw_skwcorr = true;
 bool cmslogo = false;
 
 void resolution() {
@@ -29,7 +28,7 @@ void resolution() {
 }
 
 
-void resolution(const char* inputdir, int chip, int startrun, int stoprun) {
+void resolution(const char* inputdir, int chip, int startrun, int stoprun, bool draw_skwcorr = true) {
 
   // Set the histogram styles:
   setHHStyle(*gStyle);

@@ -36,10 +36,10 @@ void controlplots(const char* inputdir, int chip, int startrun, int stoprun) {
   TProfile *ncols = new TProfile("ncols"," ",130,0,85,0,60,"");
 
   TCanvas *c2 = new TCanvas("c2","ncolstan",700,700);
-  TProfile *ncolstan = new TProfile("ncolstan"," ",130,0,1,0,60,"");
+  TProfile *ncolstan = new TProfile("ncolstan"," ",530,0,10,0,60,"");
 
   TCanvas *c3 = new TCanvas("c3","clustercharge",700,700);
-  TProfile *clustercharge = new TProfile("clustercharge"," ",130,1,2,0,300,"");
+  TProfile *clustercharge = new TProfile("clustercharge"," ",530,1,10,0,300,"");
 
   TCanvas *c4 = new TCanvas("c4","clustercharge",700,700);
   TProfile *clustercharge_tilt = new TProfile("clustercharge_tilt"," ",130,0,85,0,300,"");
@@ -108,7 +108,8 @@ void controlplots(const char* inputdir, int chip, int startrun, int stoprun) {
   ncols->SetMarkerStyle(20);
   ncols->SetMarkerColor(1);
   ncols->GetXaxis()->SetRangeUser(vtilt.front(), vtilt.back());
-  ncols->GetYaxis()->SetRangeUser(1, 4);
+  if(chip == 506) ncols->GetYaxis()->SetRangeUser(1, 21);
+  else ncols->GetYaxis()->SetRangeUser(1, 4);
   ncols->Draw();
   setStyleAndFillLegend(ncols,"data",leg);
   DrawCMSLabels(nclusters,5.6,0.045);
@@ -128,7 +129,8 @@ void controlplots(const char* inputdir, int chip, int startrun, int stoprun) {
   ncolstan->SetMarkerStyle(20);
   ncolstan->SetMarkerColor(1);
   ncolstan->GetXaxis()->SetRangeUser(vtilttan.front(), vtilttan.back());
-  ncolstan->GetYaxis()->SetRangeUser(1, 4);
+  if(chip == 506) ncolstan->GetYaxis()->SetRangeUser(1, 21);
+  else ncolstan->GetYaxis()->SetRangeUser(1, 4);
   ncolstan->Draw();
   setStyleAndFillLegend(ncolstan,"data",leg2);
   DrawCMSLabels(nclusters,5.6,0.045);
@@ -148,7 +150,8 @@ void controlplots(const char* inputdir, int chip, int startrun, int stoprun) {
   clustercharge->SetMarkerStyle(20);
   clustercharge->SetMarkerColor(1);
   clustercharge->GetXaxis()->SetRangeUser(vpath.front(), vpath.back());
-  clustercharge->GetYaxis()->SetRangeUser(20, 35);
+  if(chip == 506) clustercharge->GetYaxis()->SetRangeUser(20, 160);
+  else clustercharge->GetYaxis()->SetRangeUser(20, 35);
   clustercharge->Draw();
   setStyleAndFillLegend(clustercharge,"data",leg3);
   DrawCMSLabels(nclusters,5.6,0.045);
@@ -168,7 +171,8 @@ void controlplots(const char* inputdir, int chip, int startrun, int stoprun) {
   clustercharge_tilt->SetMarkerStyle(20);
   clustercharge_tilt->SetMarkerColor(1);
   clustercharge_tilt->GetXaxis()->SetRangeUser(vtilt.front(), vtilt.back());
-  clustercharge_tilt->GetYaxis()->SetRangeUser(20, 35);
+  if(chip == 506) clustercharge_tilt->GetYaxis()->SetRangeUser(20, 160);
+  else clustercharge_tilt->GetYaxis()->SetRangeUser(20, 35);
   clustercharge_tilt->Draw();
   setStyleAndFillLegend(clustercharge_tilt,"data",leg4);
   DrawCMSLabels(nclusters,5.6,0.045);
