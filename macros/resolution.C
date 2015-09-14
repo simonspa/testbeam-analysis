@@ -28,7 +28,7 @@ void resolution() {
 }
 
 
-void resolution(const char* inputdir, int chip, int startrun, int stoprun, bool draw_skwcorr = true) {
+void resolution(const char* inputdir, int chip, int startrun, int stoprun, bool draw_skwcorr = true, string postfix = "") {
 
   // Set the histogram styles:
   setHHStyle(*gStyle);
@@ -51,7 +51,7 @@ void resolution(const char* inputdir, int chip, int startrun, int stoprun, bool 
   int nruns = 0, nfiducial = 0, nevents = 0;
 
   // Get all runs for given chip:
-  std::vector<int> runs = getruns(inputdir,chip);
+  std::vector<int> runs = getruns(inputdir,chip,postfix);
   for(std::vector<int>::iterator run = runs.begin(); run != runs.end(); run++) {
     if(*run < startrun || *run > stoprun) continue;
 
@@ -79,7 +79,7 @@ void resolution(const char* inputdir, int chip, int startrun, int stoprun, bool 
     Double_t res_corr = fitep0sigma("cmsdyfctq4d");
     //Double_t res_corr = getRMS96("cmsdy0fctq4",92);
 
-    Double_t tilt = gettilt(inputdir,*run,chip);
+    Double_t tilt = gettilt(inputdir,*run,chip,postfix);
 
     // Eta: flip angle from tilt to theta from beam axis:
     Double_t eta = -TMath::Log(TMath::Tan(TMath::TwoPi()*(90-tilt)/(2*360)));
@@ -89,7 +89,7 @@ void resolution(const char* inputdir, int chip, int startrun, int stoprun, bool 
     nevents += ((TH1D*)gDirectory->Get("trixylk"))->GetEntries();
 
     // Subtract telescope track resolution:
-    Double_t dz = getdz(inputdir,*run,chip);
+    Double_t dz = getdz(inputdir,*run,chip,postfix);
     Double_t tel_resolution = getTelRes(dz);
 
     Double_t res_tel_subtracted = TMath::Sqrt(res*res - tel_resolution*tel_resolution);
