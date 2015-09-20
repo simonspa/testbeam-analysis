@@ -191,7 +191,7 @@ void resolution(const char* inputdir, int chip, int startrun, int stoprun, bool 
   }
   
   int thickness = 294;
-  int threshold = 170; // maybe 160 or so?
+  int threshold = 170;
   //if(chip == 506) thickness = 308;
   std::vector<double> vtilt = getsimulation("tilt", chip,thickness,threshold);
   std::vector<double> veta = getsimulation("eta", chip,thickness,threshold);
