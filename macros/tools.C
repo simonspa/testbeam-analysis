@@ -95,6 +95,90 @@ Double_t gettilt(const char * inputdir, int run, int chip, string list = "") {
   return tilt;
 }
 
+Double_t getalignmentrun(const char * inputdir, int run, int chip, string list = "") {
+
+  Int_t alignrun = 0;
+  bool found_run = false;
+  bool found_chip = false;
+
+  gSystem->OpenDirectory(inputdir);
+  ifstream in;
+  string line;
+  TString name;
+  name.Form("runlist-%i%s.csv",chip,list.c_str());
+  in.open(name);
+
+  // Skip first line:
+  getline(in,line);
+
+  while(std::getline(in,line)){
+    // Skip reading comments:
+    if (line[0] == '#') continue;
+    if(line.empty()) continue;
+
+    istringstream s( line );
+    int i = 0;
+    while (s) {
+      string str;
+      if(!getline( s, str, ',' )) break;
+      if(i == 0 && run == atoi(str.c_str())) found_run = true; // Read run number
+      if(i == 1) alignrun = atoi(str.c_str()); // Alignment run number
+      if(i == 4 && chip == atoi(str.c_str()) && found_run) { found_chip = true; break; }
+      i++;
+    }
+    if(found_run && found_chip) break;
+  }
+
+  in.close();
+  return alignrun;
+}
+
+std::vector<Double_t> getalignment(const char * inputdir, int run, int chip, string list = "") {
+
+  std::vector<Double_t> alignment;
+  bool found_run = false;
+  bool found_chip = false;
+
+  gSystem->OpenDirectory(inputdir);
+  ifstream in;
+  string line;
+  TString name;
+  name.Form("runlist-%i%s.csv",chip,list.c_str());
+  in.open(name);
+
+  // Skip first line:
+  getline(in,line);
+
+  while(std::getline(in,line)){
+    // Skip reading comments:
+    if (line[0] == '#') continue;
+    if(line.empty()) continue;
+
+    istringstream s( line );
+    int i = 0;
+    while (s) {
+      string str;
+      if(!getline( s, str, ',' )) break;
+      if(i == 0 && run == atoi(str.c_str())) found_run = true; // Read run number
+      if(i == 4 && chip == atoi(str.c_str()) && found_run) { found_chip = true; }
+      if(found_run && found_chip) {
+	if(i == 7) { alignment.push_back(atof(str.c_str())); } // Gain conversion factor
+	if(i == 11) { alignment.push_back(atof(str.c_str())); } // align x
+	if(i == 12) { alignment.push_back(atof(str.c_str())); } // align y
+	if(i == 13) { alignment.push_back(atof(str.c_str())); } // align z
+	if(i == 14) { alignment.push_back(atof(str.c_str())); } // align tilt
+	if(i == 15) { alignment.push_back(atof(str.c_str())); } // align turn
+	if(i == 16) { alignment.push_back(atof(str.c_str())); } // align rot
+      }
+      i++;
+    }
+    if(found_run && found_chip) break;
+  }
+
+  in.close();
+  return alignment;
+}
+
 Double_t getdz(const char * inputdir, int run, int chip, string list = "") {
 
   Double_t dz = -999;
