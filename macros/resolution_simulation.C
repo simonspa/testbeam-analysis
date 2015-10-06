@@ -51,7 +51,8 @@ void resolution_simulation(TString inputdir, int chip) {
       cout << "(RMS for tilt " << tilt << ")" << endl;
       }*/
 
-    Double_t lanpk = fitlang("h031",18,499);
+    Double_t lanpk = fitfulllang("h031");
+    Double_t lanpkn = fitlang("hqnrm");
 
     TH1 *nc;
     if(is_rotated) gDirectory->GetObject("hcol",nc);
@@ -72,7 +73,8 @@ void resolution_simulation(TString inputdir, int chip) {
       //<< " " << rms96_corr
 	      << "  " << ncol
 	      << "  " << lanpk
-	      << "  " << edge
+	      << "  " << lanpkn
+      //<< "  " << edge
 	      << std::endl;
     delete source;
   }
