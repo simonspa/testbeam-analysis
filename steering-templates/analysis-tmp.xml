@@ -206,7 +206,8 @@
   <!--CMS DUT gain file to be used-->
   <parameter name="DUT_gain" type="string" value="@dut_gain@"/>
   <!--CMS DUT VCAL->electrons conversion factor. Set to 0 if default is to be used.-->
-  <parameter name="DUT_conversion" type="string" value="@dut_conversion@"/>
+  <!--parameter name="DUT_conversion" type="double" value="@dut_conversion@"/-->
+  <parameter name="DUT_conversion" type="double" value="0"/>
   <!--DUT position z in mm after the telescope plane-->
   <parameter name="DUT_pos_z" type="double" value="@dut_pos_z@"/>
   <!--DUT rotation in xy-->
@@ -239,6 +240,9 @@
 
   <!--database file for skew corrections-->
   <parameter name="skew_database" type="string" value="@BasePath@/simulation/skwcorr_@dut_chip@_@skewCorrectionDatabase@.dat"/>
+
+  <!--ADC value c orrection for all but first pixel-->
+  <parameter name="adc_correction" type="double"> 3.8 </parameter>
 
   <!--verbosity level of this processor ("DEBUG0-4,MESSAGE0-4,WARNING0-4,ERROR0-4,SILENT")-->
   <parameter name="Verbosity" type="string" value="@Verbosity@"/>
