@@ -123,6 +123,11 @@ void resolution(const char* inputdir, int chip, int startrun, int stoprun, bool 
   setLegendStyle(leg2);
   setLegendStyle(leg3);
 
+  TString fileName;
+  fileName.Form("chip%i-resolution.root",chip);
+  TFile * out = TFile::Open(fileName,"RECREATE");
+  gDirectory->pwd();
+
   c1->cd();
   if(chip == 506) resolution->SetTitle(";tilt angle [#circ];resolution y #left[#mum#right]");
   else resolution->SetTitle(";tilt angle [#circ];resolution x #left[#mum#right]");
@@ -144,6 +149,7 @@ void resolution(const char* inputdir, int chip, int startrun, int stoprun, bool 
   }
   DrawCMSLabels(nfiducial,5.6,0.045);
   if(cmslogo) DrawPrelimLabel(1,0.045);
+  c1->Write();
 
   c2->cd();
   if(chip == 506) resolution_tel_subtracted->SetTitle(";tilt angle [#circ];resolution y #left[#mum#right]");
@@ -191,8 +197,11 @@ void resolution(const char* inputdir, int chip, int startrun, int stoprun, bool 
   }
   
   int thickness = 294;
+  if(chip == 506) thickness = 308;
+
   int threshold = 170;
-  //if(chip == 506) thickness = 308;
+  if(chip == 506) threshold = 200;
+
   std::vector<double> vtilt = getsimulation("tilt", chip,thickness,threshold);
   std::vector<double> veta = getsimulation("eta", chip,thickness,threshold);
   std::vector<double> vres = getsimulation("res", chip,thickness,threshold);
@@ -250,9 +259,11 @@ void resolution(const char* inputdir, int chip, int startrun, int stoprun, bool 
 
   c2->cd();
   leg2->Draw();
+  c2->Write();
 
   if(chip == 506) {
     c3->cd();
     leg3->Draw();
+    c3->Write();
   }
 }

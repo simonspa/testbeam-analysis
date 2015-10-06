@@ -99,7 +99,11 @@ void controlplots(const char* inputdir, int chip, int startrun, int stoprun) {
   cout << nruns << " runs analyzed with " << nclusters << " clusters in total." << endl;
 
   int thickness = 294;
+  if(chip == 506) thickness = 308;
+
   int threshold = 170;
+  if(chip == 506) threshold = 200;
+
   std::vector<double> vtilt = getsimulation("tilt", chip,thickness, threshold);
   std::vector<double> vtilttan = getsimulation("tilttan", chip,thickness, threshold);
   std::vector<double> vncol = getsimulation("ncol", chip,thickness, threshold);
