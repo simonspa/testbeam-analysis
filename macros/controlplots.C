@@ -44,9 +44,12 @@ void controlplots(const char* inputdir, int chip, int startrun, int stoprun) {
   TCanvas *c4 = new TCanvas("c4","clustercharge",700,700);
   TProfile *clustercharge_tilt = new TProfile("clustercharge_tilt"," ",130,0,85,0,300,"");
 
+  TCanvas *c5 = new TCanvas("c5","cmsq0f vs tilt",700,700);
+  TProfile *clusterchargenorm_tilt = new TProfile("clusterchargenorm_tilt"," ",130,0,85,0,300,"");
+
   gStyle->SetOptStat(0);
 
-  int nruns, nclusters;
+  int nruns = 0, nclusters = 0;
 
   // Get all runs for given chip:
   std::vector<int> runs = getruns(inputdir,chip);
@@ -74,18 +77,20 @@ void controlplots(const char* inputdir, int chip, int startrun, int stoprun) {
 
     Double_t ncol = h->GetMean();
     Double_t landau = fitfulllang("cmsqf");
+    Double_t landau_norm = fitlang("cmsq0f");
 
     Double_t cos = 1/TMath::Cos(TMath::Pi()*tilt/180);
     Double_t tan = TMath::Tan(TMath::Pi()*tilt/180);
 
     // Collect statistics:
-    nclusters += ((TH1D*)gDirectory->Get("cmsncol"))->GetEntries();
+    nclusters += h->GetEntries();
 
-    cout << "run" << *run << " (chip" << chip << ") ncol " << ncol << " tilt " << tilt << " lanpk " << landau << " cos " << cos << " tan " << tan << endl;
+    cout << "run" << *run << " (chip" << chip << ") ncol " << ncol << " tilt " << tilt << " lanpk " << landau << " cos " << cos << " tan " << tan << " clust " << h->GetEntries() << endl;
     ncols->Fill(tilt,ncol,1);
     ncolstan->Fill(tan,ncol,1);
     clustercharge->Fill(cos,landau,1);
     clustercharge_tilt->Fill(tilt,landau,1);
+    clusterchargenorm_tilt->Fill(tilt,landau_norm,1);
 
     nruns++;
     delete source;
@@ -100,6 +105,12 @@ void controlplots(const char* inputdir, int chip, int startrun, int stoprun) {
   std::vector<double> vncol = getsimulation("ncol", chip,thickness, threshold);
   std::vector<double> vpath = getsimulation("path", chip,thickness, threshold);
   std::vector<double> vpeak = getsimulation("peak", chip,thickness, threshold);
+  std::vector<double> vpeaknorm = getsimulation("peaknorm", chip,thickness, threshold);
+
+  TString fileName;
+  fileName.Form("chip%i-controlplots.root",chip);
+  TFile * out = TFile::Open(fileName,"RECREATE");
+  gDirectory->pwd();
 
   c1->cd();
   TLegend * leg = new TLegend();
@@ -108,7 +119,7 @@ void controlplots(const char* inputdir, int chip, int startrun, int stoprun) {
   ncols->SetMarkerStyle(20);
   ncols->SetMarkerColor(1);
   ncols->GetXaxis()->SetRangeUser(vtilt.front(), vtilt.back());
-  if(chip == 506) ncols->GetYaxis()->SetRangeUser(1, 21);
+  if(chip == 506) ncols->GetYaxis()->SetRangeUser(1, 25);
   else ncols->GetYaxis()->SetRangeUser(1, 4);
   ncols->Draw();
   setStyleAndFillLegend(ncols,"data",leg);
@@ -121,7 +132,8 @@ void controlplots(const char* inputdir, int chip, int startrun, int stoprun) {
   setStyleAndFillLegend(si,"sim",leg);
   si->Draw("PL"); // without axis option: overlay
   leg->Draw();
-
+  c1->Write();
+  
   c2->cd();
   TLegend * leg2 = new TLegend();
   if(chip == 506) ncolstan->SetTitle(";tan(#alpha);columns per cluster");
@@ -129,7 +141,7 @@ void controlplots(const char* inputdir, int chip, int startrun, int stoprun) {
   ncolstan->SetMarkerStyle(20);
   ncolstan->SetMarkerColor(1);
   ncolstan->GetXaxis()->SetRangeUser(vtilttan.front(), vtilttan.back());
-  if(chip == 506) ncolstan->GetYaxis()->SetRangeUser(1, 21);
+  if(chip == 506) ncolstan->GetYaxis()->SetRangeUser(1, 25);
   else ncolstan->GetYaxis()->SetRangeUser(1, 4);
   ncolstan->Draw();
   setStyleAndFillLegend(ncolstan,"data",leg2);
@@ -142,7 +154,7 @@ void controlplots(const char* inputdir, int chip, int startrun, int stoprun) {
   si_tan->Draw("PL"); // without axis option: overlay
   setStyleAndFillLegend(si_tan,"sim",leg2);
   leg2->Draw();
-
+  c2->Write();
 
   c3->cd();
   TLegend * leg3 = new TLegend();
@@ -163,7 +175,7 @@ void controlplots(const char* inputdir, int chip, int startrun, int stoprun) {
   siclust->Draw("PL"); // without axis option: overlay
   setStyleAndFillLegend(siclust,"sim",leg3);
   leg3->Draw();
-
+  c3->Write();
 
   c4->cd();
   TLegend * leg4 = new TLegend();
@@ -184,5 +196,30 @@ void controlplots(const char* inputdir, int chip, int startrun, int stoprun) {
   si_tilt->Draw("PL"); // without axis option: overlay
   setStyleAndFillLegend(si_tilt,"sim",leg4);
   leg4->Draw();
+  c4->Write();
+
+  c5->cd();
+  TLegend * leg5 = new TLegend();
+  clusterchargenorm_tilt->SetTitle(";#alpha [#circ];peak cluster chargenorm");
+  clusterchargenorm_tilt->SetMarkerStyle(20);
+  clusterchargenorm_tilt->SetMarkerColor(1);
+  clusterchargenorm_tilt->GetXaxis()->SetRangeUser(vtilt.front(), vtilt.back());
+  if(chip == 506) clusterchargenorm_tilt->GetYaxis()->SetRangeUser(20, 35);
+  else clusterchargenorm_tilt->GetYaxis()->SetRangeUser(20, 35);
+  clusterchargenorm_tilt->Draw();
+  setStyleAndFillLegend(clusterchargenorm_tilt,"data",leg5);
+  DrawCMSLabels(nclusters,5.6,0.045);
+  if(cmslogo) DrawPrelimLabel(1,0.045);
+  TLine *line = new TLine(vtilt.front(),22,vtilt.back(),22);
+  line->SetLineColor(kRed);
+  line->Draw();
+  TGraph *si_tiltn = new TGraph( vtilt.size(), &(vtilt[0]), &(vpeaknorm[0]) ); // sim
+  si_tiltn->SetLineColor(2);
+  si_tiltn->SetLineWidth(3);
+  si_tiltn->SetMarkerColor(2);
+  si_tiltn->Draw("PL"); // without axis option: overlay
+  setStyleAndFillLegend(si_tiltn,"sim",leg5);
+  leg5->Draw();
+  c5->Write();
 
 }

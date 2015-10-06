@@ -323,6 +323,7 @@ std::vector<double> getsimulation(std::string name, int chip, int thickness=294,
   vector <double> sryskw;
   vector <double> sncol;
   vector <double> slanpk;
+  vector <double> slanpkn;
 
   while( SIMstream.good() && ! SIMstream.eof() ) {
 
@@ -343,7 +344,7 @@ std::vector<double> getsimulation(std::string name, int chip, int thickness=294,
     sryskw.push_back(ry_skwcorr);
     sncol.push_back(ncol);
     slanpk.push_back(lanpk);
-
+    slanpkn.push_back(edge);
   } // while lines
 
   vector<double> btilttan;
@@ -370,6 +371,7 @@ std::vector<double> getsimulation(std::string name, int chip, int thickness=294,
   else if(name == "resskw") return bsyskw;
   else if(name == "ncol") return sncol;
   else if(name == "peak") return slanpk;
+  else if(name == "peaknorm") return slanpkn;
   else return std::vector<double>();
 }
 
