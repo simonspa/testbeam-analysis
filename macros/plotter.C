@@ -235,7 +235,15 @@ void DrawPrelimLabel(int cmsprelim, double textSize) {
 void DrawCMSLabels(double lumi, double energy, double textSize) {
 
   //const char *text = "%2.1f #times 10^{6} clusters (fiducial) (%1.1f GeV)";
-  const char *text = "%2.1f #times 10^{6} tracks (%1.1f GeV)";
+  const char *text;
+  if(lumi > 10000000) {
+    lumi /= 10000000;
+    text = "%2.1f #times 10^{7} tracks (%1.1f GeV)";
+  }
+  else {
+    lumi /= 1000000;
+    text = "%2.1f #times 10^{6} tracks (%1.1f GeV)";
+  }
     
   TPaveText *label = new TPaveText();
   label->SetX1NDC(gStyle->GetPadLeftMargin());
@@ -243,7 +251,7 @@ void DrawCMSLabels(double lumi, double energy, double textSize) {
   label->SetX2NDC(1.0-gStyle->GetPadRightMargin());
   label->SetY2NDC(1.0);
   label->SetTextFont(42);
-  label->AddText(Form(text, lumi/1000000, energy));
+  label->AddText(Form(text, lumi, energy));
   label->SetFillStyle(0);
   label->SetBorderSize(0);
   if (textSize!=0) label->SetTextSize(textSize);
