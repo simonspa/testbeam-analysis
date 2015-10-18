@@ -142,7 +142,9 @@ void resolution(const char* inputdir, int chip, int startrun, int stoprun, bool 
   resolution->Draw();
   if(draw_skwcorr) {
     resolution_corr->Draw("same");
-    setStyleAndFillLegend(resolution_corr,"data",leg);
+    setStyle(resolution_corr,"data");
+    leg->AddEntry(resolution, "Data", "p");
+    leg->AddEntry(resolution_corr, "Data (corrected)", "p");
   }
   else {
     setStyleAndFillLegend(resolution,"data",leg);
@@ -165,7 +167,9 @@ void resolution(const char* inputdir, int chip, int startrun, int stoprun, bool 
   resolution_tel_subtracted->Draw();
   if(draw_skwcorr) {
     resolution_corr_tel_subtracted->Draw("same");
-    setStyleAndFillLegend(resolution_corr_tel_subtracted,"data",leg2);
+    setStyle(resolution_corr_tel_subtracted,"data");
+    leg2->AddEntry(resolution_tel_subtracted, "Data", "p");
+    leg2->AddEntry(resolution_corr_tel_subtracted, "Data (corrected)", "p");
   }
   else {
     setStyleAndFillLegend(resolution_tel_subtracted,"data",leg2);
@@ -187,7 +191,9 @@ void resolution(const char* inputdir, int chip, int startrun, int stoprun, bool 
     resolution_vs_eta->Draw();
     if(draw_skwcorr) {
       resolution_corr_vs_eta->Draw("same");
-      setStyleAndFillLegend(resolution_corr_vs_eta,"data",leg3);
+      setStyle(resolution_corr_vs_eta,"data");
+      leg3->AddEntry(resolution_vs_eta, "Data", "p");
+      leg3->AddEntry(resolution_corr_vs_eta, "Data (corrected)", "p");
     }
     else {
       setStyleAndFillLegend(resolution_vs_eta,"data",leg3);
@@ -227,7 +233,9 @@ void resolution(const char* inputdir, int chip, int startrun, int stoprun, bool 
     
     if(draw_skwcorr) {
       siskw->Draw("PL"); // without axis option: overlay
-      setStyleAndFillLegend(siskw,"sim",leg2);
+      setStyle(siskw,"sim");
+      leg2->AddEntry(si, "Simulation", "l");
+      leg2->AddEntry(siskw, "Simulation (corrected)", "l");
     }
     else { setStyleAndFillLegend(si,"sim",leg2); }
 
@@ -251,7 +259,9 @@ void resolution(const char* inputdir, int chip, int startrun, int stoprun, bool 
       
       if(draw_skwcorr) {
 	si_etaskw->Draw("PL"); // without axis option: overlay
-	setStyleAndFillLegend(si_etaskw,"sim",leg3);
+	setStyle(si_etaskw,"sim");
+	leg3->AddEntry(si_eta, "Simulation", "l");
+	leg3->AddEntry(si_etaskw, "Simulation (corrected)", "l");
       }
       else { setStyleAndFillLegend(si_eta,"sim",leg3); }
     }
