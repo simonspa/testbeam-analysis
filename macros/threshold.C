@@ -22,7 +22,7 @@
 
 using namespace std;
 
-bool cmslogo = true;
+bool cmslogo = false;
 
 void threshold() {
   std::cout << "Run threshold(histogram dir)" << std::endl;
@@ -35,20 +35,23 @@ void threshold(const char* inputdir, int chip, int startrun, int stoprun) {
   setHHStyle(*gStyle);
   gStyle->SetTitleYOffset(1.2);
 
-  TCanvas *c1 = new TCanvas("c1","resolution",600,600);
+  TCanvas *c1 = new TCanvas("c1","resolution",700,700);
   TProfile *resolution = new TProfile("resolution"," ",56,1500,4200,3,770,"");
 
-  TCanvas *c2 = new TCanvas("c2","resolution",600,600);
+  TCanvas *c2 = new TCanvas("c2","resolution",700,700);
   TProfile *resolution_tel_subtracted = new TProfile("resolution_tel_subtracted"," ",56,1500,4200,3,7,"");
 
   TCanvas *c3 = new TCanvas("c3","nrows",700,700);
-  TProfile *nrows = new TProfile("nrows"," ",130,0,85,0,60,"");
+  TProfile *nrows = new TProfile("nrows"," ",130,1500,4200,0,60,"");
+
+  TCanvas *c4 = new TCanvas("c4","lanpk",700,700);
+  TProfile *lanpk = new TProfile("lanpk"," ",130,1500,4200,0,60,"");
 
   gStyle->SetOptStat(0);
 
   int nruns = 0, nfiducial = 0, nevents = 0;
   Double_t tilt;
-  Double_t tmp_ke, tmp_res, tmp_ressub;
+  Double_t tmp_ke, tmp_res, tmp_ressub, tmp_ncol, tmp_lanpk;
 
   // Get all runs for given chip:
   std::vector<int> runs = getruns(inputdir,chip,"-threshold");
@@ -89,20 +92,23 @@ void threshold(const char* inputdir, int chip, int startrun, int stoprun) {
     // From VCal to electrons: 50e/VCal DAC
     Double_t ke = threshold*50;
 
+    Double_t landau = fitfulllang("cmsqf");
+
     // Subtract telescope track resolution:
     Double_t dz = getdz(inputdir,*run,chip,"-threshold");
     Double_t tel_resolution = getTelRes(dz);
 
     Double_t res_tel_subtracted = TMath::Sqrt(res*res - tel_resolution*tel_resolution);
 
-    cout << "run" << *run << " (chip" << chip << ") res " << res << " ressub " << res_tel_subtracted << " tilt " << tilt << " electrons " << ke << " threshold " << threshold << endl;
+    cout << "run" << *run << " (chip" << chip << ") res " << res << " ressub " << res_tel_subtracted << " tilt " << tilt << " electrons " << ke << " ncol " << ncol << " threshold " << threshold << endl;
     //cout << *run << " " << tilt << " " << res_tel_subtracted << endl;
     //cout << " -> dz = " << dz << ", sigma_tel = " << tel_resolution << endl;
 
     nrows->Fill(ke,ncol);
+    lanpk->Fill(ke,landau);
     resolution->Fill(ke,res,1);
     resolution_tel_subtracted->Fill(ke,res_tel_subtracted,1);
-    tmp_ke = ke; tmp_res = res; tmp_ressub = res_tel_subtracted;
+    tmp_ke = ke; tmp_res = res; tmp_ressub = res_tel_subtracted; tmp_ncol = ncol; tmp_lanpk = landau;
     nruns++;
     delete source;
   }
@@ -111,12 +117,15 @@ void threshold(const char* inputdir, int chip, int startrun, int stoprun) {
 
   resolution->Fill(tmp_ke,tmp_res+0.1,1);
   resolution_tel_subtracted->Fill(tmp_ke,tmp_ressub+0.1,1);
- 
+  nrows->Fill(tmp_ke,tmp_ncol+0.01,1);
+  lanpk->Fill(tmp_ke,tmp_lanpk+0.01,1);
+
   int thickness = 294;
 
   std::vector<double> vthr;
   std::vector<double> vres;
   std::vector<double> vncol;
+  std::vector<double> vlanpk;
 
   // Read thresholds
   for(Int_t thr = 150; thr < 420; thr += 10) {
@@ -135,7 +144,7 @@ void threshold(const char* inputdir, int chip, int startrun, int stoprun) {
     double ry;
     double ry_skwcorr;
     double ncol;
-    double lanpk;
+    double lanpeak;
     double turn;
     double edge;
 
@@ -151,25 +160,33 @@ void threshold(const char* inputdir, int chip, int startrun, int stoprun) {
       simrun >> ry;
       simrun >> ry_skwcorr;
       simrun >> ncol;
-      simrun >> lanpk;
+      simrun >> lanpeak;
       simrun >> edge;
 
       if(tilt < (tlt+0.5)) {
 	vthr.push_back(10*thr);
+	vlanpk.push_back(lanpeak);
 	vncol.push_back(ncol);
 	vres.push_back(sqrt( ry*ry - restel_sim*restel_sim )); // subtract telescope
-	cout << "sim tilt " << tlt << " res " << ry << " ressub " << sqrt( ry*ry - restel_sim*restel_sim ) << " electrons " << (thr*10) << endl;
+	cout << "sim tilt " << tlt << " res " << ry << " ressub " << sqrt( ry*ry - restel_sim*restel_sim ) << " electrons " << (thr*10) << " ncol " << ncol << endl;
 	break;
       }
     } // while lines
   }
 
+  TString fileName;
+  fileName.Form("chip%i-threshold.root",chip);
+  TFile * out = TFile::Open(fileName,"RECREATE");
+  gDirectory->pwd();
+
   TLegend *leg = new TLegend();
   TLegend *leg2 = new TLegend();
   TLegend *leg3 = new TLegend();
+  TLegend *leg4 = new TLegend();
   setLegendStyle(leg);
   setLegendStyle(leg2);
   setLegendStyle(leg3);
+  setLegendStyle(leg4);
 
   c1->cd();
   resolution->SetTitle(";pixel threshold [e];resolution x #left[#mum#right]");
@@ -179,6 +196,7 @@ void threshold(const char* inputdir, int chip, int startrun, int stoprun) {
   setStyleAndFillLegend(resolution,"data",leg);
   DrawCMSLabels(nfiducial,5.2,0.045);
   if(cmslogo) DrawPrelimLabel(1,0.045);
+  c1->Write();
 
   c2->cd();
   resolution_tel_subtracted->SetTitle(";pixel threshold [e];resolution x #left[#mum#right]");
@@ -197,9 +215,19 @@ void threshold(const char* inputdir, int chip, int startrun, int stoprun) {
   nrows->GetXaxis()->SetRangeUser(vthr.front(), vthr.back());
   if(chip == 506) nrows->GetYaxis()->SetRangeUser(1, 21);
   else nrows->GetYaxis()->SetRangeUser(1, 4);
-  nrows->Draw();
-  setStyleAndFillLegend(nrows,"data",leg);
+  nrows->Draw("e");
+  setStyleAndFillLegend(nrows,"data",leg3);
   DrawCMSLabels(nfiducial,5.6,0.045);
+  if(cmslogo) DrawPrelimLabel(1,0.045);
+
+  c4->cd();
+  lanpk->SetTitle(";pixel threshold [e];Landau MPV #left[ke#right]");
+  lanpk->SetMarkerStyle(20);
+  lanpk->SetMarkerColor(1);
+  lanpk->Draw("e");
+  lanpk->GetYaxis()->SetRangeUser(20, 26);
+  setStyleAndFillLegend(lanpk,"data",leg4);
+  DrawCMSLabels(nfiducial,5.2,0.045);
   if(cmslogo) DrawPrelimLabel(1,0.045);
 
   if(!vthr.empty()) {
@@ -209,11 +237,12 @@ void threshold(const char* inputdir, int chip, int startrun, int stoprun) {
     si->SetLineWidth(3);
     si->SetMarkerColor(2);
     resolution_tel_subtracted->GetXaxis()->SetRangeUser(vthr.front(), vthr.back());
-    //setStyleAndFillLegend(si,"sim",leg2);
-    //si->Draw("PL"); // without axis option: overlay
+    setStyleAndFillLegend(si,"sim",leg2);
+    si->Draw("PL"); // without axis option: overlay
   }
   c2->cd();
   leg2->Draw();
+  c2->Write();
 
   if(!vthr.empty()) {
     c3->cd();
@@ -221,10 +250,24 @@ void threshold(const char* inputdir, int chip, int startrun, int stoprun) {
     si->SetLineColor(2);
     si->SetLineWidth(3);
     si->SetMarkerColor(2);
-    //setStyleAndFillLegend(si,"sim",leg3);
-    //si->Draw("PL"); // without axis option: overlay
+    setStyleAndFillLegend(si,"sim",leg3);
+    si->Draw("PL"); // without axis option: overlay
   }
   c3->cd();
   leg3->Draw();
+  c3->Write();
+
+  if(!vthr.empty()) {
+    c4->cd();
+    TGraph *si = new TGraph( vthr.size(), &(vthr[0]), &(vlanpk[0]) ); // sim
+    si->SetLineColor(2);
+    si->SetLineWidth(3);
+    si->SetMarkerColor(2);
+    setStyleAndFillLegend(si,"sim",leg4);
+    si->Draw("PL"); // without axis option: overlay
+  }
+  c4->cd();
+  leg4->Draw();
+  c4->Write();
 
 }
