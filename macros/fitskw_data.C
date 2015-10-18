@@ -24,7 +24,7 @@ void fitskw_data(TString inputdir, int chip, int startrun, int stoprun) {
     Double_t tilt = gettilt(inputdir,*run,chip);
     std::pair<double,double> skwpar = fitskwlin("cmsdy0vsskw");
 
-    cout << tilt << " " << skwpar.first << " " << skwpar.second << endl;
+    cout << tilt << " " << skwpar.first << " " << -1*skwpar.second << endl;
     delete source;
   }
   
