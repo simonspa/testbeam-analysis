@@ -30,7 +30,7 @@ void controlplots(const char* inputdir, int chip, int startrun, int stoprun) {
 
   // Set the histogram styles:
   setHHStyle(*gStyle);
-  gStyle->SetTitleYOffset(1);
+  gStyle->SetTitleYOffset(1.2);
 
   TCanvas *c1 = new TCanvas("c1","ncols",700,700);
   TProfile *ncols = new TProfile("ncols"," ",130,0,85,0,60,"");
@@ -118,15 +118,17 @@ void controlplots(const char* inputdir, int chip, int startrun, int stoprun) {
 
   c1->cd();
   TLegend * leg = new TLegend();
-  if(chip == 506) ncols->SetTitle(";#alpha [#circ];columns per cluster");
-  else ncols->SetTitle(";#alpha [#circ];rows per cluster");
-  ncols->SetMarkerStyle(20);
-  ncols->SetMarkerColor(1);
+  setLegendStyle(leg);
+
+  setStyleAndFillLegend(ncols,"data",leg);
+  if(chip == 506) ncols->SetTitle(";#alpha [#circ];columns/cluster");
+  else ncols->SetTitle(";#alpha [#circ];rows/cluster");
   ncols->GetXaxis()->SetRangeUser(vtilt.front(), vtilt.back());
   if(chip == 506) ncols->GetYaxis()->SetRangeUser(1, 25);
   else ncols->GetYaxis()->SetRangeUser(1, 4);
+  ncols->GetYaxis()->SetTitleOffset(1.2);
+
   ncols->Draw();
-  setStyleAndFillLegend(ncols,"data",leg);
   DrawCMSLabels(nclusters,5.6,0.045);
   if(cmslogo) DrawPrelimLabel(1,0.045);
   TGraph *si = new TGraph( vtilt.size(), &(vtilt[0]), &(vncol[0]) ); // sim
@@ -140,15 +142,16 @@ void controlplots(const char* inputdir, int chip, int startrun, int stoprun) {
   
   c2->cd();
   TLegend * leg2 = new TLegend();
-  if(chip == 506) ncolstan->SetTitle(";tan(#alpha);columns per cluster");
-  else ncolstan->SetTitle(";tan(#alpha);rows per cluster");
-  ncolstan->SetMarkerStyle(20);
-  ncolstan->SetMarkerColor(1);
+  setLegendStyle(leg2);
+
+  setStyleAndFillLegend(ncolstan,"data",leg2);
+  if(chip == 506) ncolstan->SetTitle(";tan(#alpha);columns/cluster");
+  else ncolstan->SetTitle(";tan(#alpha);rows/cluster");
+  ncolstan->GetYaxis()->SetTitleOffset(1.2);
   ncolstan->GetXaxis()->SetRangeUser(vtilttan.front(), vtilttan.back());
   if(chip == 506) ncolstan->GetYaxis()->SetRangeUser(1, 25);
   else ncolstan->GetYaxis()->SetRangeUser(1, 4);
   ncolstan->Draw();
-  setStyleAndFillLegend(ncolstan,"data",leg2);
   DrawCMSLabels(nclusters,5.6,0.045);
   if(cmslogo) DrawPrelimLabel(1,0.045);
   TGraph *si_tan = new TGraph( vtilttan.size(), &(vtilttan[0]), &(vncol[0]) ); // sim
@@ -157,19 +160,42 @@ void controlplots(const char* inputdir, int chip, int startrun, int stoprun) {
   si_tan->SetMarkerColor(2);
   si_tan->Draw("PL"); // without axis option: overlay
   setStyleAndFillLegend(si_tan,"sim",leg2);
+  // From geometry:
+  TF1 *fa1, *fa2;
+  if(chip == 506) {
+    fa1 = new TF1("fa1","1+285/150*x",vtilttan.front(),vtilttan.back()); 
+    fa2 = new TF1("fa2","1+308/150*x",vtilttan.front(),vtilttan.back()); 
+    leg2->AddEntry(fa1, "Geometry: 285#mum",  "l");
+    leg2->AddEntry(fa2, "Geometry: 308#mum",  "l");
+  }
+  else {
+    fa1 = new TF1("fa1","1+285/100*x",vtilttan.front(),vtilttan.back()); 
+    fa2 = new TF1("fa2","1+294/100*x",vtilttan.front(),vtilttan.back()); 
+    leg2->AddEntry(fa1, "Geometry: 285#mum",  "l");
+    leg2->AddEntry(fa2, "Geometry: 294#mum",  "l");
+  }
+  fa1->SetLineWidth(3);
+  fa1->SetLineStyle(7);
+  fa1->SetLineColor(kBlack);
+  fa2->SetLineWidth(3);
+  fa2->SetLineStyle(7);
+  fa2->SetLineColor(kRed+1);
+  fa1->Draw("same");
+  fa2->Draw("same");
   leg2->Draw();
   c2->Write();
 
   c3->cd();
   TLegend * leg3 = new TLegend();
-  clustercharge->SetTitle(";1/cos(#alpha);peak cluster charge");
-  clustercharge->SetMarkerStyle(20);
-  clustercharge->SetMarkerColor(1);
+  setLegendStyle(leg3);
+
+  setStyleAndFillLegend(clustercharge,"data",leg3);
+  clustercharge->SetTitle(";1/cos(#alpha);cluster charge MPV #left[ke#right]");
+  clustercharge->GetYaxis()->SetTitleOffset(1.3);
   clustercharge->GetXaxis()->SetRangeUser(vpath.front(), vpath.back());
-  if(chip == 506) clustercharge->GetYaxis()->SetRangeUser(20, 160);
+  if(chip == 506) clustercharge->GetYaxis()->SetRangeUser(20, 250);
   else clustercharge->GetYaxis()->SetRangeUser(20, 35);
   clustercharge->Draw();
-  setStyleAndFillLegend(clustercharge,"data",leg3);
   DrawCMSLabels(nclusters,5.6,0.045);
   if(cmslogo) DrawPrelimLabel(1,0.045);
   TGraph *siclust = new TGraph( vpath.size(), &(vpath[0]), &(vpeak[0]) ); // sim
@@ -183,14 +209,15 @@ void controlplots(const char* inputdir, int chip, int startrun, int stoprun) {
 
   c4->cd();
   TLegend * leg4 = new TLegend();
-  clustercharge_tilt->SetTitle(";#alpha [#circ];peak cluster charge");
-  clustercharge_tilt->SetMarkerStyle(20);
-  clustercharge_tilt->SetMarkerColor(1);
+  setLegendStyle(leg4);
+
+  setStyleAndFillLegend(clustercharge_tilt,"data",leg4);
+  clustercharge_tilt->SetTitle(";#alpha [#circ];cluster charge MPV #left[ke#right]");
+  clustercharge_tilt->GetYaxis()->SetTitleOffset(1.3);
   clustercharge_tilt->GetXaxis()->SetRangeUser(vtilt.front(), vtilt.back());
-  if(chip == 506) clustercharge_tilt->GetYaxis()->SetRangeUser(20, 160);
+  if(chip == 506) clustercharge_tilt->GetYaxis()->SetRangeUser(20, 250);
   else clustercharge_tilt->GetYaxis()->SetRangeUser(20, 35);
   clustercharge_tilt->Draw();
-  setStyleAndFillLegend(clustercharge_tilt,"data",leg4);
   DrawCMSLabels(nclusters,5.6,0.045);
   if(cmslogo) DrawPrelimLabel(1,0.045);
   TGraph *si_tilt = new TGraph( vtilt.size(), &(vtilt[0]), &(vpeak[0]) ); // sim
@@ -204,14 +231,15 @@ void controlplots(const char* inputdir, int chip, int startrun, int stoprun) {
 
   c5->cd();
   TLegend * leg5 = new TLegend();
-  clusterchargenorm_tilt->SetTitle(";#alpha [#circ];peak cluster chargenorm");
-  clusterchargenorm_tilt->SetMarkerStyle(20);
-  clusterchargenorm_tilt->SetMarkerColor(1);
+  setLegendStyle(leg5);
+
+  setStyleAndFillLegend(clusterchargenorm_tilt,"data",leg5);
+  clusterchargenorm_tilt->SetTitle(";#alpha [#circ];norm. cluster charge MPV #left[ke#right]");
+  clusterchargenorm_tilt->GetYaxis()->SetTitleOffset(1.3);
   clusterchargenorm_tilt->GetXaxis()->SetRangeUser(vtilt.front(), vtilt.back());
   if(chip == 506) clusterchargenorm_tilt->GetYaxis()->SetRangeUser(20, 35);
   else clusterchargenorm_tilt->GetYaxis()->SetRangeUser(20, 35);
   clusterchargenorm_tilt->Draw();
-  setStyleAndFillLegend(clusterchargenorm_tilt,"data",leg5);
   DrawCMSLabels(nclusters,5.6,0.045);
   if(cmslogo) DrawPrelimLabel(1,0.045);
   TLine *line = new TLine(vtilt.front(),22,vtilt.back(),22);
@@ -225,5 +253,4 @@ void controlplots(const char* inputdir, int chip, int startrun, int stoprun) {
   setStyleAndFillLegend(si_tiltn,"sim",leg5);
   leg5->Draw();
   c5->Write();
-
 }
