@@ -21,6 +21,7 @@
 using namespace std;
 
 bool cmslogo = false;
+bool drawthickness = false;
 
 void controlplots() {
   std::cout << "Run controlplots(histogram dir)" << std::endl;
@@ -120,7 +121,8 @@ void controlplots(const char* inputdir, int chip, int startrun, int stoprun) {
   TLegend * leg = new TLegend();
   setLegendStyle(leg);
 
-  setStyleAndFillLegend(ncols,"data",leg);
+  setStyle(ncols,"data");
+  leg->AddEntry(ncols,Form("Data (SCM %i)",chip),"p");
   if(chip == 506) ncols->SetTitle(";#alpha [#circ];columns/cluster");
   else ncols->SetTitle(";#alpha [#circ];rows/cluster");
   ncols->GetXaxis()->SetRangeUser(vtilt.front(), vtilt.back());
@@ -136,6 +138,7 @@ void controlplots(const char* inputdir, int chip, int startrun, int stoprun) {
   si->SetLineWidth(3);
   si->SetMarkerColor(2);
   setStyleAndFillLegend(si,"sim",leg);
+  if(drawthickness) leg->AddEntry((TObject*)0,Form("%i#mum",thickness),"");
   si->Draw("PL"); // without axis option: overlay
   leg->Draw();
   c1->Write();
@@ -144,7 +147,8 @@ void controlplots(const char* inputdir, int chip, int startrun, int stoprun) {
   TLegend * leg2 = new TLegend();
   setLegendStyle(leg2);
 
-  setStyleAndFillLegend(ncolstan,"data",leg2);
+  setStyle(ncolstan,"data");
+  leg2->AddEntry(ncolstan,Form("Data (SCM %i)",chip),"p");
   if(chip == 506) ncolstan->SetTitle(";tan(#alpha);columns/cluster");
   else ncolstan->SetTitle(";tan(#alpha);rows/cluster");
   ncolstan->GetYaxis()->SetTitleOffset(1.2);
@@ -160,6 +164,7 @@ void controlplots(const char* inputdir, int chip, int startrun, int stoprun) {
   si_tan->SetMarkerColor(2);
   si_tan->Draw("PL"); // without axis option: overlay
   setStyleAndFillLegend(si_tan,"sim",leg2);
+  if(drawthickness) leg2->AddEntry((TObject*)0,Form("%i#mum",thickness),"");
   // From geometry:
   TF1 *fa1, *fa2;
   if(chip == 506) {
@@ -189,7 +194,8 @@ void controlplots(const char* inputdir, int chip, int startrun, int stoprun) {
   TLegend * leg3 = new TLegend();
   setLegendStyle(leg3);
 
-  setStyleAndFillLegend(clustercharge,"data",leg3);
+  setStyle(clustercharge,"data");
+  leg3->AddEntry(clustercharge,Form("Data (SCM %i)",chip),"p");
   clustercharge->SetTitle(";1/cos(#alpha);cluster charge MPV #left[ke#right]");
   clustercharge->GetYaxis()->SetTitleOffset(1.3);
   clustercharge->GetXaxis()->SetRangeUser(vpath.front(), vpath.back());
@@ -204,6 +210,7 @@ void controlplots(const char* inputdir, int chip, int startrun, int stoprun) {
   siclust->SetMarkerColor(2);
   siclust->Draw("PL"); // without axis option: overlay
   setStyleAndFillLegend(siclust,"sim",leg3);
+  if(drawthickness) leg3->AddEntry((TObject*)0,Form("%i#mum",thickness),"");
   leg3->Draw();
   c3->Write();
 
@@ -211,7 +218,8 @@ void controlplots(const char* inputdir, int chip, int startrun, int stoprun) {
   TLegend * leg4 = new TLegend();
   setLegendStyle(leg4);
 
-  setStyleAndFillLegend(clustercharge_tilt,"data",leg4);
+  setStyle(clustercharge_tilt,"data");
+  leg4->AddEntry(clustercharge_tilt,Form("Data (SCM %i)",chip),"p");
   clustercharge_tilt->SetTitle(";#alpha [#circ];cluster charge MPV #left[ke#right]");
   clustercharge_tilt->GetYaxis()->SetTitleOffset(1.3);
   clustercharge_tilt->GetXaxis()->SetRangeUser(vtilt.front(), vtilt.back());
@@ -226,6 +234,7 @@ void controlplots(const char* inputdir, int chip, int startrun, int stoprun) {
   si_tilt->SetMarkerColor(2);
   si_tilt->Draw("PL"); // without axis option: overlay
   setStyleAndFillLegend(si_tilt,"sim",leg4);
+  if(drawthickness) leg4->AddEntry((TObject*)0,Form("%i#mum",thickness),"");
   leg4->Draw();
   c4->Write();
 
@@ -233,7 +242,8 @@ void controlplots(const char* inputdir, int chip, int startrun, int stoprun) {
   TLegend * leg5 = new TLegend();
   setLegendStyle(leg5);
 
-  setStyleAndFillLegend(clusterchargenorm_tilt,"data",leg5);
+  setStyle(clusterchargenorm_tilt,"data");
+  leg5->AddEntry(clusterchargenorm_tilt,Form("Data (SCM %i)",chip),"p");
   clusterchargenorm_tilt->SetTitle(";#alpha [#circ];norm. cluster charge MPV #left[ke#right]");
   clusterchargenorm_tilt->GetYaxis()->SetTitleOffset(1.3);
   clusterchargenorm_tilt->GetXaxis()->SetRangeUser(vtilt.front(), vtilt.back());
@@ -251,6 +261,7 @@ void controlplots(const char* inputdir, int chip, int startrun, int stoprun) {
   si_tiltn->SetMarkerColor(2);
   si_tiltn->Draw("PL"); // without axis option: overlay
   setStyleAndFillLegend(si_tiltn,"sim",leg5);
+  if(drawthickness) leg5->AddEntry((TObject*)0,Form("%i#mum",thickness),"");
   leg5->Draw();
   c5->Write();
 }
