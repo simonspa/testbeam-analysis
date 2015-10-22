@@ -74,7 +74,8 @@ void plotskw(TString myfile, int chip) {
 
   c2->cd();
   setStyle(ppar1,"sim");
-  ppar1->SetTitle(";tilt angle [#circ];skew slope");
+  if(chip == 506) ppar1->SetTitle(";tilt angle #omega [#circ];skew slope");
+  else ppar1->SetTitle(";tilt angle #alpha [#circ];skew slope");
   ppar1->GetYaxis()->SetTitleOffset(1.2);
   ppar1->GetXaxis()->SetRangeUser(0,tilt);
   ppar1->Draw();
