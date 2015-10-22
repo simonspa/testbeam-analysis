@@ -46,6 +46,9 @@ void resolution(const char* inputdir, int chip, int startrun, int stoprun, bool 
   TProfile *resolution_vs_eta = new TProfile("resolution_vs_eta"," ",120,0.01,3,0,60,"");
   TProfile *resolution_corr_vs_eta = new TProfile("resolution_corr_vs_eta"," ",120,0.01,3,0,60,"");
 
+  TCanvas *c4 = new TCanvas("c4","resolution_improvement",700,700);
+  TProfile *resolution_improvement = new TProfile("resolution_improvement"," ",170,0,85,-10,100,"");
+
   gStyle->SetOptStat(0);
 
   int nruns = 0, nfiducial = 0, nevents = 0;
@@ -95,9 +98,12 @@ void resolution(const char* inputdir, int chip, int startrun, int stoprun, bool 
     Double_t res_tel_subtracted = TMath::Sqrt(res*res - tel_resolution*tel_resolution);
     Double_t res_corr_tel_subtracted = TMath::Sqrt(res_corr*res_corr - tel_resolution*tel_resolution);
 
+    Double_t impr = (1-res_corr_tel_subtracted/res_tel_subtracted)*100;
+
     cout << "run" << *run << " (chip" << chip << ") res " << res 
 	 << " ressub " << res_tel_subtracted 
 	 << " res_corr " << res_corr_tel_subtracted 
+	 << " (" << impr << "%)"
 	 << " tilt " << tilt 
 	 << " eta " << eta << endl;
 
@@ -106,6 +112,7 @@ void resolution(const char* inputdir, int chip, int startrun, int stoprun, bool 
 
     resolution_tel_subtracted->Fill(tilt,res_tel_subtracted,1);
     resolution_corr_tel_subtracted->Fill(tilt,res_corr_tel_subtracted,1);
+    resolution_improvement->Fill(tilt,impr,1);
 
     resolution_vs_eta->Fill(eta,res_tel_subtracted,1);
     resolution_corr_vs_eta->Fill(eta,res_corr_tel_subtracted,1);
@@ -129,8 +136,8 @@ void resolution(const char* inputdir, int chip, int startrun, int stoprun, bool 
   gDirectory->pwd();
 
   c1->cd();
-  if(chip == 506) resolution->SetTitle(";tilt angle [#circ];resolution y #left[#mum#right]");
-  else resolution->SetTitle(";tilt angle [#circ];resolution x #left[#mum#right]");
+  if(chip == 506) resolution->SetTitle(";tilt angle #omega [#circ];resolution y #left[#mum#right]");
+  else resolution->SetTitle(";tilt angle #alpha [#circ];resolution x #left[#mum#right]");
   resolution->SetMarkerStyle(20);
   resolution_corr->SetMarkerStyle(20);
   if(draw_skwcorr) {
@@ -154,8 +161,8 @@ void resolution(const char* inputdir, int chip, int startrun, int stoprun, bool 
   c1->Write();
 
   c2->cd();
-  if(chip == 506) resolution_tel_subtracted->SetTitle(";tilt angle [#circ];resolution y #left[#mum#right]");
-  else resolution_tel_subtracted->SetTitle(";tilt angle [#circ];resolution x #left[#mum#right]");
+  if(chip == 506) resolution_tel_subtracted->SetTitle(";tilt angle #omega [#circ];resolution y #left[#mum#right]");
+  else resolution_tel_subtracted->SetTitle(";tilt angle #alpha [#circ];resolution x #left[#mum#right]");
   resolution_tel_subtracted->SetMarkerStyle(20);
   resolution_corr_tel_subtracted->SetMarkerStyle(20);
   if(draw_skwcorr) {
@@ -201,7 +208,9 @@ void resolution(const char* inputdir, int chip, int startrun, int stoprun, bool 
     DrawCMSLabels(nfiducial,5.6,0.045);
     if(cmslogo) DrawPrelimLabel(1,0.045);
   }
-  
+
+
+  // Simulations:  
   int thickness = 294;
   if(chip == 506) thickness = 308;
 
@@ -276,4 +285,23 @@ void resolution(const char* inputdir, int chip, int startrun, int stoprun, bool 
     leg3->Draw();
     c3->Write();
   }
+
+  if(draw_skwcorr) {
+    c4->cd();
+    if(chip == 506) resolution_improvement->SetTitle(";tilt angle #omega [#circ];rel. improvement #left[%#right]");
+    else resolution_improvement->SetTitle(";tilt angle #alpha [#circ];rel. improvement #left[%#right]");
+    setStyle(resolution_improvement,"data");
+
+    //resolution_improvement->SetMarkerStyle(0);
+    resolution_improvement->SetLineColor(kGray+2);
+    //resolution_improvement->SetLineWidth(0);
+    resolution_improvement->SetFillStyle(3004);
+    resolution_improvement->SetFillColor(kBlack);
+    if(!vtilt.empty()) resolution_improvement->GetXaxis()->SetRangeUser(vtilt.front(), vtilt.back());
+    resolution_improvement->Draw();
+    DrawCMSLabels(nfiducial,5.6,0.045);
+    if(cmslogo) DrawPrelimLabel(1,0.045);
+  }
+  c4->Write();
+
 }
