@@ -829,6 +829,48 @@ std::pair<double,double> fitskwlin( char* hs, double xl=-0.1, double xr=0.1 ) {
   return std::make_pair(tanhFcn->GetParameter(0),tanhFcn->GetParameter(1));
 }
 
+Double_t fitSkwPol( Double_t *x, Double_t *par )
+{
+  return par[0] + par[1] * x[0] + par[2] * x[0]*x[0] + par[3] * x[0]*x[0]*x[0];
+}
+
+std::vector<double> fitskwpol( char* hs, double xl=-0.1, double xr=0.1) {
+  TH1 *h = (TH1*)gDirectory->Get(hs);
+
+  if( h == NULL ) {
+    cout << hs << " does not exist\n";
+    return std::vector<double>();
+  }
+
+  int nb = h->GetNbinsX();
+  double x1 = h->GetBinCenter(1); // first
+  double x9 = h->GetBinCenter(nb); // last
+
+  if( xl > x1 && xl < x9 ) x1 = xl; // left
+  if( xr > x1 && xr < x9 ) x9 = xr; // right
+
+  // create a TF1 with the range from x1 to x9 and 3 parameters
+  TF1 *tanhFcn = new TF1( "tanhFcn", fitSkwPol, x1, x9, 4 );
+  tanhFcn->SetParName( 0, "dyoff" );
+  tanhFcn->SetParName( 1, "dyslp" );
+  tanhFcn->SetParName( 2, "dypar" );
+  tanhFcn->SetParName( 3, "dyhyp" );
+
+  // set start values:
+  tanhFcn->SetParameter( 0, 0 ); // dy off [um]
+  tanhFcn->SetParameter( 1, 99 ); // dy slope [um/skw]
+  tanhFcn->SetParameter( 2, 0 ); // dy parabola
+  tanhFcn->SetParameter( 3, 0 ); // dy hyperbola
+
+
+  h->Fit( "tanhFcn", "R Q", "p" );// R = range from tanhFcn
+
+  std::vector<double> result;
+  for(size_t i = 0; i < 4; i++) {
+    result.push_back(tanhFcn->GetParameter(i));
+  }
+  return result;
+}
 
 Double_t tp0Fit( Double_t *x, Double_t *par5 ) {
 
