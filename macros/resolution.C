@@ -28,7 +28,7 @@ void resolution() {
 }
 
 
-void resolution(const char* inputdir, int chip, int startrun, int stoprun, bool draw_skwcorr = true, string postfix = "") {
+void resolution(const char* inputdir, int chip, int startrun, int stoprun, bool draw_skwcorr = true, string postfix = "", int threshold = 170) {
 
   // Set the histogram styles:
   setHHStyle(*gStyle);
@@ -214,7 +214,7 @@ void resolution(const char* inputdir, int chip, int startrun, int stoprun, bool 
   int thickness = 294;
   if(chip == 506) thickness = 308;
 
-  int threshold = 170;
+  //int threshold = 400;//170;
   if(chip == 506) threshold = 200;
 
   std::vector<double> vtilt = getsimulation("tilt", chip,thickness,threshold);
