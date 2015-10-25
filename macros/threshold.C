@@ -36,16 +36,16 @@ void threshold(const char* inputdir, int chip, int startrun, int stoprun) {
   gStyle->SetTitleYOffset(1.2);
 
   TCanvas *c1 = new TCanvas("c1","resolution",700,700);
-  TProfile *resolution = new TProfile("resolution"," ",56,1500,4200,3,770,"");
+  TProfile *resolution = new TProfile("resolution"," ",56,1.5,4.2,3,770,"");
 
   TCanvas *c2 = new TCanvas("c2","resolution",700,700);
-  TProfile *resolution_tel_subtracted = new TProfile("resolution_tel_subtracted"," ",56,1500,4200,3,7,"");
+  TProfile *resolution_tel_subtracted = new TProfile("resolution_tel_subtracted"," ",56,1.5,4.2,3,7,"");
 
   TCanvas *c3 = new TCanvas("c3","nrows",700,700);
-  TProfile *nrows = new TProfile("nrows"," ",130,1500,4200,0,60,"");
+  TProfile *nrows = new TProfile("nrows"," ",130,1.5,4.2,0,60,"");
 
   TCanvas *c4 = new TCanvas("c4","lanpk",700,700);
-  TProfile *lanpk = new TProfile("lanpk"," ",130,1500,4200,0,60,"");
+  TProfile *lanpk = new TProfile("lanpk"," ",130,1.5,4.2,0,60,"");
 
   gStyle->SetOptStat(0);
 
@@ -90,7 +90,7 @@ void threshold(const char* inputdir, int chip, int startrun, int stoprun) {
     int threshold = gettrim(inputdir,*run,chip,"-threshold");
 
     // From VCal to electrons: 50e/VCal DAC
-    Double_t ke = threshold*50;
+    Double_t ke = threshold*50.0/1000;
 
     Double_t landau = fitfulllang("cmsqf");
 
@@ -116,7 +116,7 @@ void threshold(const char* inputdir, int chip, int startrun, int stoprun) {
   cout << nruns << " runs analyzed with " << nevents << " linked clusters and " << nfiducial << " clusters in the fiducial volume in total." << endl;
 
   resolution->Fill(tmp_ke,tmp_res+0.1,1);
-  resolution_tel_subtracted->Fill(tmp_ke,tmp_ressub+0.1,1);
+  resolution_tel_subtracted->Fill(tmp_ke,tmp_ressub+0.2,1);
   nrows->Fill(tmp_ke,tmp_ncol+0.01,1);
   lanpk->Fill(tmp_ke,tmp_lanpk+0.01,1);
 
@@ -164,11 +164,11 @@ void threshold(const char* inputdir, int chip, int startrun, int stoprun) {
       simrun >> edge;
 
       if(tilt < (tlt+0.5)) {
-	vthr.push_back(10*thr);
+	vthr.push_back(thr*0.01);
 	vlanpk.push_back(lanpeak);
 	vncol.push_back(ncol);
 	vres.push_back(sqrt( ry*ry - restel_sim*restel_sim )); // subtract telescope
-	cout << "sim tilt " << tlt << " res " << ry << " ressub " << sqrt( ry*ry - restel_sim*restel_sim ) << " electrons " << (thr*10) << " ncol " << ncol << endl;
+	cout << "sim tilt " << tlt << " res " << ry << " ressub " << sqrt( ry*ry - restel_sim*restel_sim ) << " electrons " << (thr*0.01) << " ncol " << ncol << endl;
 	break;
       }
     } // while lines
@@ -189,7 +189,7 @@ void threshold(const char* inputdir, int chip, int startrun, int stoprun) {
   setLegendStyle(leg4);
 
   c1->cd();
-  resolution->SetTitle(";pixel threshold [e];resolution x #left[#mum#right]");
+  resolution->SetTitle(";pixel threshold [ke];resolution x #left[#mum#right]");
   resolution->SetMarkerStyle(20);
   resolution->SetMarkerColor(1);
   resolution->Draw("e");
@@ -199,16 +199,17 @@ void threshold(const char* inputdir, int chip, int startrun, int stoprun) {
   c1->Write();
 
   c2->cd();
-  resolution_tel_subtracted->SetTitle(";pixel threshold [e];resolution x #left[#mum#right]");
+  resolution_tel_subtracted->SetTitle(";pixel threshold [ke];resolution x #left[#mum#right]");
   resolution_tel_subtracted->SetMarkerStyle(20);
   resolution_tel_subtracted->SetMarkerColor(1);
+  resolution_tel_subtracted->GetYaxis()->SetRangeUser(0, 15);
   resolution_tel_subtracted->Draw("e");
   setStyleAndFillLegend(resolution_tel_subtracted,"data",leg2);
   DrawCMSLabels(nfiducial,5.2,0.045);
   if(cmslogo) DrawPrelimLabel(1,0.045);
 
   c3->cd();
-  if(chip == 506) nrows->SetTitle(";pixel threshold [e];columns per cluster");
+  if(chip == 506) nrows->SetTitle(";pixel threshold [ke];columns per cluster");
   else nrows->SetTitle(";pixel threshold [e];rows per cluster");
   nrows->SetMarkerStyle(20);
   nrows->SetMarkerColor(1);
@@ -221,7 +222,7 @@ void threshold(const char* inputdir, int chip, int startrun, int stoprun) {
   if(cmslogo) DrawPrelimLabel(1,0.045);
 
   c4->cd();
-  lanpk->SetTitle(";pixel threshold [e];Landau MPV #left[ke#right]");
+  lanpk->SetTitle(";pixel threshold [ke];Landau MPV #left[ke#right]");
   lanpk->SetMarkerStyle(20);
   lanpk->SetMarkerColor(1);
   lanpk->Draw("e");
