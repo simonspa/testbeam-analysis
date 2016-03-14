@@ -1,0 +1,8 @@
+RunNumber,AlignmentRun,GearFile,BeamEnergy,dut_chip,dut_gain,dut_gain_type,dut_conversion,ref_chip,ref_gain,ref_gain_type,dut_align_x,dut_align_y,dut_pos_z,dut_tilt,dut_turn,dut_rot,ref_align_x,ref_align_y,ref_pos_z,ref_rot,skipdut,skipref,skiptel
+# Warning: no blank before dut_gain,ref_gain
+# Warning: don''''t start with tilt = 0 or turn = 0 oe rot = 0: MillePede won''''t work (sin(0) = 0)'
+# Warning: don''''t start with pos_z = 0: GBL crash when planes overlap'
+# 2015 beams:,
+
+
+23133,023133,gear_desy2016_01a.xml,4.8,504,c504-ia24-trim36tb-chiller17-gaincal.dat,desy_weibull_decorr_pos,0.248315,500,c500-ia24-trim28-gaincal.dat,desy_weibull_decorr_pos,0.529272,0.564276,42.919,4.51947,0.109073,-0.00260952,0.449319,0.0327205,40,0,0,0,0
