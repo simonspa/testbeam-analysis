@@ -134,7 +134,7 @@ void setHHStyle(TStyle& HHStyle)
             
     HHStyle.SetTitleColor(1, "XYZ");
     HHStyle.SetTitleFont(fontstyle, "XYZ");
-    HHStyle.SetTitleSize(0.05, "XYZ");
+    HHStyle.SetTitleSize(0.04, "XYZ");
     // HHStyle.SetTitleXSize(Float_t size = 0.02); // Another way to set the size?
     // HHStyle.SetTitleYSize(Float_t size = 0.02);
     HHStyle.SetTitleXOffset(1.0);
@@ -174,7 +174,7 @@ void setHHStyle(TStyle& HHStyle)
     HHStyle.SetTextAngle(0);
     HHStyle.SetTextColor(1);
     HHStyle.SetTextFont(fontstyle);
-    HHStyle.SetTextSize(0.05);
+    HHStyle.SetTextSize(0.04);
             
     // =====================
     //  Postscript options:

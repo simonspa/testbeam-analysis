@@ -68,19 +68,25 @@ void plotskw(TString myfile, int chip) {
     ppar1->Fill(tilt,par1,1);
   }
 
+  TString fileName;
+  fileName.Form("chip%i-skewpar.root",chip);
+  TFile * out = TFile::Open(fileName,"RECREATE");
+  gDirectory->pwd();
 
   c1->cd();
   ppar0->Draw();
 
   c2->cd();
   setStyle(ppar1,"sim");
-  if(chip == 506) ppar1->SetTitle(";tilt angle #omega [#circ];skew slope");
-  else ppar1->SetTitle(";tilt angle #alpha [#circ];skew slope");
+  ppar1->SetFillColor(kBlack);
+  if(chip == 506) ppar1->SetTitle(";tilt angle #omega [#circ];skew slope [#mum]");
+  else ppar1->SetTitle(";tilt angle #alpha [#circ];skew slope [#mum]");
   ppar1->GetYaxis()->SetTitleOffset(1.2);
   ppar1->GetXaxis()->SetRangeUser(0,tilt);
   ppar1->Draw();
-  if(chip == 506) DrawFreeCMSLabels("Simulation, 150 #mum pitch",0);
-  else DrawFreeCMSLabels("Simulation, 100 #mum pitch",0);
+  if(chip == 506) DrawFreeCMSLabels("Simulation, 150 #mum pitch",0.045);
+  else DrawFreeCMSLabels("Simulation, 100 #mum pitch",0.045);
+  c2->Write();
 
   in.close();
 }

@@ -290,7 +290,7 @@ std::vector<double> getsimulation(std::string name, int chip, int thickness=294,
   // read sim:
 
   TString file;
-  if(dot1) file.Form("simulation/sim%i_%iskw_thr%i_hg.dat",thickness,chip,threshold);
+  if(dot1) file.Form("simulation/sim%i_%iskw_thr%i_pol.dat",thickness,chip,threshold);
   else file.Form("simulation/sim%i_%iskw_thr%i.dat",thickness,chip,threshold);
 
   cout << "try to open sim file " << file;
