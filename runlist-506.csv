@@ -181,7 +181,7 @@ RunNumber,AlignmentRun,GearFile,BeamEnergy,dut_chip,dut_gain,dut_gain_type,dut_c
 
 # JUNE 25
 20165,020143,gear_desy2015_06d.xml,5.6,506,c506-ia24-trim28tb-nochiller-gaincal.dat,desy_weibull_decorr_pos,0.271522,501,c501-ia24-trim30tb-gaincal.dat,desy_weibull_decorr_pos,0.169201,0.361473,56.6319,22.0085,-0.185893,-0.00457082,0.54378,0.0613687,40,0,0,0,0
-20166,020143,gear_desy2015_06d.xml,5.6,506,c506-ia24-trim28tb-nochiller-gaincal.dat,desy_weibull_decorr_pos,0.273091,501,c501-ia24-trim30tb-gaincal.dat,desy_weibull_decorr_pos,0.169481,0.361304,56.5611,21.999,-0.197487,-0.00459354,0.543832,0.0609838,40,0,0,0,0
+#20166,020143,gear_desy2015_06d.xml,5.6,506,c506-ia24-trim28tb-nochiller-gaincal.dat,desy_weibull_decorr_pos,0.273091,501,c501-ia24-trim30tb-gaincal.dat,desy_weibull_decorr_pos,0.169481,0.361304,56.5611,21.999,-0.197487,-0.00459354,0.543832,0.0609838,40,0,0,0,0
 20167,020143,gear_desy2015_06d.xml,5.6,506,c506-ia24-trim28tb-nochiller-gaincal.dat,desy_weibull_decorr_pos,0.273651,501,c501-ia24-trim30tb-gaincal.dat,desy_weibull_decorr_pos,0.170077,0.370668,56.5681,21.0119,-0.205595,-0.00458776,0.543814,0.060544,40,0,0,0,0
 20168,020143,gear_desy2015_06d.xml,5.6,506,c506-ia24-trim28tb-nochiller-gaincal.dat,desy_weibull_decorr_pos,0.273614,501,c501-ia24-trim30tb-gaincal.dat,desy_weibull_decorr_pos,0.170773,0.370469,56.5418,21.0115,-0.183729,-0.00450879,0.543925,0.0605889,40,0,0,0,0
 
