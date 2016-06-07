@@ -6,6 +6,7 @@
 #include "TFile.h"
 #include "TProfile.h"
 #include "TGraph.h"
+#include "TGraphAsymmErrors.h"
 #include "TSystem.h"
 #include "TStyle.h"
 #include "TROOT.h"
@@ -211,8 +212,8 @@ void resolution(const char* inputdir, int chip, int startrun, int stoprun, bool 
 
 
   // Simulations:  
-  int thickness = 294;
-  if(chip == 506) thickness = 308;
+  int thickness = 300;
+  //if(chip == 506) thickness = 308;
 
   //int threshold = 400;//170;
   if(chip == 506) threshold = 200;
@@ -220,11 +221,35 @@ void resolution(const char* inputdir, int chip, int startrun, int stoprun, bool 
   std::vector<double> vtilt = getsimulation("tilt", chip,thickness,threshold);
   std::vector<double> veta = getsimulation("eta", chip,thickness,threshold);
   std::vector<double> vres = getsimulation("res", chip,thickness,threshold);
+  std::vector<double> vreserr_down = getsimulation("res", chip,294,threshold);
+  std::vector<double> vreserr_up = getsimulation("res", chip,308,threshold);
+  std::vector<double> vresthr_down = getsimulation("res", chip,thickness,threshold-30);
+  std::vector<double> vresthr_up = getsimulation("res", chip,thickness,threshold+50);
   std::vector<double> vresskw = getsimulation("resskw", chip,thickness,threshold);
+
+  std::vector<double> nullvec;
+  std::vector<double> vreserr;
+
+  cout << "vres " << vres.size() << " vreserr down " << vreserr_down.size() << " vreserr up " << vreserr_up.size() << endl;
+  cout << "vres " << vres.size() << " vresthr down " << vresthr_down.size() << " vresthr up " << vresthr_up.size() << endl;
+
+  for(int i = 0; i < vres.size(); i++) {
+    double err_thick = max(fabs(vreserr_down.at(i)-vres.at(i)),fabs(vreserr_up.at(i)-vres.at(i)));
+    double err_thresh = max(fabs(vresthr_down.at(i)-vres.at(i)),fabs(vresthr_up.at(i)-vres.at(i)));
+    double err_total = sqrt(err_thick*err_thick + err_thresh*err_thresh);
+    vreserr.push_back(err_total);
+    cout << vreserr.at(i) << " = sqrt(" 
+	 << max(fabs(vreserr_down.at(i)-vres.at(i)),fabs(vreserr_up.at(i)-vres.at(i))) 
+	 << "**2 + " 
+	 << max(fabs(vresthr_down.at(i)-vres.at(i)),fabs(vresthr_up.at(i)-vres.at(i))) 
+	 << "**2)" <<endl;
+    nullvec.push_back(0);
+  }
+  cout << endl;
 
   if(!vtilt.empty()) {
     c2->cd();
-    TGraph *si = new TGraph( vtilt.size(), &(vtilt[0]), &(vres[0]) ); // sim
+    TGraphAsymmErrors *si = new TGraphAsymmErrors( vtilt.size(), &(vtilt[0]), &(vres[0]), &(nullvec[0]), &(nullvec[0]), &(vreserr[0]), &(vreserr[0]) ); // sim
     TGraph *siskw = new TGraph( vtilt.size(), &(vtilt[0]), &(vresskw[0]) ); // sim
     si->SetLineWidth(3);
     siskw->SetLineWidth(3);
@@ -238,15 +263,21 @@ void resolution(const char* inputdir, int chip, int startrun, int stoprun, bool 
     else { si->SetLineColor(2); }
 
     resolution_tel_subtracted->GetXaxis()->SetRangeUser(vtilt.front(), vtilt.back());
-    si->Draw("PL"); // without axis option: overlay
-    
+
+    si->Draw("PL3"); // without axis option: overlay
+    resolution_tel_subtracted->Draw("same");
+
     if(draw_skwcorr) {
       siskw->Draw("PL"); // without axis option: overlay
       setStyle(siskw,"sim");
       leg2->AddEntry(si, "Simulation", "l");
       leg2->AddEntry(siskw, "Simulation (corrected)", "l");
     }
-    else { setStyleAndFillLegend(si,"sim",leg2); }
+    else { 
+      setStyleAndFillLegend(si,"sim",leg2); 
+      si->SetFillStyle(3001);
+      si->SetFillColor(kRed+1);
+    }
 
     if(chip == 506) {
       c3->cd();
