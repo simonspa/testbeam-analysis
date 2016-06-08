@@ -232,8 +232,9 @@ void resolution(const char* inputdir, int chip, int startrun, int stoprun, bool 
 
   cout << "vres " << vres.size() << " vreserr down " << vreserr_down.size() << " vreserr up " << vreserr_up.size() << endl;
   cout << "vres " << vres.size() << " vresthr down " << vresthr_down.size() << " vresthr up " << vresthr_up.size() << endl;
+  int min = std::min(vres.size(),std::min(std::min(vreserr_up.size(),vreserr_down.size()),std::min(vresthr_up.size(),vresthr_down.size())));
 
-  for(int i = 0; i < vres.size(); i++) {
+  for(int i = 0; i < min; i++) {
     double err_thick = max(fabs(vreserr_down.at(i)-vres.at(i)),fabs(vreserr_up.at(i)-vres.at(i)));
     double err_thresh = max(fabs(vresthr_down.at(i)-vres.at(i)),fabs(vresthr_up.at(i)-vres.at(i)));
     double err_total = sqrt(err_thick*err_thick + err_thresh*err_thresh);
@@ -281,7 +282,7 @@ void resolution(const char* inputdir, int chip, int startrun, int stoprun, bool 
 
     if(chip == 506) {
       c3->cd();
-      TGraph *si_eta = new TGraph( veta.size(), &(veta[0]), &(vres[0]) ); // sim
+      TGraphAsymmErrors *si_eta = new TGraphAsymmErrors( veta.size(), &(veta[0]), &(vres[0]), &(nullvec[0]), &(nullvec[0]), &(vreserr[0]), &(vreserr[0]) ); // sim
       TGraph *si_etaskw = new TGraph( veta.size(), &(veta[0]), &(vresskw[0]) ); // sim
       si_eta->SetLineWidth(3);
       si_eta->SetMarkerSize(0);
@@ -295,15 +296,20 @@ void resolution(const char* inputdir, int chip, int startrun, int stoprun, bool 
       else { si_eta->SetLineColor(2); }
 
       resolution_vs_eta->GetXaxis()->SetRangeUser(veta.front(), veta.back());
-      si_eta->Draw("PL"); // without axis option: overlay
-      
+      si_eta->Draw("PL3"); // without axis option: overlay
+      resolution_vs_eta->Draw("same");
+
       if(draw_skwcorr) {
 	si_etaskw->Draw("PL"); // without axis option: overlay
 	setStyle(si_etaskw,"sim");
 	leg3->AddEntry(si_eta, "Simulation", "l");
 	leg3->AddEntry(si_etaskw, "Simulation (corrected)", "l");
       }
-      else { setStyleAndFillLegend(si_eta,"sim",leg3); }
+      else { 
+	setStyleAndFillLegend(si_eta,"sim",leg3); 
+	si_eta->SetFillStyle(3001);
+	si_eta->SetFillColor(kRed+1);
+      }
     }
   }
 
