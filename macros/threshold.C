@@ -6,6 +6,7 @@
 #include "TFile.h"
 #include "TProfile.h"
 #include "TGraph.h"
+#include "TGraphAsymmErrors.h"
 #include "TSystem.h"
 #include "TStyle.h"
 #include "TString.h"
@@ -120,59 +121,45 @@ void threshold(const char* inputdir, int chip, int startrun, int stoprun) {
   nrows->Fill(tmp_ke,tmp_ncol+0.01,1);
   lanpk->Fill(tmp_ke,tmp_lanpk+0.01,1);
 
-  int thickness = 294;
 
-  std::vector<double> vthr;
-  std::vector<double> vres;
-  std::vector<double> vncol;
-  std::vector<double> vlanpk;
+  tilt++;
+  int thickness = 300;
+  // Read simulations:
+  std::vector<double> vthr = getthresholds("thr", tilt, thickness, chip);
+  std::vector<double> vres = getthresholds("res", tilt, thickness, chip);
+  std::vector<double> vreserr_up = getthresholds("res", tilt, 308, chip);
+  std::vector<double> vreserr_down = getthresholds("res", tilt, 294, chip);
+  std::vector<double> vncol = getthresholds("ncol", tilt, thickness, chip);
+  std::vector<double> vncolerr_up = getthresholds("ncol", tilt, 308, chip);
+  std::vector<double> vncolerr_down = getthresholds("ncol", tilt, 294, chip);
+  std::vector<double> vlanpk = getthresholds("lanpk", tilt, thickness, chip);
 
-  // Read thresholds
-  for(Int_t thr = 150; thr < 420; thr += 10) {
+  std::vector<double> nullvec;
+  std::vector<double> vreserr;
+  std::vector<double> vncolerr;
 
-    TString myfile;
-    myfile.Form("simulation/sim%i_%iskw_thr%i.dat",thickness,chip,thr);
-  
-    ifstream SIMstream( myfile );
-    if( !SIMstream ) { continue;}
+  cout << "vres " << vres.size() << " vreserr down " << vreserr_down.size() << " vreserr up " << vreserr_up.size() << endl;
+  int min = std::min(vres.size(),std::min(vreserr_up.size(),vreserr_down.size()));
 
-    // Read file by lines:
-    string rl;
-    double tlt;
-    int run;
-    int nev;
-    double ry;
-    double ry_skwcorr;
-    double ncol;
-    double lanpeak;
-    double turn;
-    double edge;
-
-    while( SIMstream.good() && ! SIMstream.eof() ) {
-
-      getline( SIMstream, rl ); // read one line  = event into string
-      istringstream simrun( rl ); // tokenize string
-
-      simrun >> run;
-      simrun >> tlt; // [deg]
-      simrun >> turn;
-      simrun >> nev;
-      simrun >> ry;
-      simrun >> ry_skwcorr;
-      simrun >> ncol;
-      simrun >> lanpeak;
-      simrun >> edge;
-
-      if(tilt < (tlt+0.5)) {
-	vthr.push_back(thr*0.01);
-	vlanpk.push_back(lanpeak);
-	vncol.push_back(ncol);
-	vres.push_back(sqrt( ry*ry - restel_sim*restel_sim )); // subtract telescope
-	cout << "sim tilt " << tlt << " res " << ry << " ressub " << sqrt( ry*ry - restel_sim*restel_sim ) << " electrons " << (thr*0.01) << " ncol " << ncol << endl;
-	break;
-      }
-    } // while lines
+  for(int i = 0; i < min; i++) {
+    double err_thick = max(fabs(vreserr_down.at(i)-vres.at(i)),fabs(vreserr_up.at(i)-vres.at(i)));
+    vreserr.push_back(err_thick);
+    cout << vreserr.at(i) << " = " 
+	 << max(fabs(vreserr_down.at(i)-vres.at(i)),fabs(vreserr_up.at(i)-vres.at(i))) 
+	 << endl;
+    nullvec.push_back(0);
   }
+
+  min = std::min(vncol.size(),std::min(vncolerr_up.size(),vncolerr_down.size()));
+  for(int i = 0; i < min; i++) {
+    double err_thick = max(fabs(vncolerr_down.at(i)-vncol.at(i)),fabs(vncolerr_up.at(i)-vncol.at(i)));
+    vncolerr.push_back(err_thick);
+    cout << vncolerr.at(i) << " = " 
+	 << max(fabs(vncolerr_down.at(i)-vncol.at(i)),fabs(vncolerr_up.at(i)-vncol.at(i))) 
+	 << endl;
+    nullvec.push_back(0);
+  }
+
 
   TString fileName;
   fileName.Form("chip%i-threshold.root",chip);
@@ -233,13 +220,13 @@ void threshold(const char* inputdir, int chip, int startrun, int stoprun) {
 
   if(!vthr.empty()) {
     c2->cd();
-    TGraph *si = new TGraph( vthr.size(), &(vthr[0]), &(vres[0]) ); // sim
+    TGraphAsymmErrors *si = new TGraphAsymmErrors( vthr.size(), &(vthr[0]), &(vres[0]), &(nullvec[0]), &(nullvec[0]), &(vreserr[0]), &(vreserr[0]) ); // sim
     si->SetLineColor(2);
     si->SetLineWidth(3);
     si->SetMarkerColor(2);
     resolution_tel_subtracted->GetXaxis()->SetRangeUser(vthr.front(), vthr.back());
     setStyleAndFillLegend(si,"sim",leg2);
-    si->Draw("PL"); // without axis option: overlay
+    si->Draw("PC4"); // without axis option: overlay
   }
   c2->cd();
   leg2->Draw();
@@ -247,12 +234,12 @@ void threshold(const char* inputdir, int chip, int startrun, int stoprun) {
 
   if(!vthr.empty()) {
     c3->cd();
-    TGraph *si = new TGraph( vthr.size(), &(vthr[0]), &(vncol[0]) ); // sim
+    TGraphAsymmErrors *si = new TGraphAsymmErrors( vthr.size(), &(vthr[0]), &(vncol[0]), &(nullvec[0]), &(nullvec[0]), &(vncolerr[0]), &(vncolerr[0]) ); // sim
     si->SetLineColor(2);
     si->SetLineWidth(3);
     si->SetMarkerColor(2);
     setStyleAndFillLegend(si,"sim",leg3);
-    si->Draw("PL"); // without axis option: overlay
+    si->Draw("PC4"); // without axis option: overlay
   }
   c3->cd();
   leg3->Draw();

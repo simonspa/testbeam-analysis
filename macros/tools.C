@@ -375,6 +375,68 @@ std::vector<double> getsimulation(std::string name, int chip, int thickness=294,
   else return std::vector<double>();
 }
 
+std::vector<double> getthresholds(std::string name, int tilt, int thickness, int chip) {
+
+  std::vector<double> vthr;
+  std::vector<double> vlanpk;
+  std::vector<double> vncol;
+  std::vector<double> vres;
+
+  // Read thresholds
+  for(Int_t thr = 100; thr < 500; thr += 1) {
+
+    TString myfile;
+    myfile.Form("simulation/sim%i_%iskw_thr%i.dat",thickness,chip,thr);
+  
+    ifstream SIMstream( myfile );
+    if( !SIMstream ) { continue;}
+
+    cout << "Fetching from " << myfile << endl;
+    // Read file by lines:
+    string rl;
+    double tlt;
+    int run;
+    int nev;
+    double ry;
+    double ry_skwcorr;
+    double ncol;
+    double lanpeak;
+    double turn;
+    double edge;
+
+    while( SIMstream.good() && ! SIMstream.eof() ) {
+
+      getline( SIMstream, rl ); // read one line  = event into string
+      istringstream simrun( rl ); // tokenize string
+
+      simrun >> run;
+      simrun >> tlt; // [deg]
+      simrun >> turn;
+      simrun >> nev;
+      simrun >> ry;
+      simrun >> ry_skwcorr;
+      simrun >> ncol;
+      simrun >> lanpeak;
+      simrun >> edge;
+
+      if(tilt < (tlt+0.5)) {
+	vthr.push_back(thr*0.01);
+	vlanpk.push_back(lanpeak);
+	vncol.push_back(ncol);
+	vres.push_back(sqrt( ry*ry - restel_sim*restel_sim )); // subtract telescope
+	cout << "sim tilt " << tlt << " res " << ry << " ressub " << sqrt( ry*ry - restel_sim*restel_sim ) << " electrons " << (thr*0.01) << " ncol " << ncol << endl;
+	break;
+      }
+    } // while lines
+  }
+  cout << endl;
+  if(name == "thr") return vthr;
+  else if(name == "lanpk") return vlanpk;
+  else if(name == "ncol") return vncol;
+  else if(name == "res") return vres;
+  else return std::vector<double>();
+}
+
 // Gauss function:
 Double_t gp0Fit( Double_t *x, Double_t *par ) {
 
