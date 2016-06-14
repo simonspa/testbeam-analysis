@@ -276,7 +276,7 @@ void resolution(const char* inputdir, int chip, int startrun, int stoprun, bool 
     }
     else { 
       setStyleAndFillLegend(si,"sim",leg2); 
-      si->SetFillStyle(3001);
+      si->SetFillStyle(3005);
       si->SetFillColor(kRed+1);
     }
 
@@ -307,7 +307,7 @@ void resolution(const char* inputdir, int chip, int startrun, int stoprun, bool 
       }
       else { 
 	setStyleAndFillLegend(si_eta,"sim",leg3); 
-	si_eta->SetFillStyle(3001);
+	si_eta->SetFillStyle(3005);
 	si_eta->SetFillColor(kRed+1);
       }
     }
