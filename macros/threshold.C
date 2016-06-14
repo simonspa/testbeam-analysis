@@ -196,8 +196,8 @@ void threshold(const char* inputdir, int chip, int startrun, int stoprun) {
   if(cmslogo) DrawPrelimLabel(1,0.045);
 
   c3->cd();
-  if(chip == 506) nrows->SetTitle(";pixel threshold [ke];columns per cluster");
-  else nrows->SetTitle(";pixel threshold [e];rows per cluster");
+  if(chip == 506) nrows->SetTitle(";pixel threshold [ke];<pixels/cluster>");
+  else nrows->SetTitle(";pixel threshold [ke];<pixels/cluster>");
   nrows->SetMarkerStyle(20);
   nrows->SetMarkerColor(1);
   nrows->GetXaxis()->SetRangeUser(vthr.front(), vthr.back());
@@ -205,7 +205,7 @@ void threshold(const char* inputdir, int chip, int startrun, int stoprun) {
   else nrows->GetYaxis()->SetRangeUser(1, 4);
   nrows->Draw("e");
   setStyleAndFillLegend(nrows,"data",leg3);
-  DrawCMSLabels(nfiducial,5.6,0.045);
+  DrawCMSLabels(nfiducial,5.2,0.045);
   if(cmslogo) DrawPrelimLabel(1,0.045);
 
   c4->cd();
