@@ -197,7 +197,7 @@ void threshold(const char* inputdir, int chip, int startrun, int stoprun) {
 
   c3->cd();
   if(chip == 506) nrows->SetTitle(";pixel threshold [ke];<pixels/cluster>");
-  else nrows->SetTitle(";pixel threshold [ke];<pixels/cluster>");
+  else nrows->SetTitle(";pixel threshold [ke];#LTpixels/cluster#GT");
   nrows->SetMarkerStyle(20);
   nrows->SetMarkerColor(1);
   nrows->GetXaxis()->SetRangeUser(vthr.front(), vthr.back());
